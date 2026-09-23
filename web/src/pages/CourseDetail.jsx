@@ -209,7 +209,7 @@ const CourseDetail = () => {
         <section id="curriculum-section" className="section-reveal max-w-7xl mx-auto py-16 scroll-mt-32">
           <div className="flex flex-col gap-6">
             <div className="mb-4 text-center md:text-left">
-              <h2 className="font-newsreader italic text-6xl md:text-9xl text-normal font-extralight mb-4 tracking-tighter">
+              <h2 className="font-newsreader italic text-4xl md:text-6xl text-normal font-extralight mb-4 tracking-tighter">
                 The <span className="text-accent">Blueprint</span>
               </h2>
               <div className="h-[1px] bg-accent/20 w-32 md:w-48 mx-auto md:mx-0" />
@@ -243,7 +243,7 @@ const CourseDetail = () => {
                           </button>
                         </div>
                         <h3 className={`font-newsreader italic text-normal font-extralight leading-[1] transition-all duration-500 ${
-                          isExpanded ? 'text-4xl md:text-5xl lg:text-6xl' : 'text-2xl md:text-3xl'
+                          isExpanded ? 'text-3xl md:text-4xl' : 'text-2xl md:text-3xl'
                         }`}>
                           {module.title}
                         </h3>
@@ -278,7 +278,7 @@ const CourseDetail = () => {
                                     {lesson.type}
                                   </span>
                                 </div>
-                                <h4 className="font-newsreader italic text-3xl md:text-5xl lg:text-6xl text-normal font-extralight leading-none tracking-tight">
+                                <h4 className="font-newsreader italic text-3xl md:text-4xl text-normal font-extralight leading-none tracking-tight">
                                   {lesson.title}
                                 </h4>
                                 <p className="font-montserrat text-description/70 text-sm md:text-base lg:text-lg leading-relaxed max-w-3xl break-words">

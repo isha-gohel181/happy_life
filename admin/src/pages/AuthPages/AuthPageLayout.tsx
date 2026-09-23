@@ -20,7 +20,7 @@ export default function AuthLayout({
               <Link to="/" className="block mb-4">
                 <img
                   className="h-24"
-                  src="/images/logo/osa_logo.png"
+                  src="/images/logo/bankers_logo.jpeg"
                   alt="Logo"
                 />
               </Link>

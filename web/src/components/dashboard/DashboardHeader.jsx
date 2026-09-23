@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../../redux/slices/authSlice'
+import { fetchNotifications, markNotificationsRead } from '../../redux/slices/notificationSlice'
 import { createPortal } from 'react-dom'
 import { gsap } from 'gsap'
 import RollingText from '../RollingText'
@@ -22,6 +23,20 @@ const DashboardHeader = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
+  const { items: notifications } = useSelector(state => state.notifications)
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchNotifications({ page: 1, limit: 5 }))
+    }
+  }, [dispatch, user])
+
+  const handleMarkAllRead = () => {
+    dispatch(markNotificationsRead()).then(() => {
+      dispatch(fetchNotifications({ page: 1, limit: 5 }))
+    })
+  }
+
   const navItems = [
     { key: 'dashboard', name: (t('dashboard') || 'DASHBOARD').toUpperCase(), path: '/dashboard' },
     { key: 'liveClasses', name: (t('liveClasses') || 'LIVE CLASSES').toUpperCase(), path: '/dashboard/live-classes' },
@@ -38,9 +53,9 @@ const DashboardHeader = () => {
     { key: 'myPurchases', name: (t('myPurchases') || 'MY PURCHASES').toUpperCase(), path: '/dashboard/purchases' },
     { key: 'myCourses', name: (t('myCourses') || 'MY COURSES').toUpperCase(), path: '/dashboard/my-courses' },
     { key: 'allCourses', name: (t('allCourses') || 'ALL COURSES').toUpperCase(), path: '/dashboard/courses' },
-    { key: 'forum', name: (t('forum') || 'FORUM').toUpperCase(), path: '/dashboard/forum' },
-    { key: 'news', name: (t('news') || 'NEWS').toUpperCase(), path: '/dashboard/news' },
-    { key: 'jobPostings', name: (t('jobPostings') || 'JOB POSTINGS').toUpperCase(), path: '/dashboard/job-posts' },
+    // { key: 'forum', name: (t('forum') || 'FORUM').toUpperCase(), path: '/dashboard/forum' },
+    // { key: 'news', name: (t('news') || 'NEWS').toUpperCase(), path: '/dashboard/news' },
+    // { key: 'jobPostings', name: (t('jobPostings') || 'JOB POSTINGS').toUpperCase(), path: '/dashboard/job-posts' },
   ]
 
   const menuRef = useRef(null)
@@ -132,7 +147,7 @@ const DashboardHeader = () => {
 
         <div className="dash-menu-item absolute top-0 left-0 w-full p-6 flex items-center justify-between z-20">
           <div className="flex items-center gap-2.5">
-            <img src="/logo/osa_logo.png" alt="OS Academy Logo" className="h-8 w-auto object-contain rounded-lg" />
+            <img src="/logo/bankers_logo.jpeg" alt="Bankers Grade Logo" className="h-8 w-auto object-contain rounded-lg" />
           </div>
           <button
             onClick={toggleMenu}
@@ -215,7 +230,7 @@ const DashboardHeader = () => {
       <div className="flex items-center gap-6">
         {/* DASHBOARD LOGO */}
         <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity text-slate-900">
-          <img src="/logo/osa_logo.png" alt="OS Academy Logo" className="h-8 w-auto object-contain rounded-lg" />
+          <img src="/logo/bankers_logo.jpeg" alt="Bankers Grade Logo" className="h-8 w-auto object-contain rounded-lg" />
         </Link>
 
         <nav className="hidden [@media(min-width:1300px)]:flex items-center gap-6">
@@ -302,25 +317,23 @@ const DashboardHeader = () => {
           <div className={`absolute top-14 right-0 w-80 bg-white border border-slate-200 rounded-2xl p-4 shadow-2xl transition-all duration-300 origin-top
               ${showNotifications ? 'opacity-100 scale-100 translate-y-0 visible' : 'opacity-0 scale-95 -translate-y-2 invisible pointer-events-none'}`}>
             <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
-              <span className="font-jetbrains text-[8px] text-amber-600 tracking-[0.2em] font-black uppercase">{t('recentDispatches')}</span>
-              <span className="font-jetbrains text-[8px] text-slate-500 uppercase tracking-widest cursor-pointer hover:text-slate-800">{t('markAllRead')}</span>
+              <span className="font-jetbrains text-[8px] text-amber-600 tracking-[0.2em] font-black uppercase">{t('recentDispatches') || 'RECENT DISPATCHES'}</span>
+              <button onClick={handleMarkAllRead} className="font-jetbrains text-[8px] text-slate-500 uppercase tracking-widest cursor-pointer hover:text-slate-800 bg-transparent border-none p-0">{t('markAllRead') || 'MARK ALL READ'}</button>
             </div>
-            <div className="space-y-3">
-              {[
-                { title: t('protocolXPAcquired'), desc: t('xpDesc'), tech: 'SYSTEM' },
-                { title: t('moduleUploaded'), desc: t('moduleUploadedDesc'), tech: 'CURATOR' },
-                { title: t('communitySignal'), desc: t('communitySignalDesc'), tech: 'COMMS' }
-              ].map((item, i) => (
-                <div key={i} className="group cursor-pointer p-3 rounded-lg hover:bg-slate-50 transition-colors border-l-2 border-transparent hover:border-accent">
+            <div className="space-y-3 max-h-[300px] overflow-y-auto">
+              {notifications?.length > 0 ? notifications.slice(0, 5).map((item, i) => (
+                <div key={i} className={`group cursor-pointer p-3 rounded-lg hover:bg-slate-50 transition-colors border-l-2 ${item.status === 1 ? 'border-amber-400 bg-amber-50/30' : 'border-transparent hover:border-accent'}`}>
                   <div className="flex justify-between items-start mb-1">
-                    <h5 className="font-newsreader italic text-sm text-slate-900 group-hover:text-amber-600 transition-colors">{item.title}</h5>
-                    <span className="font-jetbrains text-[6px] text-amber-700 bg-amber-50 border border-amber-200 px-1 rounded">{item.tech}</span>
+                    <h5 className="font-newsreader italic text-sm text-slate-900 group-hover:text-amber-600 transition-colors">{item.data?.title || 'Notification'}</h5>
+                    <span className="font-jetbrains text-[6px] text-amber-700 bg-amber-50 border border-amber-200 px-1 rounded">{item.status === 1 ? 'NEW' : 'READ'}</span>
                   </div>
-                  <p className="font-jetbrains text-[9px] text-slate-600 leading-tight">{item.desc}</p>
+                  <p className="font-jetbrains text-[9px] text-slate-600 leading-tight line-clamp-2">{item.data?.description || item.data?.body || ''}</p>
                 </div>
-              ))}
+              )) : (
+                <p className="text-xs text-slate-500 text-center py-4">No recent notifications</p>
+              )}
             </div>
-            <button className="w-full mt-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg font-jetbrains text-[8px] text-slate-700 uppercase tracking-[0.3em] hover:bg-accent hover:text-slate-950 font-bold transition-all">{t('viewAllAlerts')}</button>
+            <Link to="/dashboard/notifications" className="w-full mt-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg font-jetbrains text-[8px] text-slate-700 uppercase tracking-[0.3em] hover:bg-accent hover:text-slate-950 font-bold transition-all flex justify-center text-center items-center">{t('viewAllAlerts') || 'VIEW ALL ALERTS'}</Link>
           </div>
         </div>
 

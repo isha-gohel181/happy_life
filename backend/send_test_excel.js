@@ -24,13 +24,13 @@ const transporter = nodemailer.createTransport({
   port: Number(process.env.SMTP_PORT) || 587,
   secure: process.env.SMTP_SECURE === 'true',
   auth: {
-    user: process.env.SMTP_USER || 'support@osacademy.com',
+    user: process.env.SMTP_USER || 'support@edrilla.com',
     pass: process.env.SMTP_PASS || 'vjbfuqityyfivvii',
   },
 });
 
 const info = await transporter.sendMail({
-  from: `"Edrilla" <${process.env.SMTP_USER || 'support@osacademy.com'}>`,
+  from: `"Edrilla" <${process.env.SMTP_USER || 'support@edrilla.com'}>`,
   to: 'anshuljha1149@gmail.com',
   subject: 'Test Excel File - Certificate Report',
   text: 'Please find attached the test Excel file.',

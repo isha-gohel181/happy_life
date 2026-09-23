@@ -85,7 +85,7 @@ const HTML_TEMPLATE = (name, email, passwordText) => `
                 </div>
             </div>
             
-            <p>For any queries, contact us at <a href="mailto:support@osacademy.com" class="support-link">support@osacademy.com</a>.</p>
+            <p>For any queries, contact us at <a href="mailto:support@edrilla.com" class="support-link">support@edrilla.com</a>.</p>
 
             <p>Happy Learning!<br>Team Edrilla</p>
         </div>

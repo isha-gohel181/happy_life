@@ -85,7 +85,7 @@ const FAQSection = () => {
           <span className="font-jetbrains text-[9px] text-accent tracking-[1em] uppercase font-bold">{t('faqTitle')}</span>
         </div>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
-          <h2 className="font-newsreader italic text-6xl md:text-8xl text-normal font-extralight tracking-tighter leading-tight">
+          <h2 className="font-newsreader italic text-4xl md:text-6xl text-normal font-extralight tracking-tighter leading-tight">
             {t('faqSubtitle')}
           </h2>
 

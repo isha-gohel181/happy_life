@@ -16,7 +16,7 @@ const smtpConfig = {
     port: Number(process.env.SMTP_PORT) || 587,
     secure: process.env.SMTP_SECURE === 'true',
     auth: {
-        user: process.env.SMTP_USER || 'support@osacademy.com',
+        user: process.env.SMTP_USER || 'support@edrilla.com',
         pass: process.env.SMTP_PASS || 'vjbfuqityyfivvii',
     },
 };
@@ -210,7 +210,7 @@ async function sendMail(to, name) {
     const html = emailTemplate.replace(/{{Name}}/g, name).replace(/{{Email}}/g, to);
 
     await transporter.sendMail({
-        from: `"Sahil Khanna | Edrilla" <${process.env.EMAIL_FROM || 'support@osacademy.com'}>`,
+        from: `"Sahil Khanna | Edrilla" <${process.env.EMAIL_FROM || 'support@edrilla.com'}>`,
         to,
         subject: '⚠️ ACTION REQUIRED: How to Join Your Live Classes & Access Recordings',
         html,

@@ -161,7 +161,7 @@ const Gigs = () => {
       <div className="max-w-7xl mx-auto">
         <div className="mb-6">
           <div className="flex items-baseline gap-6 gig-header-reveal flex-wrap">
-            <h1 className="font-newsreader text-5xl md:text-7xl font-bold italic text-slate-900 tracking-tight">
+            <h1 className="font-newsreader text-4xl md:text-6xl font-bold italic text-slate-900 tracking-tight">
               {t('gigsTitle')}
             </h1>
           </div>

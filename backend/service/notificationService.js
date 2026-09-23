@@ -125,21 +125,40 @@ class NotificationService {
     } 
   }
   
-async sendToAllStudents(data, webPushLink = null) {
-  try {
-    console.log("🔥 sendToAllStudents called with data:", data);
+  async sendToAllStudents(data, webPushLink = null) {
+    try {
+      console.log("🔥 sendToAllStudents called with data:", data);
 
-    // 1️⃣ Fetch all FCM tokens
-    const tokens = await FcmToken.find({}).select("token userId deviceId updatedAt -_id");
-    console.log(`🟢 Total tokens fetched: ${tokens.length}`);
+      // 1️⃣ Create notifications for ALL users in the database
+      const allUsers = await User.find({}).select("_id");
+      console.log(`🟢 Total users fetched from DB: ${allUsers.length}`);
 
-    if (!tokens || tokens.length === 0) {
-      console.warn("⚠️ No students with FCM tokens found");
-      return { success: false, message: "No students with FCM tokens found", sent: 0, failed: 0 };
-    }
+      if (allUsers.length > 0) {
+        const notificationsToInsert = allUsers.map(user => ({
+          user_id: user._id,
+          data: {
+            ...data,
+            type: data.type || "general_notification"
+          },
+          status: 1, // unread
+        }));
 
-    // Group by deviceId+token combination and keep only the latest user for each device
-    const deviceTokensMap = new Map();
+        // Bulk insert for performance
+        await Notification.insertMany(notificationsToInsert);
+        console.log(`✅ Saved ${notificationsToInsert.length} notifications to the database for all users`);
+      }
+
+      // 2️⃣ Fetch all FCM tokens to send push notifications
+      const tokens = await FcmToken.find({}).select("token userId deviceId updatedAt -_id");
+      console.log(`🟢 Total tokens fetched for push notifications: ${tokens.length}`);
+
+      if (!tokens || tokens.length === 0) {
+        console.warn("⚠️ No students with FCM tokens found for push notifications");
+        return { success: true, message: "Notifications saved to DB, but no FCM tokens found to push", sent: 0, failed: 0 };
+      }
+
+      // Group by deviceId+token combination and keep only the latest user for each device
+      const deviceTokensMap = new Map();
     
     tokens.forEach(t => {
       if (t.token && t.deviceId) {
@@ -167,23 +186,11 @@ async sendToAllStudents(data, webPushLink = null) {
       try {
         const res = await fcmService.sendPushNotification([deviceToken.token], data, webPushLink);
 
-        // Check response and save notification only if FCM was successful
+        // Check response
         if (res.responses && res.responses[0]) {
           if (res.responses[0].success) {
-            // Save notification to database after successful FCM send
-            const notification = new Notification({
-              user_id: deviceToken.userId,
-              device_id: deviceToken.deviceId,
-              data: {
-                ...data,
-                type: data.type || "general_notification"
-              },
-              status: 1, // 1 = unread (correct)
-            });
-            await notification.save();
-
             sent++;
-            console.log(`✅ Notification sent and saved for device: ${deviceToken.deviceId}, latest user: ${deviceToken.userId}, updated: ${deviceToken.updatedAt}`);
+            console.log(`✅ Push notification sent for device: ${deviceToken.deviceId}, latest user: ${deviceToken.userId}`);
           } else {
             failed++;
             console.log(`❌ Notification FAILED for device: ${deviceToken.deviceId}, error: ${res.responses[0].error?.message}`);
@@ -241,8 +248,24 @@ async sendToCourseStudents(courseId, data, webPushLink = null) {
       };
     }
 
-    // 3️⃣ Extract user IDs
+    // 3️⃣ Extract user IDs and save notifications for all enrolled students
     const userIds = enrollments.map(e => e.userId);
+
+    const courseNotificationData = {
+      ...data,
+      courseId: courseId,
+      type: "course_notification"
+    };
+
+    if (userIds.length > 0) {
+      const notificationsToInsert = userIds.map(uid => ({
+        user_id: uid,
+        data: courseNotificationData,
+        status: 1 // unread
+      }));
+      await Notification.insertMany(notificationsToInsert);
+      console.log(`✅ Saved ${notificationsToInsert.length} course notifications to the database for all enrolled students`);
+    }
 
     // 4️⃣ Get FCM tokens for enrolled students only
     const tokens = await FcmToken.find({
@@ -287,7 +310,7 @@ async sendToCourseStudents(courseId, data, webPushLink = null) {
     let failed = 0;
     const savedNotifications = [];
 
-    // 5️⃣ Send FCM notifications to course students and save to database (one per device, latest user)
+    // 5️⃣ Send FCM notifications to course students (one per device, latest user)
     const sendPromises = Array.from(deviceTokensMap.values()).map(async deviceToken => {
       try {
         const courseNotificationData = {
@@ -300,25 +323,8 @@ async sendToCourseStudents(courseId, data, webPushLink = null) {
 
         if (res.responses && res.responses[0]) {
           if (res.responses[0].success) {
-            // ✅ Save notification to database after successful FCM send
-            try {
-              const notification = new Notification({
-                user_id: deviceToken.userId,
-                device_id: deviceToken.deviceId,
-                data: courseNotificationData,
-                status: 1, // 1 = unread
-              });
-              
-              const savedNotification = await notification.save();
-              savedNotifications.push(savedNotification);
-              
-              sent++;
-              console.log(`✅ Course notification sent and saved for device: ${deviceToken.deviceId}, latest user: ${deviceToken.userId}, notification ID: ${savedNotification._id}, updated: ${deviceToken.updatedAt}`);
-            } catch (saveError) {
-              console.error(`❌ Error saving notification for device ${deviceToken.deviceId}:`, saveError);
-              // Still count as sent since FCM was successful
-              sent++;
-            }
+            sent++;
+            console.log(`✅ Course notification sent for device: ${deviceToken.deviceId}, latest user: ${deviceToken.userId}`);
           } else {
             failed++;
             console.log(`❌ Course notification FAILED for device: ${deviceToken.deviceId}, error: ${res.responses[0].error?.message}`);
@@ -341,7 +347,7 @@ async sendToCourseStudents(courseId, data, webPushLink = null) {
 
     await Promise.all(sendPromises);
 
-    console.log(`📡 Course FCM sending finished. Total sent: ${sent}, Failed: ${failed}, Total enrolled: ${enrollments.length}, Notifications saved: ${savedNotifications.length}, Unique devices: ${deviceTokensMap.size}`);
+    console.log(`📡 Course FCM sending finished. Total sent: ${sent}, Failed: ${failed}, Total enrolled: ${enrollments.length}, Unique devices: ${deviceTokensMap.size}`);
     
     return { 
       success: true, 
@@ -349,8 +355,6 @@ async sendToCourseStudents(courseId, data, webPushLink = null) {
       failed, 
       totalStudents: enrollments.length,
       courseId,
-      savedNotifications: savedNotifications.length,
-      notificationIds: savedNotifications.map(n => n._id),
       uniqueDevices: deviceTokensMap.size
     };
 

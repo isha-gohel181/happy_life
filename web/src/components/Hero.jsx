@@ -90,7 +90,7 @@ const Hero = ({ isLoaded }) => {
                <img
                   ref={imageRef}
                   src="/bannner.png"
-                  alt="OS Academy"
+                  alt="Bankers Grade"
                   className="absolute bottom-0 h-[90%] md:h-[100%] w-auto max-w-none object-contain drop-shadow-xl"
                   style={{
                      maskImage: 'linear-gradient(to bottom, black 70%, transparent 98%)',

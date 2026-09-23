@@ -287,7 +287,7 @@ const DashboardQuiz = () => {
                                 <polyline points="12 19 5 12 12 5" />
                             </svg>
                         </Link>
-                        <img src="/logo/osa_logo.png" alt="Logo" className="h-8 w-auto object-contain rounded" />
+                        <img src="/logo/bankers_logo.jpeg" alt="Logo" className="h-8 w-auto object-contain rounded" />
                         <div className="h-6 w-[1px] bg-slate-200" />
                         <span className="font-semibold text-slate-800 text-sm">
                             {sanitizeDisplay(quiz.quizTitle)} - Evaluation Results
@@ -556,7 +556,7 @@ const DashboardQuiz = () => {
                     </Link>
                     
                     {/* Logo */}
-                    <img src="/logo/osa_logo.png" alt="Logo" className="h-8 w-auto object-contain rounded" />
+                    <img src="/logo/bankers_logo.jpeg" alt="Logo" className="h-8 w-auto object-contain rounded" />
 
                     {/* Vertical divider */}
                     <div className="h-6 w-[1px] bg-slate-200" />

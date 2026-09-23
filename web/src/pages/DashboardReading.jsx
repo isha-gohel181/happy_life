@@ -75,7 +75,7 @@ const DashboardReading = () => {
                                     <span className="font-jetbrains text-[8px] text-accent uppercase tracking-widest font-black">Reading Protocol</span>
                                 </div>
                             </div>
-                            <h1 className="font-newsreader italic text-5xl md:text-8xl text-normal font-extralight tracking-tight leading-[0.9] uppercase">
+                            <h1 className="font-newsreader italic text-4xl md:text-6xl text-normal font-extralight tracking-tight leading-[0.9] uppercase">
                                 {sanitizeDisplay(reading.title || lessonData.title)}
                             </h1>
                             {reading.subTitle && (

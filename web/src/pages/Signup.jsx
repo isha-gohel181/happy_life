@@ -95,21 +95,16 @@ const Signup = () => {
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-        });
-        const googleUser = await userInfoRes.json();
-
-        if (googleUser.email) {
-          dispatch(googleLoginUser({
-            email: googleUser.email,
-            fullName: googleUser.name || googleUser.given_name || 'Google User',
-            deviceId: 'browser',
-            platform: 'web'
-          }));
+        const resultAction = await dispatch(googleLoginUser({
+          googleAccessToken: tokenResponse.access_token,
+          deviceId: 'browser',
+          platform: 'web'
+        }));
+        if (googleLoginUser.fulfilled.match(resultAction)) {
+          navigate('/dashboard', { replace: true })
         }
       } catch (err) {
-        console.error('Google User Info Error:', err);
+        console.error('Google Login Error:', err);
       }
     },
     onError: (error) => console.log('Login Failed:', error),
@@ -123,7 +118,7 @@ const Signup = () => {
       <div className="signup-left">
         <div className="flex items-center justify-between w-full mb-8">
           <Link to="/" className="signup-logo flex items-center gap-2.5">
-            <img src="/logo/osa_logo.png" alt="OS Academy Logo" className="h-10 w-auto object-contain rounded-lg" />
+            <img src="/logo/bankers_logo.jpeg" alt="Bankers Grade Logo" className="h-10 w-auto object-contain rounded-lg" />
           </Link>
         </div>
 
@@ -199,13 +194,13 @@ const Signup = () => {
                 autoComplete="email"
               />
               <div className="mt-2 flex items-center gap-3">
-                <button type="button" onClick={handleSendOtp} disabled={sendingOtp} className={`px-4 py-2 bg-amber-400 text-slate-950 rounded-xl font-bold font-jetbrains text-xs ${sendingOtp ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                <button type="button" onClick={handleSendOtp} disabled={sendingOtp} className={`px-4 py-2 bg-amber-400 text-white rounded-xl font-bold font-jetbrains text-xs ${sendingOtp ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   {sendingOtp ? t('sendingOtpBtn') : (otpSent ? t('resendOtpBtn') : t('sendOtpBtn'))}
                 </button>
                 {otpSent && (
                   <div className="flex items-center gap-2">
                     <input value={otpCode} onChange={(e) => setOtpCode(e.target.value)} placeholder={t('enterOtpPlaceholder')} className="signup-input !p-2 !h-9 !w-40" />
-                    <button type="button" onClick={handleVerifyOtp} disabled={verifyingOtp} className={`px-3 py-2 bg-amber-400 text-slate-950 rounded-xl font-bold font-jetbrains text-xs ${verifyingOtp ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                    <button type="button" onClick={handleVerifyOtp} disabled={verifyingOtp} className={`px-3 py-2 bg-amber-400 text-white rounded-xl font-bold font-jetbrains text-xs ${verifyingOtp ? 'opacity-50 cursor-not-allowed' : ''}`}>
                       {verifyingOtp ? t('verifyingBtn') : (otpVerifiedStore ? t('verifiedBtn') : t('verifyBtn'))}
                     </button>
                   </div>

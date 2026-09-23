@@ -9,32 +9,32 @@ dotenv.config();
 const XLSX_PATH = path.resolve("./students.xlsx"); // Place your students.xlsx in project root
 
 if (!fs.existsSync(XLSX_PATH)) {
-    console.error(
-        `❌ XLSX file not found at ${XLSX_PATH}. Please export your students list to students.xlsx and place it here.`
-    );
-    process.exit(1);
+  console.error(
+    `❌ XLSX file not found at ${XLSX_PATH}. Please export your students list to students.xlsx and place it here.`
+  );
+  process.exit(1);
 }
 
 function getStudentsFromXlsx() {
-    const workbook = xlsx.readFile(XLSX_PATH);
-    // Use the second sheet (tab 2)
-    const sheetNames = workbook.SheetNames;
-    if (sheetNames.length < 2) return [];
-    const sheetName = sheetNames[1]; // index 1 is the second sheet
-    if (!sheetName) return [];
-    const sheet = workbook.Sheets[sheetName];
-    // Expect columns: Name, Email (case-insensitive)
-    return xlsx.utils
-        .sheet_to_json(sheet)
-        .map((row) => ({
-            name: row["Name"] || row["Full Name"] || "Student",
-            email: row["Email"],
-        }))
-        .filter((s) => s.email);
+  const workbook = xlsx.readFile(XLSX_PATH);
+  // Use the second sheet (tab 2)
+  const sheetNames = workbook.SheetNames;
+  if (sheetNames.length < 2) return [];
+  const sheetName = sheetNames[1]; // index 1 is the second sheet
+  if (!sheetName) return [];
+  const sheet = workbook.Sheets[sheetName];
+  // Expect columns: Name, Email (case-insensitive)
+  return xlsx.utils
+    .sheet_to_json(sheet)
+    .map((row) => ({
+      name: row["Name"] || row["Full Name"] || "Student",
+      email: row["Email"],
+    }))
+    .filter((s) => s.email);
 }
 
 function getWelcomeEmailHTML(name, email) {
-    return `
+  return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -267,7 +267,7 @@ function getWelcomeEmailHTML(name, email) {
         
         <div class="footer">
             <p class="support-info">Need help? Contact us at</p>
-            <a href="mailto:support@osacademy.com" class="support-email">support@osacademy.com</a>
+            <a href="mailto:support@edrilla.com" class="support-email">support@edrilla.com</a>
         </div>
     </div>
 </body>
@@ -276,29 +276,29 @@ function getWelcomeEmailHTML(name, email) {
 }
 
 async function sendWelcomeEmail({ name, email }) {
-    const subject = "Welcome to Edrilla Solopreneur - Let's Start Your Journey!";
-    const html = getWelcomeEmailHTML(name, email);
-
-    await emailService.getTransporter("transactional").sendMail({
-        from: emailService.getFrom("transactional"),
-        to: email,
-        subject,
-        html,
-    });
+  const subject = "Welcome to Edrilla Solopreneur - Let's Start Your Journey!";
+  const html = getWelcomeEmailHTML(name, email);
+  
+  await emailService.getTransporter("transactional").sendMail({
+    from: emailService.getFrom("transactional"),
+    to: email,
+    subject,
+    html,
+  });
 }
 
 (async () => {
-    const students = getStudentsFromXlsx();
-    //console.log(`📧 Starting to send welcome emails to ${students.length} students...`);
-
-    for (const student of students) {
-        try {
-            await sendWelcomeEmail(student);
-            //console.log(`✅ Sent to ${student.email}`);
-        } catch (err) {
-            console.error(`❌ Failed for ${student.email}:`, err.message);
-        }
+  const students = getStudentsFromXlsx();
+  //console.log(`📧 Starting to send welcome emails to ${students.length} students...`);
+  
+  for (const student of students) {
+    try {
+      await sendWelcomeEmail(student);
+      //console.log(`✅ Sent to ${student.email}`);
+    } catch (err) {
+      console.error(`❌ Failed for ${student.email}:`, err.message);
     }
-
-    //console.log('🎉 Email sending process completed!');
+  }
+  
+  //console.log('🎉 Email sending process completed!');
 })();

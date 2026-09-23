@@ -554,19 +554,19 @@ const AppSidebar: React.FC = () => {
             <>
               <img
                 className="dark:hidden h-11"
-                src="/images/logo/osa_logo.png"
+                src="/images/logo/bankers_logo.jpeg"
                 alt="Logo"
               />
               <img
                 className="hidden dark:block h-11"
-                src="/images/logo/osa_logo.png"
+                src="/images/logo/bankers_logo.jpeg"
                 alt="Logo"
               />
             </>
           ) : (
             <img
               className="dark:hidden h-11"
-              src="/images/logo/osa_logo.png"
+              src="/images/logo/bankers_logo.jpeg"
               alt="Logo"
             />
           )}

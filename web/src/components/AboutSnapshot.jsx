@@ -45,15 +45,15 @@ const AboutSnapshot = () => {
       <section ref={containerRef} className="py-24 bg-white relative overflow-hidden">
          {/* Decorative background element */}
          <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-amber-50 rounded-full blur-[100px] -z-10 translate-x-1/3 -translate-y-1/3" />
-
+         
          <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col lg:flex-row items-center gap-16">
-
+            
             {/* Left: Image Composite */}
             <div ref={imageRef} className="w-full lg:w-1/2 relative">
                <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] bg-slate-100">
-                  <img
-                     src="/hero_section.png"
-                     alt="OS Academy Platform"
+                  <img 
+                     src="/hero_section.png" 
+                     alt="Bankers Grade Platform" 
                      className="w-full h-full object-cover"
                      onError={(e) => {
                         e.target.src = "https://images.unsplash.com/photo-1556761175-5973dc0f32d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
@@ -62,7 +62,7 @@ const AboutSnapshot = () => {
                   {/* Overlay gradient */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-slate-900/40 to-transparent mix-blend-overlay" />
                </div>
-
+               
                {/* Floating stat card */}
                <div className="absolute -bottom-6 -right-6 md:bottom-10 md:-right-10 bg-white p-6 rounded-2xl shadow-xl border border-slate-100 max-w-[200px] animate-bounce-slow">
                   <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-4 text-amber-600">
@@ -81,13 +81,13 @@ const AboutSnapshot = () => {
                   <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                   Who We Are
                </div>
-
+               
                <h2 className="snapshot-text text-4xl md:text-5xl font-black text-slate-900 leading-[1.1] mb-6">
                   Your Ultimate Guide to <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-700">Banking Success.</span>
                </h2>
-
+               
                <p className="snapshot-text text-lg text-slate-600 mb-8 leading-relaxed font-medium">
-                  OS Academy is a premier online educational platform designed exclusively for banking professionals. Whether you're aiming for career advancement or preparing for crucial promotional exams, we provide the tools you need to succeed.
+                  Bankers Grade is a premier online educational platform designed exclusively for banking professionals. Whether you're aiming for career advancement or preparing for crucial promotional exams, we provide the tools you need to succeed.
                </p>
 
                <ul className="snapshot-text space-y-4 mb-10">

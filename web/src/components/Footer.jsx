@@ -54,7 +54,7 @@ const Footer = () => {
         {/* Brand Logo & Name Container */}
         <div className="footer-reveal mb-8">
           <Link to="/" className="flex items-center gap-3 group">
-            <img src="/logo/osa_logo.png" alt="OS Academy Logo" className="h-12 md:h-16 w-auto object-contain rounded-xl group-hover:scale-105 transition-transform duration-300" />
+            <img src="/logo/bankers_logo.jpeg" alt="Bankers Grade Logo" className="h-12 md:h-16 w-auto object-contain rounded-xl group-hover:scale-105 transition-transform duration-300" />
           </Link>
         </div>
 
@@ -108,7 +108,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="flex flex-col md:flex-row items-center text-center md:text-left">
-          <p className="font-jetbrains text-sm text-slate-400 font-medium">© 2026 OS Academy. All rights reserved.</p>
+          <p className="font-jetbrains text-sm text-slate-400 font-medium">© 2026 Bankers Grade. All rights reserved.</p>
         </div>
 
         {/* Nav Links */}

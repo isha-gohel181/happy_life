@@ -431,10 +431,10 @@ const translations = {
     masterclassSub: 'Exclusive live sessions led by industry pioneers and senior tech leaders.',
 
     // Footer
-    sloganMagic: "We don't do",
-    sloganMagicBold: "BLACK MAGIC",
-    sloganGuarantee: "No overnight results",
-    sloganGuaranteeBold: "GUARANTEE",
+    sloganMagic: "Education engineered for",
+    sloganMagicBold: "MASTERY",
+    sloganGuarantee: "The standard for",
+    sloganGuaranteeBold: "EXCELLENCE",
     ambitionExecution: "Where Ambition Meets Execution",
     privacyPolicy: "Privacy Policy",
     services: "Services",
@@ -951,10 +951,10 @@ const translations = {
     masterclassSub: 'उद्योग के अग्रदूतों और वरिष्ठ टेक लीडरों के नेतृत्व में विशेष लाइव सत्र।',
 
     // Footer
-    sloganMagic: "हम नहीं करते",
-    sloganMagicBold: "ब्लैक मैजिक",
-    sloganGuarantee: "रातोंरात परिणाम की नहीं है",
-    sloganGuaranteeBold: "गारंटी",
+    sloganMagic: "महारत के लिए डिज़ाइन की गई",
+    sloganMagicBold: "शिक्षा",
+    sloganGuarantee: "उत्कृष्टता का",
+    sloganGuaranteeBold: "मानक",
     ambitionExecution: "जहाँ महत्वाकांक्षा निष्पादन से मिलती है",
     privacyPolicy: "गोपनीयता नीति",
     services: "सेवाएं",

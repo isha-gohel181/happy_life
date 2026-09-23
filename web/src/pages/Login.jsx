@@ -89,24 +89,16 @@ const Login = () => {
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-        });
-        const googleUser = await userInfoRes.json();
-
-        if (googleUser.email) {
-          const resultAction = await dispatch(googleLoginUser({
-            email: googleUser.email,
-            fullName: googleUser.name || googleUser.given_name || 'Google User',
-            deviceId: 'browser',
-            platform: 'web'
-          }));
-          if (googleLoginUser.fulfilled.match(resultAction)) {
-            navigate('/dashboard', { replace: true })
-          }
+        const resultAction = await dispatch(googleLoginUser({
+          googleAccessToken: tokenResponse.access_token,
+          deviceId: 'browser',
+          platform: 'web'
+        }));
+        if (googleLoginUser.fulfilled.match(resultAction)) {
+          navigate('/dashboard', { replace: true })
         }
       } catch (err) {
-        console.error('Google User Info Error:', err);
+        console.error('Google Login Error:', err);
       }
     },
     onError: (error) => console.log('Login Failed:', error),
@@ -118,7 +110,7 @@ const Login = () => {
       <div className="login-left">
         <div className="flex items-center justify-between w-full mb-8">
           <Link to="/" className="login-logo flex items-center gap-2.5">
-            <img src="/logo/osa_logo.png" alt="OS Academy Logo" className="h-10 w-auto object-contain rounded-lg" />
+            <img src="/logo/bankers_logo.jpeg" alt="Bankers Grade Logo" className="h-10 w-auto object-contain rounded-lg" />
           </Link>
         </div>
 

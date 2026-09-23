@@ -18,7 +18,7 @@ const transporter = nodemailer.createTransport({
   port: Number(process.env.SMTP_PORT) || 587,
   secure: process.env.SMTP_SECURE === 'true',
   auth: {
-    user: process.env.SMTP_USER || 'support@osacademy.com',
+    user: process.env.SMTP_USER || 'support@edrilla.com',
     pass: process.env.SMTP_PASS || 'vjbfuqityyfivvii',
   },
 });
@@ -54,7 +54,7 @@ async function sendCertificateEmail(certificateId) {
         course_name: 'Become an Ai Builder in 30 Days',
         completion_date: cert.completion_date ? new Date(cert.completion_date) : new Date(),
         instructor_name: instructor?.fullName || cert.instructor_name || 'Instructor',
-        platform_name: 'OS Academy',
+        platform_name: 'Bankers Grade',
         serial_number: cert.serial_number || '',
         extra_lines: [
           'for participating in the AI Live Cohort',
@@ -88,7 +88,7 @@ async function sendCertificateEmail(certificateId) {
       ? new Date(cert.completion_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
 
     await transporter.sendMail({
-      from: `"Edrilla" <${process.env.SMTP_USER || 'support@osacademy.com'}>`,
+      from: `"Edrilla" <${process.env.SMTP_USER || 'support@edrilla.com'}>`,
       to: studentEmail,
       subject: `Your Certificate for ${courseName} - Edrilla`,
       html: `<!DOCTYPE html><html><head><style>body{font-family:Arial,sans-serif;background:#f4f7fa;padding:40px 10px}.container{max-width:600px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden}.header{background:#0d1b2a;padding:50px 30px;text-align:center;border-bottom:5px solid #B1E346}.header h1{color:#fff;margin:0;font-size:32px;letter-spacing:6px}.content{padding:40px 35px}.content h2{color:#0d1b2a}.footer{background:#0d1b2a;padding:40px;text-align:center;color:#94a3b8}</style></head><body><div class="container"><div class="header"><h1>EDRILLA</h1></div><div class="content"><h2>Congratulations, ${studentName}!</h2><p>You have successfully completed <strong>${courseName}</strong>${completionDate ? ` on <strong>${completionDate}</strong>` : ''}.</p><p>Your certificate is attached.</p></div><div class="footer"><p style="color:#fff;font-size:18px;font-weight:bold">EDRILLA</p><p>Warm Regards,<br>Team Lapaas</p></div></div></body></html>`,

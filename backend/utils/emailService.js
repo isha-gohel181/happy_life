@@ -7,7 +7,7 @@ dotenv.config();
  * 
  * Transactional: noreply@edrilla.com (process.env.TransactionalEmail / process.env.TransactionalEmailPass)
  * Founder/Casual: sahil@edrilla.com (process.env.FounderEmail / process.env.FounderEmailPass)
- * Support: support@osacademy.com (process.env.SupportEmail / process.env.SupportEmailPass)
+ * Support: support@edrilla.com (process.env.SupportEmail / process.env.SupportEmailPass)
  */
 class EmailService {
   constructor() {
@@ -63,7 +63,7 @@ class EmailService {
       case "founder":
         return `"Sahil (Edrilla)" <${process.env.FounderEmail || "sahil@edrilla.com"}>`;
       case "support":
-        return `"Edrilla Support" <${process.env.SupportEmail || "support@osacademy.com"}>`;
+        return `"Edrilla Support" <${process.env.SupportEmail || "support@edrilla.com"}>`;
       default:
         return `"Edrilla" <${process.env.TransactionalEmail || "noreply@edrilla.com"}>`;
     }
@@ -237,7 +237,8 @@ class EmailService {
         <h2>Course Enrollment Confirmation</h2>
         <p>Hello <strong>${name}</strong>,</p>
         <p>Thank you for enrolling in our course(s)! Your enrollment is now confirmed and you can start learning right away.</p>
-        ${password !== null && password !== undefined && password !== ''
+        ${
+        password !== null && password !== undefined && password !== ''
           ? `
           <p>Your login details are as follows:</p>
           <p><strong>Email:</strong> ${email}</p>
@@ -354,7 +355,7 @@ class EmailService {
         </div>
         <div class="footer">
             <p class="support-info">Need help? Contact us at</p>
-            <a href="mailto:support@osacademy.com" class="support-email">support@osacademy.com</a>
+            <a href="mailto:support@edrilla.com" class="support-email">support@edrilla.com</a>
         </div>
     </div>
 </body>

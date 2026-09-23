@@ -46,15 +46,13 @@ export const loginUser = createAsyncThunk(
 
 export const googleLoginUser = createAsyncThunk(
   'auth/googleLoginUser',
-  async ({ email, fullName, deviceId, platform }, { rejectWithValue }) => {
+  async ({ googleAccessToken, deviceId, platform }, { rejectWithValue }) => {
     try {
       const res = await fetch(`${BASE_URL}/google-login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email,
-          fullName,
-          password: 'google_oauth_bypass', // Backend requires a password field but it's just hashed if new
+          googleAccessToken,
           deviceId: deviceId || 'browser',
           platform: platform || 'web'
         }),

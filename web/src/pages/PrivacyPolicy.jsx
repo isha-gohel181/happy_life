@@ -17,7 +17,7 @@ const PrivacyPolicy = () => {
         <div className="privacy-animate space-y-6 text-base leading-relaxed">
           <p><strong>Effective Date:</strong> January 1, 2026</p>
           <p>
-            At OS Academy (operated by EdutouchInfinity Pvt. Ltd.), we take your privacy seriously. This Privacy Policy explains how we collect, use, and protect your personal information when you use our educational platform.
+            At Bankers Grade (operated by EdutouchInfinity Pvt. Ltd.), we take your privacy seriously. This Privacy Policy explains how we collect, use, and protect your personal information when you use our educational platform.
           </p>
 
           <h2 className="text-xl font-bold text-amber-600 mt-6">1. Information We Collect</h2>

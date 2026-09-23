@@ -225,7 +225,7 @@ const DashboardLiveClasses = () => {
                             <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
                             <span className="font-jetbrains text-[10px] text-accent tracking-[0.4em] uppercase">{t('liveSignal') || 'LIVE SIGNAL'}</span>
                         </div>
-                        <h1 className="font-newsreader italic text-6xl md:text-8xl text-normal tracking-tighter">
+                        <h1 className="font-newsreader italic text-4xl md:text-6xl text-normal tracking-tighter">
                             {t('liveClasses') || 'Live Classes'}
                         </h1>
                     </div>

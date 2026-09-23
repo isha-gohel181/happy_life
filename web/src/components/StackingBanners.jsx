@@ -121,7 +121,7 @@ const StackingBanners = () => {
               </span>
             </div>
 
-            <h2 className="font-newsreader text-5xl md:text-7xl italic text-slate-900 leading-tight tracking-tight">
+            <h2 className="font-newsreader text-4xl md:text-6xl italic text-slate-900 leading-tight tracking-tight">
               {t('selectionTitle')}
             </h2>
 

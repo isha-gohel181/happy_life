@@ -187,7 +187,7 @@ const News = () => {
             </span>
             
             <div className="relative">
-              <h1 className="font-newsreader text-5xl md:text-8xl font-bold italic text-slate-900 tracking-tight">
+              <h1 className="font-newsreader text-4xl md:text-6xl font-bold italic text-slate-900 tracking-tight">
                 <span className="block">{t('latestTitle')}</span>
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-0 mt-2">
                   <div className="relative">

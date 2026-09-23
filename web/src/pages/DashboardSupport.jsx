@@ -357,7 +357,7 @@ const DashboardSupport = () => {
                             {/* Submit Section (Strategic Action) */}
                             <div className="pt-24 pb-20 border-t border-slate-200 grid grid-cols-1 lg:grid-cols-2 items-center gap-20 support-reveal opacity-0">
                                 <div className="space-y-8">
-                                    <h2 className="font-newsreader italic text-5xl md:text-7xl text-slate-900 font-bold tracking-tighter leading-[0.9]">
+                                    <h2 className="font-newsreader italic text-4xl md:text-5xl text-slate-900 font-bold tracking-tighter leading-[0.9]">
                                        {t('establishCommunication')}
                                     </h2>
                                     <p className="font-jetbrains text-xs text-slate-600 leading-[2] uppercase tracking-widest max-w-md font-medium">

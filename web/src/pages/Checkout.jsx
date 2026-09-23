@@ -170,7 +170,7 @@ const Checkout = () => {
             key: rKey,
             amount: rAmount, // amount in paise expected
             currency: razor.currency || 'INR',
-            name: selectedPlan.title || 'OS Academy',
+            name: selectedPlan.title || 'Bankers Grade',
             description: course.title || 'Course Purchase',
             order_id: order.id,
             handler: async function (response) {

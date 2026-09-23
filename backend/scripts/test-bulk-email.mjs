@@ -72,7 +72,7 @@ const HTML_TEMPLATE = (name, email, passwordText) => `
                 </div>
             </div>
             
-            <p>For any queries, simply reply to this email or contact us at <a href="mailto:support@osacademy.com" class="support-link">support@osacademy.com</a>. You can also raise a support query directly from the mobile app help section.</p>
+            <p>For any queries, simply reply to this email or contact us at <a href="mailto:support@edrilla.com" class="support-link">support@edrilla.com</a>. You can also raise a support query directly from the mobile app help section.</p>
 
             <p>Happy Learning!<br>Team Edrilla</p>
         </div>

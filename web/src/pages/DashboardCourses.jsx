@@ -110,7 +110,7 @@ const DashboardCourses = () => {
         <div className="courses-hero max-w-[1600px] mx-auto mb-12 flex flex-col md:flex-row md:items-end justify-between items-start gap-8">
           <div className="space-y-2">
              <p className="font-jetbrains text-xs text-amber-800 uppercase tracking-[0.4em] font-black italic">{t('curatedCatalog')}</p>
-             <h1 className="font-newsreader italic text-5xl md:text-7xl text-slate-900 font-bold tracking-tight leading-none uppercase">
+             <h1 className="font-newsreader italic text-4xl md:text-6xl text-slate-900 font-bold tracking-tight leading-none uppercase">
                 {t('ourCoursesTitle')}
              </h1>
           </div>

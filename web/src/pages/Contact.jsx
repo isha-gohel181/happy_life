@@ -322,7 +322,7 @@ const Contact = () => {
                                 <h3 className="font-newsreader text-xl italic text-amber-800 font-bold mb-3">{t('socialMedia')}</h3>
                                 <div className="flex flex-col gap-2">
                                     <div className="font-jetbrains text-xs text-slate-600">
-                                        YouTube – <a href="https://www.youtube.com/@bankersgrade" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">OS Academy</a>
+                                        YouTube – <a href="https://www.youtube.com/@bankersgrade" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">Bankers Grade</a>
                                     </div>
                                     <div className="font-jetbrains text-xs text-slate-600">
                                         Instagram – <a href="https://www.instagram.com/bankersgrade" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">@bankersgrade</a>

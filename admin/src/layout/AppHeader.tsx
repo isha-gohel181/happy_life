@@ -86,12 +86,12 @@ const AppHeader: React.FC = () => {
           <Link to="/" className="lg:hidden">
             <img
               className="dark:hidden h-10 w-auto object-contain"
-              src="/images/logo/osa_logo.png"
+              src="/images/logo/bankers_logo.jpeg"
               alt="Logo"
             />
             <img
               className="hidden dark:block h-10 w-auto object-contain"
-              src="/images/logo/osa_logo.png"
+              src="/images/logo/bankers_logo.jpeg"
               alt="Logo"
             />
           </Link>

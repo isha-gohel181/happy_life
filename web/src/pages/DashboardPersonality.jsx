@@ -199,7 +199,7 @@ const DashboardPersonality = () => {
                 </div>
                 <div className="text-center md:text-left pt-4">
                    <p className="font-jetbrains text-[8px] text-accent font-black tracking-[0.6em] uppercase mb-4 italic">Analysis Synchronized</p>
-                   <h1 className="font-newsreader text-6xl md:text-8xl italic text-normal font-extralight mb-6 tracking-tighter leading-none">
+                   <h1 className="font-newsreader text-4xl md:text-6xl italic text-normal font-extralight mb-6 tracking-tighter leading-none">
                      Type: <span className="text-accent underline-lime">{displayData.name}</span>
                    </h1>
                    <p className="font-montserrat text-[14px] md:text-xs text-description/80 max-w-2xl leading-relaxed uppercase tracking-[0.3em] mb-10">
