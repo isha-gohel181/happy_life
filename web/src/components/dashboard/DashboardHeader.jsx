@@ -53,9 +53,9 @@ const DashboardHeader = () => {
     { key: 'myPurchases', name: (t('myPurchases') || 'MY PURCHASES').toUpperCase(), path: '/dashboard/purchases' },
     { key: 'myCourses', name: (t('myCourses') || 'MY COURSES').toUpperCase(), path: '/dashboard/my-courses' },
     { key: 'allCourses', name: (t('allCourses') || 'ALL COURSES').toUpperCase(), path: '/dashboard/courses' },
-    // { key: 'forum', name: (t('forum') || 'FORUM').toUpperCase(), path: '/dashboard/forum' },
-    // { key: 'news', name: (t('news') || 'NEWS').toUpperCase(), path: '/dashboard/news' },
-    // { key: 'jobPostings', name: (t('jobPostings') || 'JOB POSTINGS').toUpperCase(), path: '/dashboard/job-posts' },
+    { key: 'forum', name: (t('forum') || 'FORUM').toUpperCase(), path: '/dashboard/forum' },
+    { key: 'news', name: (t('news') || 'NEWS').toUpperCase(), path: '/dashboard/news' },
+    { key: 'jobPostings', name: (t('jobPostings') || 'JOB POSTINGS').toUpperCase(), path: '/dashboard/job-posts' },
   ]
 
   const menuRef = useRef(null)
@@ -147,7 +147,7 @@ const DashboardHeader = () => {
 
         <div className="dash-menu-item absolute top-0 left-0 w-full p-6 flex items-center justify-between z-20">
           <div className="flex items-center gap-2.5">
-            <img src="/logo/bankers_logo.jpeg" alt="Bankers Grade Logo" className="h-8 w-auto object-contain rounded-lg" />
+            <img src="/logos/osa_logo.png" alt="OS Academy Logo" className="h-8 md:h-9 w-auto object-contain rounded-full" />
           </div>
           <button
             onClick={toggleMenu}
@@ -230,7 +230,7 @@ const DashboardHeader = () => {
       <div className="flex items-center gap-6">
         {/* DASHBOARD LOGO */}
         <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity text-slate-900">
-          <img src="/logo/bankers_logo.jpeg" alt="Bankers Grade Logo" className="h-8 w-auto object-contain rounded-lg" />
+          <img src="/logos/osa_logo.png" alt="OS Academy Logo" className="h-8 md:h-9 w-auto object-contain rounded-full" />
         </Link>
 
         <nav className="hidden [@media(min-width:1300px)]:flex items-center gap-6">

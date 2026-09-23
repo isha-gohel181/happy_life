@@ -251,7 +251,7 @@ const DashboardQuiz = () => {
 
     if (detailLoading) {
         return (
-            <div className="min-h-screen bg-[#f4f6fe] flex flex-col items-center justify-center space-y-4">
+            <div className="min-h-screen bg-[#fbf9f4] flex flex-col items-center justify-center space-y-4">
                 <div className="w-12 h-12 border-2 border-accent/20 border-t-accent rounded-full animate-spin" />
             </div>
         )
@@ -259,14 +259,14 @@ const DashboardQuiz = () => {
 
     if (!quiz) {
         return (
-            <div className="min-h-screen bg-[#f4f6fe] text-slate-800 flex items-center justify-center p-8">
+            <div className="min-h-screen bg-[#fbf9f4] text-slate-800 flex items-center justify-center p-8">
                 <div className="max-w-2xl text-center space-y-6 bg-white border border-slate-200 p-8 rounded-2xl shadow-sm">
-                    <div className="w-20 h-20 bg-blue-50 border border-blue-100 rounded-full flex items-center justify-center mx-auto text-[#011753]">
+                    <div className="w-20 h-20 bg-amber-50 border border-amber-100 rounded-full flex items-center justify-center mx-auto text-[#D99B2A]">
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" /></svg>
                     </div>
                     <h2 className="font-newsreader text-4xl italic">Protocol Not Found</h2>
                     <p className="text-slate-500 font-mono uppercase tracking-widest text-[10px]">Security Clearance Failure or Invalid Mission ID</p>
-                    <Link to="/dashboard/my-courses" className="inline-block px-12 py-4 bg-[#011753] hover:bg-[#011447] text-white font-bold uppercase tracking-wider text-xs rounded-xl shadow-md transition-all">Back to dashboard</Link>
+                    <Link to="/dashboard/my-courses" className="inline-block px-12 py-4 bg-[#D99B2A] hover:bg-[#c2841f] text-white font-bold uppercase tracking-wider text-xs rounded-xl shadow-md transition-all">Back to dashboard</Link>
                 </div>
             </div>
         )
@@ -275,7 +275,7 @@ const DashboardQuiz = () => {
     // --- RENDER: Results Screen ---
     if (isFinished) {
         return (
-            <div className="min-h-screen bg-[#f4f6fe] text-slate-900 flex flex-col">
+            <div className="min-h-screen bg-[#fbf9f4] text-slate-900 flex flex-col">
                 <header className="bg-white border-b border-slate-200 h-16 px-6 flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <Link
@@ -287,7 +287,7 @@ const DashboardQuiz = () => {
                                 <polyline points="12 19 5 12 12 5" />
                             </svg>
                         </Link>
-                        <img src="/logo/bankers_logo.jpeg" alt="Logo" className="h-8 w-auto object-contain rounded" />
+                        <img src="/logos/osa_logo.png" alt="OS Academy Logo" className="h-8 w-auto object-contain rounded" />
                         <div className="h-6 w-[1px] bg-slate-200" />
                         <span className="font-semibold text-slate-800 text-sm">
                             {sanitizeDisplay(quiz.quizTitle)} - Evaluation Results
@@ -297,14 +297,14 @@ const DashboardQuiz = () => {
                 <main className="flex-grow flex items-center justify-center p-6">
                     <div className="bg-white border border-slate-200 max-w-2xl w-full p-8 md:p-12 rounded-2xl shadow-sm text-center space-y-8">
                         <div className="space-y-3">
-                            <p className="font-mono text-xs text-[#011753] uppercase tracking-[0.3em] font-black">Protocol Complete</p>
+                            <p className="font-mono text-xs text-[#D99B2A] uppercase tracking-[0.3em] font-black">Protocol Complete</p>
                             <h1 className="font-newsreader italic text-5xl md:text-6xl text-slate-900 font-extralight tracking-tight leading-none uppercase">Evaluation Success</h1>
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
                             <div className="p-6 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
                                 <p className="font-mono text-[9px] text-slate-400 uppercase tracking-widest">Score Achieved</p>
-                                <p className="font-newsreader text-4xl text-[#011753] font-bold italic">{submitResult?.data?.score || 0}%</p>
+                                <p className="font-newsreader text-4xl text-[#D99B2A] font-bold italic">{submitResult?.data?.score || 0}%</p>
                             </div>
                             <div className="p-6 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
                                 <p className="font-mono text-[9px] text-slate-400 uppercase tracking-widest">Status</p>
@@ -321,25 +321,25 @@ const DashboardQuiz = () => {
                         <div className="pt-6 flex flex-wrap justify-center gap-4">
                             <button 
                                 onClick={() => setResultView('overview')}
-                                className={`px-6 py-3 font-bold uppercase tracking-wider text-xs rounded-xl shadow-sm transition-all ${resultView === 'overview' ? 'bg-[#011753] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
+                                className={`px-6 py-3 font-bold uppercase tracking-wider text-xs rounded-xl shadow-sm transition-all ${resultView === 'overview' ? 'bg-[#D99B2A] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
                             >
                                 Overview
                             </button>
                             {quiz.showLeaderboard !== false && (
                                 <button 
                                     onClick={() => setResultView('leaderboard')}
-                                    className={`px-6 py-3 font-bold uppercase tracking-wider text-xs rounded-xl shadow-sm transition-all ${resultView === 'leaderboard' ? 'bg-[#011753] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
+                                    className={`px-6 py-3 font-bold uppercase tracking-wider text-xs rounded-xl shadow-sm transition-all ${resultView === 'leaderboard' ? 'bg-[#D99B2A] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
                                 >
                                     Leaderboard
                                 </button>
                             )}
                             <button 
                                 onClick={() => setResultView('review')}
-                                className={`px-6 py-3 font-bold uppercase tracking-wider text-xs rounded-xl shadow-sm transition-all ${resultView === 'review' ? 'bg-[#011753] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
+                                className={`px-6 py-3 font-bold uppercase tracking-wider text-xs rounded-xl shadow-sm transition-all ${resultView === 'review' ? 'bg-[#D99B2A] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
                             >
                                 Review Answers
                             </button>
-                            <Link to={`/dashboard/course/${courseId}`} className="inline-block px-6 py-3 border-2 border-[#011753] text-[#011753] font-bold uppercase tracking-wider text-xs rounded-xl hover:bg-[#011753] hover:text-white transition-all">
+                            <Link to={`/dashboard/course/${courseId}`} className="inline-block px-6 py-3 border-2 border-[#D99B2A] text-[#D99B2A] font-bold uppercase tracking-wider text-xs rounded-xl hover:bg-[#D99B2A] hover:text-white transition-all">
                                 Exit
                             </Link>
                         </div>
@@ -366,13 +366,13 @@ const DashboardQuiz = () => {
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-100">
                                                     {leaderboard.map((entry, idx) => (
-                                                        <tr key={idx} className={entry.userId === user?._id ? "bg-blue-50" : ""}>
+                                                        <tr key={idx} className={entry.userId === user?._id ? "bg-amber-50" : ""}>
                                                             <td className="px-4 py-3 font-bold">#{entry.rank}</td>
                                                             <td className="px-4 py-3 font-medium">
                                                                 {entry.firstName} {entry.lastName}
-                                                                {entry.userId === user?._id && <span className="ml-2 text-[10px] bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full">You</span>}
+                                                                {entry.userId === user?._id && <span className="ml-2 text-[10px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full">You</span>}
                                                             </td>
-                                                            <td className="px-4 py-3 text-right font-bold text-[#011753]">{entry.score} / {entry.totalMarks}</td>
+                                                            <td className="px-4 py-3 text-right font-bold text-[#D99B2A]">{entry.score} / {entry.totalMarks}</td>
                                                             <td className="px-4 py-3 text-right text-slate-500">{entry.timeTaken}s</td>
                                                         </tr>
                                                     ))}
@@ -421,7 +421,7 @@ const DashboardQuiz = () => {
                                                 </div>
 
                                                 {q.explanation && (
-                                                    <div className="mt-4 p-4 bg-blue-50 border border-blue-100 rounded-lg text-sm text-[#011753]">
+                                                    <div className="mt-4 p-4 bg-amber-50 border border-amber-100 rounded-lg text-sm text-[#D99B2A]">
                                                         <strong>Explanation:</strong> {sanitizeDisplay(q.explanation)}
                                                     </div>
                                                 )}
@@ -440,20 +440,20 @@ const DashboardQuiz = () => {
     // --- RENDER: Start / Intro Screen ---
     if (!isStarted) {
         return (
-            <div className="min-h-screen bg-[#f4f6fe] text-slate-900 selection:bg-blue-50/60 flex flex-col">
+            <div className="min-h-screen bg-[#fbf9f4] text-slate-900 selection:bg-amber-50/60 flex flex-col">
                 <DashboardHeader />
                 <main className="flex-grow flex items-center justify-center p-6 pt-24">
                     <div className="bg-white border border-slate-200 max-w-4xl w-full p-8 md:p-12 rounded-2xl shadow-sm space-y-8">
                         {/* Header */}
                         <div className="space-y-4">
-                            <Link to={`/dashboard/course/${courseId}`} className="font-mono text-[10px] text-[#011753] uppercase tracking-wider hover:underline flex items-center gap-1.5">
+                            <Link to={`/dashboard/course/${courseId}`} className="font-mono text-[10px] text-[#D99B2A] uppercase tracking-wider hover:underline flex items-center gap-1.5">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6"/></svg>
                                 Return to Session
                             </Link>
                             
                             <div className="space-y-3">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-blue-50 border border-blue-100 rounded-xl flex items-center justify-center text-[#011753]">
+                                    <div className="w-12 h-12 bg-amber-50 border border-amber-100 rounded-xl flex items-center justify-center text-[#D99B2A]">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" /></svg>
                                     </div>
                                     <h1 className="font-newsreader italic text-3xl md:text-5xl text-slate-900 font-extralight tracking-tight leading-[0.9] uppercase">{sanitizeDisplay(quiz.quizTitle)}</h1>
@@ -470,8 +470,8 @@ const DashboardQuiz = () => {
                                 { label: 'Total Marks', value: quiz.totalMarks, icon: 'award' },
                                 { label: 'Pass Marks', value: quiz.passMark, icon: 'check-circle' }
                             ].map((stat, i) => (
-                                <div key={i} className="bg-slate-50 border border-slate-200 p-6 rounded-xl space-y-3 text-center group hover:border-[#011753]/30 transition-all">
-                                    <div className="flex justify-center text-[#011753]/50 group-hover:text-[#011753] transition-colors">
+                                <div key={i} className="bg-slate-50 border border-slate-200 p-6 rounded-xl space-y-3 text-center group hover:border-[#D99B2A]/30 transition-all">
+                                    <div className="flex justify-center text-[#D99B2A]/50 group-hover:text-[#D99B2A] transition-colors">
                                         {stat.icon === 'target' && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>}
                                         {stat.icon === 'clock' && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>}
                                         {stat.icon === 'award' && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 15l-2 5L9 9l11 4-5 2zm0 0l2 5 3-11-11 4 5 2z"/><circle cx="12" cy="12" r="10"/></svg>}
@@ -488,8 +488,8 @@ const DashboardQuiz = () => {
                         {/* Instructions */}
                         <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl space-y-4">
                             <div className="flex items-center gap-3">
-                                <svg className="text-[#011753]" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                                <h3 className="font-mono text-xs text-[#011753] uppercase tracking-wider font-bold">Tactical Instructions</h3>
+                                <svg className="text-[#D99B2A]" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                <h3 className="font-mono text-xs text-[#D99B2A] uppercase tracking-wider font-bold">Tactical Instructions</h3>
                             </div>
                             <ul className="space-y-2.5 font-newsreader italic text-slate-700 list-disc pl-5 leading-relaxed text-sm">
                                 <li>Read each question carefully before selecting your answer.</li>
@@ -512,7 +512,7 @@ const DashboardQuiz = () => {
                                             <p className="font-newsreader italic text-xs text-slate-500 leading-snug">{sanitizeDisplay(section.sectionDescription)}</p>
                                         </div>
                                         <div className="text-right ml-4">
-                                            <p className="font-newsreader text-2xl text-[#011753] font-bold italic">{section.questions?.length || 0}</p>
+                                            <p className="font-newsreader text-2xl text-[#D99B2A] font-bold italic">{section.questions?.length || 0}</p>
                                             <p className="font-mono text-[8px] text-slate-400 uppercase tracking-widest">Questions</p>
                                         </div>
                                     </div>
@@ -524,7 +524,7 @@ const DashboardQuiz = () => {
                         <div className="flex justify-center pt-4">
                             <button 
                                 onClick={startQuiz}
-                                className="px-16 py-4 bg-[#011753] hover:bg-[#011447] text-white font-bold uppercase tracking-wider text-xs rounded-xl shadow-md hover:scale-105 active:scale-95 transition-all"
+                                className="px-16 py-4 bg-[#D99B2A] hover:bg-[#c2841f] text-white font-bold uppercase tracking-wider text-xs rounded-xl shadow-md hover:scale-105 active:scale-95 transition-all"
                             >
                                 Start Quiz
                             </button>
@@ -539,7 +539,7 @@ const DashboardQuiz = () => {
     const currentQ = allQuestions[currentQuestionIndex]
 
     return (
-        <div className="min-h-screen bg-[#f4f6fe] text-slate-850 selection:bg-blue-50/60 flex flex-col">
+        <div className="min-h-screen bg-[#fbf9f4] text-slate-850 selection:bg-amber-50/60 flex flex-col">
             {/* Custom distraction-free header */}
             <header className="bg-white border-b border-slate-200 h-16 px-6 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-4">
@@ -556,7 +556,7 @@ const DashboardQuiz = () => {
                     </Link>
                     
                     {/* Logo */}
-                    <img src="/logo/bankers_logo.jpeg" alt="Logo" className="h-8 w-auto object-contain rounded" />
+                    <img src="/logos/osa_logo.png" alt="OS Academy Logo" className="h-8 w-auto object-contain rounded" />
 
                     {/* Vertical divider */}
                     <div className="h-6 w-[1px] bg-slate-200" />
@@ -582,7 +582,7 @@ const DashboardQuiz = () => {
                                 }}
                                 className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all truncate border ${
                                     isCurrentSection
-                                        ? 'bg-[#011753] border-[#011753] text-white shadow-sm'
+                                        ? 'bg-[#D99B2A] border-[#D99B2A] text-white shadow-sm'
                                         : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                                 }`}
                             >
@@ -671,16 +671,16 @@ const DashboardQuiz = () => {
                                                     onClick={() => handleOptionSelect(currentQ.id, opt.label)}
                                                     className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all ${
                                                         isSelected
-                                                            ? 'bg-blue-50/50 border-[#011753] text-[#011753] shadow-sm font-semibold'
+                                                            ? 'bg-amber-50/50 border-[#D99B2A] text-[#D99B2A] shadow-sm font-semibold'
                                                             : 'bg-white border-slate-200 hover:border-slate-300 text-slate-700'
                                                     }`}
                                                 >
                                                     <div
                                                         className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                                                            isSelected ? 'border-[#011753] bg-white' : 'border-slate-300'
+                                                            isSelected ? 'border-[#D99B2A] bg-white' : 'border-slate-300'
                                                         }`}
                                                     >
-                                                        {isSelected && <div className="w-2.5 h-2.5 bg-[#011753] rounded-full" />}
+                                                        {isSelected && <div className="w-2.5 h-2.5 bg-[#D99B2A] rounded-full" />}
                                                     </div>
                                                     <span className="text-sm font-medium">
                                                         <span className="opacity-50 mr-1.5">{opt.label}.</span> {sanitizeDisplay(opt.text)}
@@ -712,7 +712,7 @@ const DashboardQuiz = () => {
                         </div>
                         <button
                             onClick={handleSaveAndNext}
-                            className="px-6 py-2.5 bg-[#011753] hover:bg-[#011447] text-white font-bold text-xs rounded-lg shadow-sm transition-all"
+                            className="px-6 py-2.5 bg-[#D99B2A] hover:bg-[#c2841f] text-white font-bold text-xs rounded-lg shadow-sm transition-all"
                         >
                             Save & Next
                         </button>
@@ -723,7 +723,7 @@ const DashboardQuiz = () => {
                 <aside className="w-80 border-l border-slate-200 bg-white flex flex-col p-6 space-y-6 overflow-y-auto hidden lg:flex shrink-0">
                     {/* User profile details */}
                     <div className="flex items-center gap-3 p-4 bg-slate-50 border border-slate-200 rounded-xl">
-                        <div className="w-10 h-10 rounded-full bg-[#011753] text-white flex items-center justify-center font-bold text-sm">
+                        <div className="w-10 h-10 rounded-full bg-[#D99B2A] text-white flex items-center justify-center font-bold text-sm">
                             {getInitials(user?.fullName || user?.name)}
                         </div>
                         <div className="flex flex-col">
@@ -774,7 +774,7 @@ const DashboardQuiz = () => {
                                     if (isVisited) statusClass = "bg-red-500 border-red-500 text-white hover:bg-red-600" // Visited but not answered (Red)
                                     if (isAnswered) statusClass = "bg-green-600 border-green-600 text-white hover:bg-green-700" // Answered (Green)
                                     if (isFlagged) statusClass = "bg-purple-600 border-purple-600 text-white hover:bg-purple-700" // Flagged (Purple)
-                                    if (isCurrent) statusClass += " ring-2 ring-[#011753] ring-offset-1 scale-105 z-10" // Current Selection Indicator
+                                    if (isCurrent) statusClass += " ring-2 ring-[#D99B2A] ring-offset-1 scale-105 z-10" // Current Selection Indicator
 
                                     return (
                                         <button
@@ -829,7 +829,7 @@ const DashboardQuiz = () => {
                             </button>
                             <button
                                 onClick={handleWarningContinue}
-                                className="px-4 py-2.5 bg-[#011753] hover:bg-[#011447] text-white font-bold text-xs rounded-xl transition-all"
+                                className="px-4 py-2.5 bg-[#D99B2A] hover:bg-[#c2841f] text-white font-bold text-xs rounded-xl transition-all"
                             >
                                 Continue to Submit
                             </button>
@@ -842,7 +842,7 @@ const DashboardQuiz = () => {
             {showConfirmModal && (
                 <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm px-4">
                     <div className="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 max-w-md w-full shadow-xl space-y-6">
-                        <div className="w-12 h-12 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
+                        <div className="w-12 h-12 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <circle cx="12" cy="12" r="10" />
                                 <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />

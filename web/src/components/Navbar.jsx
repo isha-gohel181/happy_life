@@ -16,6 +16,10 @@ const Navbar = ({ isLoaded }) => {
   const { t } = useLanguage()
   const location = useLocation()
   const [isOpen, setIsOpen] = useState(false)
+  const [coursesDropdownOpen, setCoursesDropdownOpen] = useState(false)
+  const [freeDropdownOpen, setFreeDropdownOpen] = useState(false)
+  const coursesDropdownRef = useRef(null)
+  const freeDropdownRef = useRef(null)
   const menuRef = useRef(null)
   const shutter1Ref = useRef(null)
   const shutter2Ref = useRef(null)
@@ -24,13 +28,27 @@ const Navbar = ({ isLoaded }) => {
   const line2Ref = useRef(null)
   const line3Ref = useRef(null)
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (coursesDropdownRef.current && !coursesDropdownRef.current.contains(event.target)) {
+        setCoursesDropdownOpen(false)
+      }
+      if (freeDropdownRef.current && !freeDropdownRef.current.contains(event.target)) {
+        setFreeDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
   const navLinks = [
     { key: 'home', name: t('home'), path: '/' },
-    { key: 'ourCourses', name: t('ourCourses'), path: '/courses' },
-    // { key: 'forum', name: t('forum'), path: '/forum' },
+    { key: 'ourCourses', name: t('ourCourses'), path: '/courses', hasDropdown: true, dropdownType: 'courses' },
+    { key: 'freeContent', name: t('freeContent') || 'Free Content', path: '/free-content', hasDropdown: true, dropdownType: 'freeContent' },
+    { key: 'forum', name: t('forum'), path: '/forum' },
     { key: 'about Us', name: t('about Us'), path: '/about-us' },
-    // { key: 'gig', name: t('gig'), path: '/gig' },
-    // { key: 'news', name: t('news'), path: '/news' },
+    { key: 'gig', name: t('gig'), path: '/gig' },
+    { key: 'news', name: t('news'), path: '/news' },
   ]
 
   const socialLinks = [
@@ -143,11 +161,12 @@ const Navbar = ({ isLoaded }) => {
 
   const updatePillToActive = () => {
     if (!linksWrapRef.current || !pillRef.current) return
-    const activeEl = linksWrapRef.current.querySelector('.active')
+    const activeEl = linksWrapRef.current.querySelector('.nav-item-active, .active')
     if (activeEl) {
+      const targetEl = activeEl.classList.contains('nav-slot') ? activeEl : (activeEl.closest('.nav-slot') || activeEl)
       gsap.to(pillRef.current, {
-        left: activeEl.offsetLeft,
-        width: activeEl.offsetWidth,
+        left: targetEl.offsetLeft,
+        width: targetEl.offsetWidth,
         duration: 0.35,
         ease: 'power3.out',
         autoAlpha: 1
@@ -164,10 +183,10 @@ const Navbar = ({ isLoaded }) => {
 
   // Floating Pill Highlight Logic
   const handleHover = (e) => {
-    const { offsetLeft, offsetWidth } = e.currentTarget
+    const targetEl = e.currentTarget.classList.contains('nav-slot') ? e.currentTarget : (e.currentTarget.closest('.nav-slot') || e.currentTarget)
     gsap.to(pillRef.current, {
-      left: offsetLeft,
-      width: offsetWidth,
+      left: targetEl.offsetLeft,
+      width: targetEl.offsetWidth,
       duration: 0.35,
       ease: 'power3.out',
       autoAlpha: 1
@@ -263,11 +282,11 @@ const Navbar = ({ isLoaded }) => {
       >
         <div
           ref={innerNavRef}
-          className="flex items-center justify-between bg-white/90 rounded-[2rem] md:rounded-full px-4 md:px-6 !py-3 border border-slate-200/80 shadow-sm backdrop-blur-2xl relative z-20 overflow-hidden will-change-[padding,background-color]"
+          className="flex items-center justify-between bg-white/90 rounded-[2rem] md:rounded-full px-4 md:px-6 !py-3 border border-slate-200/80 shadow-sm backdrop-blur-2xl relative z-20 will-change-[padding,background-color]"
         >
 
           <Link to="/" ref={logoRef} className="flex items-center hover:opacity-80 transition-opacity gap-2.5 text-slate-900">
-            <img src="/logo/bankers_logo.jpeg" alt="Bankers Grade Logo" className="h-10 md:h-12 w-auto object-contain rounded-lg" />
+            <img src="/logos/osa_logo.png" alt="OS Academy Logo" className="h-10 md:h-12 w-auto object-contain rounded-full" />
           </Link>
 
           <div
@@ -281,19 +300,307 @@ const Navbar = ({ isLoaded }) => {
               className="absolute top-1/2 -translate-y-1/2 h-9 bg-amber-100 border border-amber-300 rounded-full pointer-events-none transition-all duration-300 z-0 opacity-0"
             />
 
-            {navLinks.map((link) => (
-              <NavLink
-                key={link.key}
-                to={link.path}
-                onMouseEnter={handleHover}
-                className={({ isActive }) =>
-                  `nav-link-item group px-5 py-2 rounded-full font-inter text-[10px] font-bold uppercase transition-all duration-300 tracking-[0.2em] relative z-10 ${isActive ? 'text-amber-900 font-black' : 'text-slate-700 hover:text-slate-900'
-                  }`
-                }
-              >
-                {link.name}
-              </NavLink>
-            ))}
+            {navLinks.map((link) => {
+              if (link.dropdownType === 'courses') {
+                const isCoursesActive = location.pathname.startsWith('/courses')
+                return (
+                  <div
+                    key={link.key}
+                    ref={coursesDropdownRef}
+                    onMouseEnter={(e) => {
+                      handleHover(e)
+                      setCoursesDropdownOpen(true)
+                    }}
+                    onMouseLeave={() => setCoursesDropdownOpen(false)}
+                    className="nav-slot relative flex items-center"
+                  >
+                    <div
+                      onClick={() => setCoursesDropdownOpen((prev) => !prev)}
+                      className={`nav-link-item group px-5 py-2 rounded-full font-inter text-[10px] font-bold uppercase transition-all duration-300 tracking-[0.2em] relative z-10 flex items-center gap-1.5 cursor-pointer ${
+                        isCoursesActive ? 'nav-item-active text-amber-900 font-black' : 'text-slate-700 hover:text-slate-900'
+                      }`}
+                    >
+                      <Link to={link.path} onClick={(e) => { e.stopPropagation(); setCoursesDropdownOpen(false); }} className="cursor-pointer">
+                        {link.name}
+                      </Link>
+                      <svg
+                        width="8"
+                        height="8"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        className={`transition-transform duration-300 opacity-70 ${coursesDropdownOpen ? 'rotate-180 text-amber-600' : ''}`}
+                      >
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </div>
+
+                    {/* Courses Dropdown Floating Card */}
+                    <div
+                      className={`absolute top-full left-1/2 -translate-x-1/2 pt-3 transition-all duration-300 z-50 ${
+                        coursesDropdownOpen
+                          ? 'opacity-100 pointer-events-auto translate-y-0 visible'
+                          : 'opacity-0 pointer-events-none translate-y-2 invisible'
+                      }`}
+                    >
+                      <div className="w-80 bg-white/95 backdrop-blur-2xl rounded-2xl p-3 border border-slate-200/90 shadow-2xl space-y-1">
+                        {/* 1. All Courses */}
+                        <Link
+                          to="/courses"
+                          onClick={() => setCoursesDropdownOpen(false)}
+                          className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group/item text-left"
+                        >
+                          <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center shrink-0 border border-amber-100">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                              <path d="M6 12v5c0 2 4 3 6 3s6-1 6-3v-5" />
+                            </svg>
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold text-slate-800 group-hover/item:text-amber-600 transition-colors">{t('allCourses') || 'All Courses'}</span>
+                              <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-50 text-amber-800">Catalog</span>
+                            </div>
+                            <p className="text-[10px] text-slate-500 font-medium line-clamp-1">Complete foundation & specialized courses</p>
+                          </div>
+                        </Link>
+
+                        {/* 2. GS Courses */}
+                        <Link
+                          to="/courses?filter=GS COURSES"
+                          onClick={() => setCoursesDropdownOpen(false)}
+                          className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group/item text-left"
+                        >
+                          <div className="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-100">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <circle cx="12" cy="12" r="10" />
+                              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+                            </svg>
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold text-slate-800 group-hover/item:text-indigo-600 transition-colors">{t('gsCourses') || 'GS Courses'}</span>
+                              <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700">Prelims & Mains</span>
+                            </div>
+                            <p className="text-[10px] text-slate-500 font-medium line-clamp-1">General Studies Papers I, II, III & IV</p>
+                          </div>
+                        </Link>
+
+                        {/* 3. Optional Courses */}
+                        <Link
+                          to="/courses?filter=OPTIONAL COURSES"
+                          onClick={() => setCoursesDropdownOpen(false)}
+                          className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group/item text-left"
+                        >
+                          <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                            </svg>
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold text-slate-800 group-hover/item:text-emerald-600 transition-colors">{t('optionalCourses') || 'Optional Courses'}</span>
+                              <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700">Specialized</span>
+                            </div>
+                            <p className="text-[10px] text-slate-500 font-medium line-clamp-1">Pub Ad, Sociology, Geography & mentorship</p>
+                          </div>
+                        </Link>
+
+                        {/* 4. Test Series */}
+                        <Link
+                          to="/courses?tab=test-series"
+                          onClick={() => setCoursesDropdownOpen(false)}
+                          className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group/item text-left"
+                        >
+                          <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                              <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                              <path d="m9 14 2 2 4-4" />
+                            </svg>
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold text-slate-800 group-hover/item:text-blue-600 transition-colors">{t('testSeries') || 'Test Series'}</span>
+                              <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700">Quizzes & Mocks</span>
+                            </div>
+                            <p className="text-[10px] text-slate-500 font-medium line-clamp-1">Interactive mock tests with score analysis</p>
+                          </div>
+                        </Link>
+
+                        {/* 5. Buy Books */}
+                        <Link
+                          to="/courses?tab=buy-books"
+                          onClick={() => setCoursesDropdownOpen(false)}
+                          className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group/item text-left"
+                        >
+                          <div className="w-9 h-9 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 border border-rose-100">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                            </svg>
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold text-slate-800 group-hover/item:text-rose-600 transition-colors">{t('buyBooks') || 'Buy Books'}</span>
+                              <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-rose-50 text-rose-700">eBooks & Notes</span>
+                            </div>
+                            <p className="text-[10px] text-slate-500 font-medium line-clamp-1">Handcrafted notes, syllabus books & guides</p>
+                          </div>
+                        </Link>
+
+                        <div className="pt-2 border-t border-slate-100 mt-1">
+                          <Link
+                            to="/courses"
+                            onClick={() => setCoursesDropdownOpen(false)}
+                            className="flex items-center justify-between p-2 rounded-lg bg-slate-50 hover:bg-amber-50 text-[11px] font-bold text-amber-900 transition-colors text-left"
+                          >
+                            <span>Explore Full Courses Catalog</span>
+                            <span>→</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
+
+              if (link.dropdownType === 'freeContent') {
+                const isFreeActive = location.pathname.startsWith('/free-content')
+                return (
+                  <div
+                    key={link.key}
+                    ref={freeDropdownRef}
+                    onMouseEnter={(e) => {
+                      handleHover(e)
+                      setFreeDropdownOpen(true)
+                    }}
+                    onMouseLeave={() => setFreeDropdownOpen(false)}
+                    className="nav-slot relative flex items-center"
+                  >
+                    <div
+                      onClick={() => setFreeDropdownOpen((prev) => !prev)}
+                      className={`nav-link-item group px-5 py-2 rounded-full font-inter text-[10px] font-bold uppercase transition-all duration-300 tracking-[0.2em] relative z-10 flex items-center gap-1.5 cursor-pointer ${
+                        isFreeActive ? 'nav-item-active text-amber-900 font-black' : 'text-slate-700 hover:text-slate-900'
+                      }`}
+                    >
+                      <Link to={link.path} onClick={(e) => { e.stopPropagation(); setFreeDropdownOpen(false); }} className="cursor-pointer">
+                        {link.name}
+                      </Link>
+                      <svg
+                        width="8"
+                        height="8"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        className={`transition-transform duration-300 opacity-70 ${freeDropdownOpen ? 'rotate-180 text-amber-600' : ''}`}
+                      >
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </div>
+
+                    {/* Dropdown Floating Card */}
+                    <div
+                      className={`absolute top-full left-1/2 -translate-x-1/2 pt-3 transition-all duration-300 z-50 ${
+                        freeDropdownOpen
+                          ? 'opacity-100 pointer-events-auto translate-y-0 visible'
+                          : 'opacity-0 pointer-events-none translate-y-2 invisible'
+                      }`}
+                    >
+                      <div className="w-80 bg-white/95 backdrop-blur-2xl rounded-2xl p-3 border border-slate-200/90 shadow-2xl space-y-1">
+                        <Link
+                          to="/free-content?tab=pdfs"
+                          onClick={() => setFreeDropdownOpen(false)}
+                          className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group/item text-left"
+                        >
+                          <div className="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0 border border-red-100">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                              <polyline points="14 2 14 8 20 8" />
+                            </svg>
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold text-slate-800 group-hover/item:text-amber-600 transition-colors">{t('freePdfs') || 'PDFs & Notes'}</span>
+                              <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-50 text-amber-800">6+ Guides</span>
+                            </div>
+                            <p className="text-[10px] text-slate-500 font-medium line-clamp-1">Download free cheatsheets & study guides</p>
+                          </div>
+                        </Link>
+
+                        <Link
+                          to="/free-content?tab=classes"
+                          onClick={() => setFreeDropdownOpen(false)}
+                          className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group/item text-left"
+                        >
+                          <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center shrink-0 border border-amber-100">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <polygon points="5 3 19 12 5 21 5 3" />
+                            </svg>
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold text-slate-800 group-hover/item:text-amber-600 transition-colors">{t('freeClasses') || 'Classes & Lectures'}</span>
+                              <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-50 text-amber-800">6+ Videos</span>
+                            </div>
+                            <p className="text-[10px] text-slate-500 font-medium line-clamp-1">Free video tutorials & masterclasses</p>
+                          </div>
+                        </Link>
+
+                        <Link
+                          to="/free-content?tab=tests"
+                          onClick={() => setFreeDropdownOpen(false)}
+                          className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group/item text-left"
+                        >
+                          <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                              <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                              <path d="m9 14 2 2 4-4" />
+                            </svg>
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold text-slate-800 group-hover/item:text-amber-600 transition-colors">{t('freeTests') || 'Tests & Quizzes'}</span>
+                              <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-50 text-amber-800">4+ Quizzes</span>
+                            </div>
+                            <p className="text-[10px] text-slate-500 font-medium line-clamp-1">Interactive mock tests with score analysis</p>
+                          </div>
+                        </Link>
+
+                        <div className="pt-2 border-t border-slate-100 mt-1">
+                          <Link
+                            to="/free-content"
+                            onClick={() => setFreeDropdownOpen(false)}
+                            className="flex items-center justify-between p-2 rounded-lg bg-slate-50 hover:bg-amber-50 text-[11px] font-bold text-amber-900 transition-colors text-left"
+                          >
+                            <span>{t('exploreFreeContent') || 'Explore Full Free Library'}</span>
+                            <span>→</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
+
+              return (
+                <NavLink
+                  key={link.key}
+                  to={link.path}
+                  onMouseEnter={handleHover}
+                  className={({ isActive }) =>
+                    `nav-slot nav-link-item group px-5 py-2 rounded-full font-inter text-[10px] font-bold uppercase transition-all duration-300 tracking-[0.2em] relative z-10 ${
+                      isActive ? 'nav-item-active text-amber-900 font-black' : 'text-slate-700 hover:text-slate-900'
+                    }`
+                  }
+                >
+                  {link.name}
+                </NavLink>
+              )
+            })}
           </div>
 
           <div ref={buttonsWrapRef} className="flex items-center gap-3">
@@ -331,7 +638,7 @@ const Navbar = ({ isLoaded }) => {
           {/* Internal Menu Header */}
           <header className="menu-header absolute top-0 left-0 w-full px-8 md:px-12 py-8 md:py-10 flex items-center justify-between z-50">
             <Link to="/" onClick={toggleMenu} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <img src="/logo/bankers_logo.jpeg" alt="Bankers Grade Logo" className="h-10 md:h-12 w-auto object-contain rounded-lg" />
+              <img src="/logos/osa_logo.png" alt="OS Academy Logo" className="h-10 md:h-12 w-auto object-contain rounded-full" />
             </Link>
 
             <button
@@ -345,20 +652,86 @@ const Navbar = ({ isLoaded }) => {
             </button>
           </header>
 
-          <div className="relative z-10 flex flex-col items-center justify-center h-full gap-10 md:gap-16 px-8 text-center pt-28 md:pt-40 pb-12 overflow-y-auto">
-            <div className="flex flex-col items-center gap-6">
+          <div className="relative z-10 flex flex-col items-center justify-center h-full gap-8 md:gap-12 px-8 text-center pt-28 md:pt-40 pb-12 overflow-y-auto">
+            <div className="flex flex-col items-center gap-5">
               {navLinks.map((link) => (
-                <NavLink
-                  key={link.key}
-                  to={link.path}
-                  onClick={toggleMenu}
-                  className={({ isActive }) =>
-                    `menu-item font-newsreader text-3xl sm:text-4xl md:text-8xl font-extralight transition-all duration-300 block ${isActive ? 'text-accent italic' : 'text-slate-800 opacity-60 hover:opacity-100 hover:tracking-wider'
-                    }`
-                  }
-                >
-                  <RollingText text={link.name} className="md:h-24 h-8 sm:h-10" />
-                </NavLink>
+                <div key={link.key} className="flex flex-col items-center gap-2">
+                  <NavLink
+                    to={link.path}
+                    onClick={toggleMenu}
+                    className={({ isActive }) =>
+                      `menu-item font-newsreader text-2xl sm:text-4xl md:text-7xl font-extralight transition-all duration-300 block ${
+                        isActive ? 'text-accent italic' : 'text-slate-800 opacity-60 hover:opacity-100 hover:tracking-wider'
+                      }`
+                    }
+                  >
+                    <RollingText text={link.name} className="md:h-20 h-7 sm:h-10" />
+                  </NavLink>
+                  {link.dropdownType === 'courses' && (
+                    <div className="menu-item flex flex-wrap items-center justify-center gap-2 pb-2 max-w-md">
+                      <Link
+                        to="/courses"
+                        onClick={toggleMenu}
+                        className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 hover:bg-amber-100 hover:text-amber-900 text-[10px] font-mono font-bold uppercase tracking-wider"
+                      >
+                        🎓 {t('allCourses') || 'All Courses'}
+                      </Link>
+                      <Link
+                        to="/courses?filter=GS COURSES"
+                        onClick={toggleMenu}
+                        className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 hover:bg-indigo-100 hover:text-indigo-900 text-[10px] font-mono font-bold uppercase tracking-wider"
+                      >
+                        🏛️ {t('gsCourses') || 'GS Courses'}
+                      </Link>
+                      <Link
+                        to="/courses?filter=OPTIONAL COURSES"
+                        onClick={toggleMenu}
+                        className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 hover:bg-emerald-100 hover:text-emerald-900 text-[10px] font-mono font-bold uppercase tracking-wider"
+                      >
+                        📚 {t('optionalCourses') || 'Optional'}
+                      </Link>
+                      <Link
+                        to="/courses?tab=test-series"
+                        onClick={toggleMenu}
+                        className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 hover:bg-blue-100 hover:text-blue-900 text-[10px] font-mono font-bold uppercase tracking-wider"
+                      >
+                        📝 {t('testSeries') || 'Test Series'}
+                      </Link>
+                      <Link
+                        to="/courses?tab=buy-books"
+                        onClick={toggleMenu}
+                        className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 hover:bg-rose-100 hover:text-rose-900 text-[10px] font-mono font-bold uppercase tracking-wider"
+                      >
+                        📖 {t('buyBooks') || 'Buy Books'}
+                      </Link>
+                    </div>
+                  )}
+                  {link.dropdownType === 'freeContent' && (
+                    <div className="menu-item flex flex-wrap items-center justify-center gap-2 pb-2">
+                      <Link
+                        to="/free-content?tab=pdfs"
+                        onClick={toggleMenu}
+                        className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 hover:bg-amber-100 hover:text-amber-900 text-[10px] font-mono font-bold uppercase tracking-wider"
+                      >
+                        📄 PDFs
+                      </Link>
+                      <Link
+                        to="/free-content?tab=classes"
+                        onClick={toggleMenu}
+                        className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 hover:bg-amber-100 hover:text-amber-900 text-[10px] font-mono font-bold uppercase tracking-wider"
+                      >
+                        🎥 Classes
+                      </Link>
+                      <Link
+                        to="/free-content?tab=tests"
+                        onClick={toggleMenu}
+                        className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 hover:bg-amber-100 hover:text-amber-900 text-[10px] font-mono font-bold uppercase tracking-wider"
+                      >
+                        📝 Tests
+                      </Link>
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
 

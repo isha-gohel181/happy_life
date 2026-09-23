@@ -19,13 +19,13 @@ export default function AuthLayout({
             <div className="flex flex-col items-center max-w-xs">
               <Link to="/" className="block mb-4">
                 <img
-                  className="h-24"
-                  src="/images/logo/bankers_logo.jpeg"
-                  alt="Logo"
+                  className="h-20 object-contain rounded-xl"
+                  src="/images/logo/os_full_logo.jpeg"
+                  alt="OS Academy Logo"
                 />
               </Link>
                 <p className="text-center text-gray-400 dark:text-white/60">
-                Daimond Ecommerce Admin Dashboard 
+                OS Academy Admin Dashboard 
                 </p>
             </div>
           </div>

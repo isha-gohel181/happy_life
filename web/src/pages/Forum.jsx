@@ -622,7 +622,7 @@ const QuestionCard = ({ question }) => {
                      onClick={() => setIsModalOpen(true)}
                      className="w-full bg-accent text-slate-950 p-8 font-jetbrains text-[11px] font-black uppercase tracking-[0.4em] hover:scale-[1.05] active:scale-95 transition-all shadow-accent-soft flex flex-col items-center gap-4 group rounded-xl"
                    >
-                      <div className="w-12 h-12 rounded-full bg-[#4a89ff] flex items-center justify-center text-white shadow-lg group-hover:rotate-90 transition-transform duration-500">
+                      <div className="w-12 h-12 rounded-full bg-slate-950 text-amber-400 border border-amber-400/40 flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-amber-900 group-hover:text-amber-200 transition-all duration-300">
                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 5v14M5 12h14"/></svg>
                       </div>
                       {t('startNewTopic')}

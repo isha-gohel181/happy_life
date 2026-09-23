@@ -183,16 +183,16 @@
   gap: 0.8rem;
   font-size: 0.65rem;
   letter-spacing: 0.2em;
-  color: #011753;
+  color: #D99B2A;
   font-weight: 800;
 }
 
 .status-dot {
   width: 8px;
   height: 8px;
-  background-color: #011753;
+  background-color: #D99B2A;
   border-radius: 50%;
-  box-shadow: 0 0 10px rgba(1, 23, 83, 0.6);
+  box-shadow: 0 0 10px rgba(217, 155, 42, 0.6);
   animation: pulse 2s infinite;
 }
 
@@ -261,7 +261,7 @@
 .stat-value {
   font-size: 3rem;
   font-weight: 800;
-  color: #011753;
+  color: #D99B2A;
   margin-bottom: 0.3rem;
   font-family: var(--font-newsreader);
 }

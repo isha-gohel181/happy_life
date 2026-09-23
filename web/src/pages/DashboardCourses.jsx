@@ -8,57 +8,9 @@ import CourseCard from '../components/CourseCard'
 import DashboardHeader from '../components/dashboard/DashboardHeader'
 import { useLanguage } from '../context/LanguageContext'
 
-const courseData = [
-  {
-    id: 1,
-    category: 'EDITORIAL DESIGN',
-    title: 'The Architecture of the Page',
-    description: 'Mastering grid systems and visual tension in high-end publishing.',
-    price: '$249.00',
-    image: '/courses/architecture.png',
-    isNew: true,
-  },
-  {
-    id: 2,
-    category: 'TYPOGRAPHY',
-    title: 'The Romantic Serif',
-    description: 'History and application of intricate display typefaces in digital systems.',
-    price: '$189.00',
-    image: '/courses/typography.png',
-  },
-  {
-    id: 3,
-    category: 'CURATION',
-    title: 'The Digital Curator',
-    description: 'Transitioning from content manager to high-end content architect.',
-    price: '$322.00',
-    image: '/courses/curator.png',
-  },
-  {
-    id: 4,
-    category: 'ART DIRECTION',
-    title: 'Visual Narrative & Identity',
-    description: 'Building cohesive brand worlds through cinematic storytelling.',
-    price: '$599.00',
-    image: '/courses/narrative.png',
-  },
-  {
-    id: 5,
-    category: 'DIGITAL ART',
-    title: 'Motion & Tonal Stacking',
-    description: 'Creating depth and atmosphere without traditional drop shadows.',
-    price: '$420.00',
-    image: '/courses/motion.png',
-  },
-  {
-    id: 6,
-    category: 'PROFESSIONAL PRACTICE',
-    title: 'Pricing the Premium',
-    description: 'The economics of high-end design services and luxury positioning.',
-    price: '$144.00',
-    image: '/courses/pricing.png',
-  }
-]
+import { dummyCourses } from '../data/coursesData'
+
+const courseData = dummyCourses
 
 
 const DashboardCourses = () => {
@@ -70,6 +22,41 @@ const DashboardCourses = () => {
   const [showAdvanced, setShowAdvanced] = useState(false)
   const [selectedDifficulty, setSelectedDifficulty] = useState('All')
   const [selectedDuration, setSelectedDuration] = useState('All hours')
+
+  const filteredCourses = React.useMemo(() => {
+    const apiAvailable = courses && courses.length > 0
+    let list = apiAvailable ? courses : dummyCourses
+
+    if (activeFilter === 'GS COURSES') {
+      let gsResults = []
+      if (apiAvailable) {
+        gsResults = courses.filter(item => {
+          const cat = (item.category?.name || item.category || '').toUpperCase()
+          const title = (item.title || '').toUpperCase()
+          return cat.includes('GS') || cat.includes('GENERAL STUDIES') || title.includes('GS')
+        })
+      }
+      if (gsResults.length === 0) {
+        gsResults = dummyCourses.filter(c => c.category === 'GS COURSES')
+      }
+      list = gsResults
+    } else if (activeFilter === 'OPTIONAL COURSES') {
+      let optResults = []
+      if (apiAvailable) {
+        optResults = courses.filter(item => {
+          const cat = (item.category?.name || item.category || '').toUpperCase()
+          const title = (item.title || '').toUpperCase()
+          return cat.includes('OPTIONAL') || title.includes('OPTIONAL')
+        })
+      }
+      if (optResults.length === 0) {
+        optResults = dummyCourses.filter(c => c.category === 'OPTIONAL COURSES')
+      }
+      list = optResults
+    }
+
+    return list
+  }, [courses, activeFilter])
 
   useLayoutEffect(() => {
     dispatch(fetchCourses())
@@ -131,9 +118,11 @@ const DashboardCourses = () => {
         <div className="course-filter-reveal max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center py-4 border-y border-slate-200/80 gap-6 mb-12 opacity-0 invisible">
            <div className="flex items-center gap-2 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/80 overflow-x-auto scrollbar-hide">
               {[
-                { id: 'ALL COURSES', label: t('allCoursesTab') },
-                { id: 'BUSINESS', label: t('businessTab') },
-                { id: 'DIGITAL MARKETING', label: t('digitalMarketingTab') }
+                { id: 'ALL COURSES', label: t('allCoursesTab') || 'ALL COURSES' },
+                { id: 'GS COURSES', label: t('gsCoursesTab') || 'GS COURSES' },
+                { id: 'OPTIONAL COURSES', label: t('optionalCoursesTab') || 'OPTIONAL COURSES' },
+                { id: 'TEST SERIES', label: t('testSeriesTab') || 'TEST SERIES' },
+                { id: 'BUY BOOKS', label: t('buyBooksTab') || 'BUY BOOKS' }
               ].map(({ id, label }) => (
                  <button 
                    key={id}
@@ -237,8 +226,8 @@ const DashboardCourses = () => {
             <div className="col-span-full text-center py-20 text-amber-800 font-montserrat font-bold">LOADING COURSES...</div>
           ) : error ? (
             <div className="col-span-full text-center py-20 text-red-600 font-montserrat font-bold">{t('failedToLoad')}</div>
-          ) : courses && courses.length > 0 ? (
-            courses.map((item) => (
+          ) : filteredCourses && filteredCourses.length > 0 ? (
+            filteredCourses.map((item) => (
               <CourseCard 
                 key={item._id || item.id} 
                 item={{

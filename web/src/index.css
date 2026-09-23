@@ -46,44 +46,44 @@ input, textarea, [contenteditable="true"] {
   --font-anton: "Inter", sans-serif;
   --font-signature: "Mrs Saint Delafield", cursive;
 
-  /* Modern deep blue Bankers Grade Palette */
-  --color-accent: #011753; /* Deep Blue Accent */
-  --color-accent-secondary: #06B6D4; /* Cyan */
-  --color-dark: #f4f6fe; /* Lighter shade of #011753 for main bg */
+  /* OS Academy Gold Amber Palette (#D99B2A) */
+  --color-accent: #D99B2A; /* Primary Golden Amber */
+  --color-accent-secondary: #f3b94a; /* Warm Gold */
+  --color-dark: #fbf9f4; /* Warm premium light bg */
   --color-normal: #0F172A; /* Slate 900 High Contrast Text */
   --color-description: #475569; /* Slate 600 Body Description Text */
-  --color-border: rgba(1, 23, 83, 0.08); /* Subtle border matching the new palette */
+  --color-border: rgba(217, 155, 42, 0.12); /* Subtle gold border */
   --color-card: #FFFFFF; /* Pure White Elevated Card */
-  --color-card-border: rgba(1, 23, 83, 0.06); /* Subtle card edge matching the new palette */
+  --color-card-border: rgba(217, 155, 42, 0.08); /* Subtle gold card edge */
 
-  --shadow-accent-large: 0 10px 30px -10px rgba(1, 23, 83, 0.4);
-  --shadow-accent-soft: 0 4px 20px -2px rgba(1, 23, 83, 0.3);
+  --shadow-accent-large: 0 10px 30px -10px rgba(217, 155, 42, 0.4);
+  --shadow-accent-soft: 0 4px 20px -2px rgba(217, 155, 42, 0.3);
 
   /* Override color palettes dynamically */
-  --color-amber-50: #f4f6fe;
-  --color-amber-100: #e6edff;
-  --color-amber-200: #ccd9ff;
-  --color-amber-300: #99b2ff;
-  --color-amber-400: #011753;
-  --color-amber-500: #011447;
-  --color-amber-600: #01113b;
-  --color-amber-700: #000c2a;
-  --color-amber-800: #00071a;
-  --color-amber-900: #00030d;
+  --color-amber-50: #fdfaf3;
+  --color-amber-100: #fbf4e4;
+  --color-amber-200: #edd395;
+  --color-amber-300: #e4bd64;
+  --color-amber-400: #D99B2A;
+  --color-amber-500: #c2841f;
+  --color-amber-600: #9e6717;
+  --color-amber-700: #7d4f13;
+  --color-amber-800: #5a380d;
+  --color-amber-900: #362106;
 
-  --color-yellow-50: #f4f6fe;
-  --color-yellow-100: #e6edff;
-  --color-yellow-200: #ccd9ff;
-  --color-yellow-300: #99b2ff;
-  --color-yellow-400: #011753;
-  --color-yellow-500: #011447;
-  --color-yellow-600: #01113b;
-  --color-yellow-700: #000c2a;
-  --color-yellow-800: #00071a;
-  --color-yellow-900: #00030d;
+  --color-yellow-50: #fdfaf3;
+  --color-yellow-100: #fbf4e4;
+  --color-yellow-200: #edd395;
+  --color-yellow-300: #e4bd64;
+  --color-yellow-400: #D99B2A;
+  --color-yellow-500: #c2841f;
+  --color-yellow-600: #9e6717;
+  --color-yellow-700: #7d4f13;
+  --color-yellow-800: #5a380d;
+  --color-yellow-900: #362106;
 
-  --color-slate-50: #f4f6fe;
-  --color-slate-100: #eef2ff;
+  --color-slate-50: #fbf9f4;
+  --color-slate-100: #f6f1e5;
 
   --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
 
@@ -422,7 +422,7 @@ button{
   color: #ffffff !important;
 }
 
-/* Specific button and input focus outlines to use deep blue */
+/* Specific button and input focus outlines to use #D99B2A */
 input:focus, textarea:focus, select:focus {
-  border-color: #011753 !important;
+  border-color: #D99B2A !important;
 }
