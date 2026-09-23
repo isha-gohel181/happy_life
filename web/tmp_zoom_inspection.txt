@@ -1,0 +1,43 @@
+                mute_upon_entry: true,
+                watermark: false,
+                use_pmi: false,
+                approval_type: 0,
+                audio: "both",
+                auto_recording: "cloud", // or "local", "none"
+            },
+        };
+
+        const response = await axios.post(
+            "https://api.zoom.us/v2/users/me/meetings",
+            meetingData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        // Save data to database
+        const newMeeting = new ZoomMeeting({
+            topic: meetingData.topic,
+            type: meetingData.type,
+            start_time: meetingData.start_time,
+            duration: meetingData.duration,
+            timezone: meetingData.timezone,
+            password: meetingData.password,
+            agenda: meetingData.agenda,
+            meeting_id: response.data.id,
+            join_url: response.data.join_url,
+            start_url: response.data.start_url,
+            createdBy: req.user?._id, // assumes passport jwt binds user to req
+            courseId: courseId || null
+        });
+
+        await newMeeting.save();
+
+        res.status(201).json({
+            success: true,
+            message: "Zoom meeting created successfully",
+            meeting: newMeeting, // returning mongodb object along with zoom id
+        });

@@ -1,0 +1,13 @@
+node_modules
+.env
+config/firebase-service-account.json
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.flv
+*.wmv
+*.mpg
+*.mpeg
+*.webm
+.env.*

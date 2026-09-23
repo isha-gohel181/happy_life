@@ -1,0 +1,428 @@
+@import "tailwindcss";
+
+html, body {
+  margin: 0;
+  padding: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Enable selection in forms for usability */
+input, textarea, [contenteditable="true"] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+
+/* Global Security: Disable Printing */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  body::after {
+    content: "Security Policy: Printing is strictly prohibited for this protected content.";
+    visibility: visible !important;
+    display: block !important;
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    right: 10%;
+    font-family: monospace;
+    font-size: 24px;
+    color: black;
+    text-align: center;
+  }
+}
+
+@theme {
+  --font-inter: "Inter", sans-serif;
+  --font-montserrat: "Inter", sans-serif; /* Overriding for global update */
+  --font-newsreader: "Inter", sans-serif;
+  --font-Montserrat: "Inter", sans-serif;
+  --font-anton: "Inter", sans-serif;
+  --font-signature: "Mrs Saint Delafield", cursive;
+
+  /* Modern deep blue OS Academy Palette */
+  --color-accent: #011753; /* Deep Blue Accent */
+  --color-accent-secondary: #06B6D4; /* Cyan */
+  --color-dark: #f4f6fe; /* Lighter shade of #011753 for main bg */
+  --color-normal: #0F172A; /* Slate 900 High Contrast Text */
+  --color-description: #475569; /* Slate 600 Body Description Text */
+  --color-border: rgba(1, 23, 83, 0.08); /* Subtle border matching the new palette */
+  --color-card: #FFFFFF; /* Pure White Elevated Card */
+  --color-card-border: rgba(1, 23, 83, 0.06); /* Subtle card edge matching the new palette */
+
+  --shadow-accent-large: 0 10px 30px -10px rgba(1, 23, 83, 0.4);
+  --shadow-accent-soft: 0 4px 20px -2px rgba(1, 23, 83, 0.3);
+
+  /* Override color palettes dynamically */
+  --color-amber-50: #f4f6fe;
+  --color-amber-100: #e6edff;
+  --color-amber-200: #ccd9ff;
+  --color-amber-300: #99b2ff;
+  --color-amber-400: #011753;
+  --color-amber-500: #011447;
+  --color-amber-600: #01113b;
+  --color-amber-700: #000c2a;
+  --color-amber-800: #00071a;
+  --color-amber-900: #00030d;
+
+  --color-yellow-50: #f4f6fe;
+  --color-yellow-100: #e6edff;
+  --color-yellow-200: #ccd9ff;
+  --color-yellow-300: #99b2ff;
+  --color-yellow-400: #011753;
+  --color-yellow-500: #011447;
+  --color-yellow-600: #01113b;
+  --color-yellow-700: #000c2a;
+  --color-yellow-800: #00071a;
+  --color-yellow-900: #00030d;
+
+  --color-slate-50: #f4f6fe;
+  --color-slate-100: #eef2ff;
+
+  --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
+
+  --blur-custom: 48.3px;
+  --blur-glass: 12px;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-dark);
+    color: var(--color-normal);
+    font-family: var(--font-inter);
+  }
+}
+
+/* Explicit weight classes as requested */
+.newsreader-extralight {
+  font-family: var(--font-newsreader);
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.newsreader-light {
+  font-family: var(--font-newsreader);
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.jetbrains-extralight {
+  font-family: var(--font-jetbrains);
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.jetbrains-light {
+  font-family: var(--font-jetbrains);
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+@utility reveal-up {
+  @apply opacity-0 translate-y-[60px] blur-[15px];
+}
+
+@utility scrollbar-hide {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(255,255,255,0.15) transparent !important;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px !important;
+  height: 4px !important;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15) !important;
+  border-radius: 0 !important;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.25) !important;
+}
+
+@utility ease-memo {
+  transition-timing-function: cubic-bezier(0.62, 0.05, 0.01, 0.99);
+}
+
+/* Lenis Smooth Scroll Core Styles */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+
+button{
+  text-align:center!important;
+  cursor: pointer;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Floating Scrollbar Thumb - Cleaner Look (Excluding hidden areas) */
+:not(.scrollbar-hide)::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 10px;
+}
+
+/* Aggressive Scrollbar Arrow Removal */
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-button:single-button,
+::-webkit-scrollbar-button:vertical:start:decrement,
+::-webkit-scrollbar-button:vertical:end:increment,
+::-webkit-scrollbar-button:horizontal:start:decrement,
+::-webkit-scrollbar-button:horizontal:end:increment {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  filter: brightness(1.2);
+}
+
+/* Interaction Layers - Surface Glazing & Depth */
+
+.glaze-spot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  border-radius: 50%;
+  mix-blend-mode: overlay;
+  z-index: 10;
+  opacity: 0;
+  will-change: transform, opacity;
+  transform: translate(-50%, -50%);
+}
+
+.perspective-mesh {
+  perspective: 1200px;
+}
+
+.magnetic-item {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Shutter Layout Utilities */
+.shutter-row {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  height: 1.25em;
+  line-height: 1;
+}
+
+.shutter-layer {
+  display: flex;
+  white-space: pre;
+  line-height: 1;
+}
+
+.shutter-char {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent) transparent;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 12s linear infinite;
+}
+
+@utility clip-path-ribbon {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 85%, 0% 100%);
+}
+
+@keyframes scan {
+  0% { top: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@utility animate-scan {
+  animation: scan 4s linear infinite;
+}
+
+@utility will-change-transform-filter {
+  will-change: transform, filter;
+}
+
+
+@keyframes float-slow {
+  0% { transform: translate(5%, 5%); }
+  25% { transform: translate(75%, 20%); }
+  50% { transform: translate(20%, 75%); }
+  75% { transform: translate(65%, 45%); }
+  100% { transform: translate(5%, 5%); }
+}
+
+@utility animate-float-slow {
+  animation: float-slow 20s linear infinite;
+}
+
+/* News Content HTML Styling */
+.news-content-html {
+  @apply flex flex-col gap-8;
+}
+
+.news-content-html p {
+  @apply leading-[1.8] text-description tracking-wide mb-6;
+}
+
+.news-content-html h3, .news-content-html h2 {
+  @apply font-newsreader italic text-3xl text-normal mt-12 mb-6;
+}
+
+.news-content-html hr {
+  @apply border-white/5 my-12;
+}
+
+.news-content-html ul, .news-content-html ol {
+  @apply flex flex-col gap-4 mb-8 pl-6;
+}
+
+.news-content-html li {
+  @apply relative pl-4 before:content-[''] before:absolute before:left-[-12px] before:top-[10px] before:w-1.5 before:h-[1px] before:bg-accent/40;
+}
+
+.news-content-html strong {
+  @apply text-accent font-medium;
+}
+
+.news-content-html figure {
+  @apply my-12;
+}
+
+.news-content-html table {
+  @apply w-full border-collapse border border-white/5 bg-white/[0.01];
+}
+
+.news-content-html th, .news-content-html td {
+  @apply border border-white/5 p-4 text-[10px] uppercase tracking-wider text-left;
+}
+
+.news-content-html thead {
+  @apply bg-white/[0.03] text-accent font-black;
+}
+
+.news-content-html blockquote {
+  @apply border-l-2 border-accent/30 bg-accent/5 p-8 italic text-lg text-accent/80 my-10;
+}
+
+/* Custom contrast helper overrides for the deep blue theme */
+.bg-accent, 
+.bg-amber-400,
+.bg-yellow-400,
+.hover\:bg-accent:hover, 
+.hover\:bg-amber-400:hover, 
+.hover\:bg-yellow-400:hover,
+.group:hover .group-hover\:bg-accent, 
+.group:hover .group-hover\:bg-amber-400,
+.group:hover .group-hover\:bg-yellow-400 {
+  color: #ffffff !important;
+}
+
+/* Ensure text children inside deep blue buttons/components also inherit or display as white */
+.bg-accent *, 
+.bg-amber-400 *, 
+.bg-yellow-400 *,
+.hover\:bg-accent:hover *, 
+.hover\:bg-amber-400:hover *, 
+.hover\:bg-yellow-400:hover *,
+.group:hover .group-hover\:bg-accent *,
+.group:hover .group-hover\:bg-amber-400 * {
+  color: #ffffff !important;
+}
+
+/* Fix specific contrast edge-cases like yellow-900 or amber-900 text on dark buttons */
+.bg-accent .text-slate-950,
+.bg-accent .text-amber-900,
+.bg-accent .text-yellow-900,
+.bg-amber-400 .text-slate-950,
+.bg-amber-400 .text-amber-900,
+.bg-amber-400 .text-yellow-900 {
+  color: #ffffff !important;
+}
+
+/* Specific button and input focus outlines to use deep blue */
+input:focus, textarea:focus, select:focus {
+  border-color: #011753 !important;
+}

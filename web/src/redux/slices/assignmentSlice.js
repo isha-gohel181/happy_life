@@ -1,0 +1,61 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://api.edrilla.com';
+
+export const fetchMySubmissions = createAsyncThunk(
+  'assignment/fetchMySubmissions',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const token = state.auth.token || localStorage.getItem('edrilla_token');
+      
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const response = await fetch(`${BASE_URL}/assignment-submissions/my`, {
+        method: 'GET',
+        headers
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch your submissions');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+const assignmentSlice = createSlice({
+  name: 'assignment',
+  initialState: {
+    submissions: [],
+    loading: false,
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchMySubmissions.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMySubmissions.fulfilled, (state, action) => {
+        state.loading = false;
+        state.submissions = action.payload?.data || action.payload || [];
+      })
+      .addCase(fetchMySubmissions.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+});
+
+export default assignmentSlice.reducer;
