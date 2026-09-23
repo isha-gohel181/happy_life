@@ -96,7 +96,7 @@ const AboutUs = () => {
           <div className="flex flex-col justify-center">
             <h2 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight mb-8">
               More than just an <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600">educational platform.</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-[#D99B2A]">educational platform.</span>
             </h2>
             <div className="space-y-6 text-lg text-slate-600 leading-relaxed font-medium">
               <p>

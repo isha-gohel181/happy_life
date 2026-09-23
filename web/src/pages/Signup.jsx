@@ -118,7 +118,7 @@ const Signup = () => {
       <div className="signup-left">
         <div className="flex items-center justify-between w-full mb-8">
           <Link to="/" className="signup-logo flex items-center gap-2.5">
-            <img src="/logo/bankers_logo.jpeg" alt="Bankers Grade Logo" className="h-10 w-auto object-contain rounded-lg" />
+            <img src="/logo/os_full_logo.jpeg" alt="OS Academy Logo" className="h-10 w-auto object-contain rounded-lg" />
           </Link>
         </div>
 

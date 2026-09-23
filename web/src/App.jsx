@@ -5,6 +5,7 @@ import Footer from './components/Footer'
 import Home from './pages/Home'
 import Courses from './pages/Courses'
 import Forum from './pages/Forum'
+import FreeContent from './pages/FreeContent'
 import Gigs from './pages/Gigs'
 import News from './pages/News'
 import NewsDetail from './pages/NewsDetail'
@@ -310,6 +311,7 @@ const AppContent = () => {
             {/* Public Routes */}
             <Route path="/" element={<Home isLoaded={isLoaded} />} />
             <Route path="/courses" element={<Courses />} />
+            <Route path="/free-content" element={<FreeContent />} />
             <Route path="/forum" element={<Forum />} />
             <Route path="/gig" element={<Gigs />} />
             <Route path="/news" element={<News />} />

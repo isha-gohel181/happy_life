@@ -43,10 +43,10 @@ const Footer = () => {
   return (
     <footer
       ref={footerRef}
-      className="relative w-full bg-slate-950 text-white pt-20 pb-12 px-6 md:px-12 lg:px-20 overflow-hidden flex flex-col justify-between border-t border-slate-800"
+      className="relative w-full bg-white text-slate-900 pt-20 pb-12 px-6 md:px-12 lg:px-20 overflow-hidden flex flex-col justify-between border-t border-slate-200/80"
     >
       {/* Top Accent Gradient Bar */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-80" />
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D99B2A] to-transparent opacity-60" />
 
       {/* Brand & Statement Area */}
       <div className="max-w-6xl mx-auto flex flex-col items-center justify-center text-center my-10 relative z-10">
@@ -54,17 +54,17 @@ const Footer = () => {
         {/* Brand Logo & Name Container */}
         <div className="footer-reveal mb-8">
           <Link to="/" className="flex items-center gap-3 group">
-            <img src="/logo/bankers_logo.jpeg" alt="Bankers Grade Logo" className="h-12 md:h-16 w-auto object-contain rounded-xl group-hover:scale-105 transition-transform duration-300" />
+            <img src="/logo/os_full_logo.jpeg" alt="OS Academy Logo" className="h-12 md:h-16 w-auto object-contain rounded-xl group-hover:scale-105 transition-transform duration-300 shadow-xs" />
           </Link>
         </div>
 
         {/* Headline Slogan */}
         <div className="footer-reveal text-center space-y-2 mb-12">
-          <h2 className="font-newsreader italic text-3xl md:text-5xl lg:text-6xl text-slate-100 font-bold tracking-tight leading-tight">
-            {t('sloganMagic')} <span className="not-italic font-black text-blue-400 uppercase tracking-tighter">{t('sloganMagicBold')}</span>
+          <h2 className="font-newsreader italic text-3xl md:text-5xl lg:text-6xl text-slate-900 font-bold tracking-tight leading-tight">
+            {t('sloganMagic')} <span className="not-italic font-black text-[#D99B2A] uppercase tracking-tighter">{t('sloganMagicBold')}</span>
           </h2>
-          <h2 className="font-newsreader italic text-3xl md:text-5xl lg:text-6xl text-slate-100 font-bold tracking-tight leading-tight">
-            {t('sloganGuarantee')} <span className="not-italic font-black text-blue-400 uppercase tracking-tighter">{t('sloganGuaranteeBold')}</span>
+          <h2 className="font-newsreader italic text-3xl md:text-5xl lg:text-6xl text-slate-900 font-bold tracking-tight leading-tight">
+            {t('sloganGuarantee')} <span className="not-italic font-black text-[#D99B2A] uppercase tracking-tighter">{t('sloganGuaranteeBold')}</span>
           </h2>
         </div>
 
@@ -74,7 +74,7 @@ const Footer = () => {
             <a
               key={social.name}
               href={social.url}
-              className="w-11 h-11 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-slate-950 hover:bg-accent hover:border-accent transition-all duration-300 shadow-sm hover:scale-110"
+              className="w-11 h-11 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600 hover:text-white hover:bg-[#D99B2A] hover:border-[#D99B2A] transition-all duration-300 shadow-xs hover:scale-110"
               aria-label={social.name}
             >
               <svg
@@ -104,27 +104,27 @@ const Footer = () => {
       </div>
 
       {/* Bottom Links & Legal Bar */}
-      <div className="footer-reveal max-w-6xl mx-auto w-full pt-10 border-t border-slate-900 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+      <div className="footer-reveal max-w-6xl mx-auto w-full pt-10 border-t border-slate-200/80 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
 
         {/* Copyright */}
         <div className="flex flex-col md:flex-row items-center text-center md:text-left">
-          <p className="font-jetbrains text-sm text-slate-400 font-medium">© 2026 Bankers Grade. All rights reserved.</p>
+          <p className="font-jetbrains text-sm text-slate-500 font-medium">© 2026 OS Academy. All rights reserved.</p>
         </div>
 
         {/* Nav Links */}
-        <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-3 font-jetbrains text-sm tracking-wide font-medium text-slate-400">
-          <Link to="/about-us" className="hover:text-amber-400 transition-colors">About Us</Link>
-          <Link to="/contact" className="hover:text-amber-400 transition-colors">Contact</Link>
-          <Link to="/terms-conditions" className="hover:text-amber-400 transition-colors">Terms & Conditions</Link>
-          <Link to="/privacy-policy" className="hover:text-amber-400 transition-colors">Privacy Policy</Link>
-          <Link to="/refund-policy" className="hover:text-amber-400 transition-colors">Refund Policy</Link>
+        <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-3 font-jetbrains text-sm tracking-wide font-medium text-slate-600">
+          <Link to="/about-us" className="hover:text-[#D99B2A] transition-colors">About Us</Link>
+          <Link to="/contact" className="hover:text-[#D99B2A] transition-colors">Contact</Link>
+          <Link to="/terms-conditions" className="hover:text-[#D99B2A] transition-colors">Terms & Conditions</Link>
+          <Link to="/privacy-policy" className="hover:text-[#D99B2A] transition-colors">Privacy Policy</Link>
+          <Link to="/refund-policy" className="hover:text-[#D99B2A] transition-colors">Refund Policy</Link>
         </div>
 
       </div>
 
       {/* Background Radial Glow */}
-      <div className="absolute inset-0 pointer-events-none opacity-30">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-amber-500/10 blur-[140px] rounded-full" />
+      <div className="absolute inset-0 pointer-events-none opacity-40">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-amber-500/5 blur-[140px] rounded-full" />
       </div>
     </footer>
   )

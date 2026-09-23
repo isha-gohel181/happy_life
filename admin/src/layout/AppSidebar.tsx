@@ -553,21 +553,21 @@ const AppSidebar: React.FC = () => {
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <img
-                className="dark:hidden h-11"
-                src="/images/logo/bankers_logo.jpeg"
-                alt="Logo"
+                className="dark:hidden h-11 object-contain rounded-lg"
+                src="/images/logo/os_full_logo.jpeg"
+                alt="OS Academy Logo"
               />
               <img
-                className="hidden dark:block h-11"
-                src="/images/logo/bankers_logo.jpeg"
-                alt="Logo"
+                className="hidden dark:block h-11 object-contain rounded-lg"
+                src="/images/logo/os_full_logo.jpeg"
+                alt="OS Academy Logo"
               />
             </>
           ) : (
             <img
-              className="dark:hidden h-11"
-              src="/images/logo/bankers_logo.jpeg"
-              alt="Logo"
+              className="h-10 w-10 object-contain rounded-full"
+              src="/images/logo/osa_logo.png"
+              alt="OS Academy Logo"
             />
           )}
         </Link>
