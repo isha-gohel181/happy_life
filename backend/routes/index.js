@@ -67,6 +67,7 @@ import bannerRouter from "./bannerRoutes.js";
 import personalityRouter from "./personalityRoutes.js";
 import zoomRouter from "./zoomRoutes.js"; // Zoom router
 import adminActivityLogRouter from "./adminActivityLogRoutes.js";
+import freeContentRouter from "./freeContentRoutes.js";
 import { Route } from "express";
 
 router.get("/", (req, res) => {
@@ -137,6 +138,7 @@ router.use("/news", newsRouter); // Add news routes
 router.use("/personality", personalityRouter); // Add personality test routes
 router.use("/zoom", zoomRouter); // Zoom routes
 router.use("/admin-activity-logs", adminActivityLogRouter);
+router.use("/free-content", freeContentRouter); // Free content routes
 
 // Image upload route for EditorJS (requires authentication)
 const handleMulterError = (err, req, res, next) => {

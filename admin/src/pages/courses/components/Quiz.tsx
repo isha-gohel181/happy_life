@@ -161,12 +161,14 @@ interface RootState {
 
 // Props for the Quiz component when used as a modal
 type QuizModalProps = {
-  sectionId: string;
-  lessonId: string;
+  sectionId?: string;
+  lessonId?: string;
   lesson?: LessonType;
   quizId?: string; // If provided, component will edit existing quiz
   onClose: () => void;
   onSaveSuccess?: (data: any) => void;
+  onSubmitQuizData?: (data: any) => void;
+  initialQuizData?: any;
 };
 
 const Quiz = ({
@@ -176,6 +178,8 @@ const Quiz = ({
   quizId,
   onClose,
   onSaveSuccess,
+  onSubmitQuizData,
+  initialQuizData,
 }: QuizModalProps) => {
   const dispatch = useDispatch();
   const {
@@ -246,7 +250,24 @@ const Quiz = ({
 
   // Initialize component based on mode
   useEffect(() => {
-    if (quizId) {
+    if (initialQuizData) {
+      setQuizData({
+        quizTitle: initialQuizData.quizTitle || "",
+        quizDuration: initialQuizData.timeLimit || "",
+        quizDifficulty: initialQuizData.level || "",
+        passMark: initialQuizData.passMark || 70,
+        quizDescription: initialQuizData.quizDescription || "",
+        courseId: "",
+        courseTitle: "",
+        lessonTitle: "",
+        totalMarks: initialQuizData.totalMarks || 100,
+        isTestSeries: initialQuizData.isTestSeries || false,
+        showLeaderboard: initialQuizData.showLeaderboard !== undefined ? initialQuizData.showLeaderboard : true,
+        showQuizResult: initialQuizData.showQuizResult !== undefined ? initialQuizData.showQuizResult : true,
+      });
+      setSections(initialQuizData.sections || []);
+      setIsEditMode(true);
+    } else if (quizId) {
       getData();
     } else {
       setQuizData({
@@ -433,6 +454,11 @@ const Quiz = ({
         showLeaderboard: quizData.showLeaderboard,
         showQuizResult: quizData.showQuizResult,
       };
+      if (onSubmitQuizData) {
+        onSubmitQuizData(payload);
+        handleClose();
+        return;
+      }
       dispatch(upadateQuiz(payload) as any);
     } else {
       // Create new quiz
@@ -450,6 +476,11 @@ const Quiz = ({
         showLeaderboard: quizData.showLeaderboard,
         showQuizResult: quizData.showQuizResult,
       };
+      if (onSubmitQuizData) {
+        onSubmitQuizData(payload);
+        handleClose();
+        return;
+      }
       dispatch(createQuiz(payload) as any);
     }
     // Don't call handleClose() here - let the success popup show first

@@ -46,10 +46,12 @@ const navItems: NavItem[] = [
   {
     icon: <ListIcon />,
     name: "Courses",
-    path: "/courses/all/courses"    // subItems: [
-    //   { name: "Add Course", path: "/courses/add" },
-    //   { name: "Courses List", path: "/courses/all/courses" },
-    // ],
+    path: "/courses/all/courses"
+  },
+  {
+    icon: <PageIcon />,
+    name: "Free Content",
+    path: "/free-content",
   },
 
   // {

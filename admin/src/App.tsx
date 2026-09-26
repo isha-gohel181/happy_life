@@ -100,6 +100,8 @@ const CreateCertificateTemplate = lazy(
   () => import("./pages/Certification/CreateCertificateTemplate")
 );
 const AppMenuSettings = lazy(() => import("./pages/settings/AppMenuSettings"));
+const FreeContentList = lazy(() => import("./pages/FreeContent/FreeContentList"));
+const AddEditFreeContent = lazy(() => import("./pages/FreeContent/AddEditFreeContent"));
 
 
 export default function App() {
@@ -286,6 +288,11 @@ export default function App() {
                 <Route path="/security-incidents" element={<SecurityIncidents />} />
                 <Route path="/live-classes" element={<ZoomMeetings />} />
                 <Route path="/settings/app-menu" element={<AppMenuSettings />} />
+
+                {/* Free Content */}
+                <Route path="/free-content" element={<FreeContentList />} />
+                <Route path="/free-content/add" element={<AddEditFreeContent />} />
+                <Route path="/free-content/edit/:id" element={<AddEditFreeContent />} />
               </Route>
             </Route>
 
