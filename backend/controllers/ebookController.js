@@ -1,0 +1,186 @@
+import Ebook from "../models/Ebook.js";
+import Order from "../models/Order.js";
+import User from "../models/user.js";
+import Setting from "../models/setting.js";
+import { generateOrderNumber } from "../utils/generateOrderNo.js";
+import axios from 'axios';
+import crypto from 'crypto';
+
+// GET /api/ebooks - Fetch all active ebooks
+export const getEbooks = async (req, res) => {
+  try {
+    const ebooks = await Ebook.find({ isActive: true }).sort({ createdAt: -1 });
+    res.status(200).json({ success: true, ebooks });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// GET /api/ebooks/:id - Fetch single ebook
+export const getEbookById = async (req, res) => {
+  try {
+    const ebook = await Ebook.findById(req.params.id);
+    if (!ebook) {
+      return res.status(404).json({ success: false, message: 'Ebook not found' });
+    }
+    res.status(200).json({ success: true, ebook });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// POST /api/ebooks - Create an ebook (Admin only)
+export const createEbook = async (req, res) => {
+  try {
+    const ebook = new Ebook(req.body);
+    await ebook.save();
+    res.status(201).json({ success: true, ebook });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+// PUT /api/ebooks/:id - Update an ebook (Admin only)
+export const updateEbook = async (req, res) => {
+  try {
+    const ebook = await Ebook.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    if (!ebook) {
+      return res.status(404).json({ success: false, message: 'Ebook not found' });
+    }
+    res.status(200).json({ success: true, ebook });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+// DELETE /api/ebooks/:id - Delete an ebook (Admin only)
+export const deleteEbook = async (req, res) => {
+  try {
+    const ebook = await Ebook.findByIdAndDelete(req.params.id);
+    if (!ebook) {
+      return res.status(404).json({ success: false, message: 'Ebook not found' });
+    }
+    res.status(200).json({ success: true, message: 'Ebook deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// POST /api/ebooks/checkout/init
+export const ebookCheckoutInit = async (req, res) => {
+  try {
+    const { ebookId } = req.body;
+    const userId = req.user._id;
+
+    const ebook = await Ebook.findById(ebookId);
+    if (!ebook || !ebook.isActive) {
+      return res.status(404).json({ success: false, message: 'Ebook not found or inactive' });
+    }
+
+    const user = await User.findById(userId);
+    if (user.purchasedEbooks && user.purchasedEbooks.includes(ebookId)) {
+      return res.status(400).json({ success: false, message: 'You have already purchased this ebook.' });
+    }
+
+    // Fetch Razorpay credentials
+    const keySetting = await Setting.findOne({ key: "RAZORPAY_KEY_ID" });
+    const secretSetting = await Setting.findOne({ key: "RAZORPAY_KEY_SECRET" });
+    const apiKey = keySetting?.value;
+    const apiSecret = secretSetting?.value;
+
+    if (!apiKey || !apiSecret) {
+      return res.status(500).json({ success: false, message: "Razorpay credentials not configured" });
+    }
+
+    // GST logic (optional based on your standard flow, using 0% here for simplicity, can be updated)
+    const GST_RATE = await Setting.getGstRate().catch(() => 0.18);
+    const tax = parseFloat((ebook.price * GST_RATE).toFixed(2));
+    const grandTotal = parseFloat((ebook.price + tax).toFixed(2));
+
+    const amountPaise = Math.round(grandTotal * 100);
+
+    // Create Razorpay order
+    const auth = Buffer.from(`${apiKey}:${apiSecret}`).toString("base64");
+    const rpResponse = await axios.post(
+      "https://api.razorpay.com/v1/orders",
+      { amount: amountPaise, currency: "INR" },
+      { headers: { "Content-Type": "application/json", Authorization: `Basic ${auth}` } }
+    );
+
+    res.status(200).json({
+      success: true,
+      orderId: rpResponse.data.id,
+      amount: amountPaise,
+      currency: "INR",
+      key: apiKey,
+      tax,
+      grandTotal
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// POST /api/ebooks/checkout/verify
+export const ebookCheckoutVerify = async (req, res) => {
+  try {
+    const { ebookId, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const userId = req.user._id;
+
+    const ebook = await Ebook.findById(ebookId);
+    if (!ebook) {
+      return res.status(404).json({ success: false, message: 'Ebook not found' });
+    }
+
+    const secretSetting = await Setting.findOne({ key: "RAZORPAY_KEY_SECRET" });
+    const apiSecret = secretSetting?.value;
+
+    if (!apiSecret) {
+      return res.status(500).json({ success: false, message: "Razorpay credentials not configured" });
+    }
+
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSignature = crypto.createHmac('sha256', apiSecret).update(body.toString()).digest('hex');
+
+    if (expectedSignature !== razorpay_signature) {
+      return res.status(400).json({ success: false, message: "Invalid payment signature" });
+    }
+
+    // Payment is valid, create local order
+    const GST_RATE = await Setting.getGstRate().catch(() => 0.18);
+    const tax = parseFloat((ebook.price * GST_RATE).toFixed(2));
+    const grandTotal = parseFloat((ebook.price + tax).toFixed(2));
+    const orderNo = await generateOrderNumber();
+
+    const order = new Order({
+      orderNo,
+      userId,
+      items: [{
+        ebookId: ebook._id,
+        type: 'ebook',
+        pricePaid: ebook.price,
+        currency: 'INR'
+      }],
+      subTotal: ebook.price,
+      tax: tax,
+      gstRate: GST_RATE,
+      grandTotal: grandTotal,
+      payment: {
+        provider: 'razorpay',
+        paymentIntent: razorpay_payment_id,
+        status: 'paid'
+      }
+    });
+
+    await order.save();
+
+    // Grant access
+    await User.findByIdAndUpdate(userId, {
+      $addToSet: { purchasedEbooks: ebook._id }
+    });
+
+    res.status(200).json({ success: true, message: "Payment successful, Ebook purchased!", orderId: order._id });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

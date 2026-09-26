@@ -53,6 +53,16 @@ const navItems: NavItem[] = [
     name: "Free Content",
     path: "/free-content",
   },
+  {
+    icon: <PageIcon />,
+    name: "Test Series",
+    path: "/test-series",
+  },
+  {
+    icon: <BoxCubeIcon />,
+    name: "Ebooks",
+    path: "/ebooks",
+  },
 
   // {
   //   icon: <BoxCubeIcon />,

@@ -102,6 +102,10 @@ const CreateCertificateTemplate = lazy(
 const AppMenuSettings = lazy(() => import("./pages/settings/AppMenuSettings"));
 const FreeContentList = lazy(() => import("./pages/FreeContent/FreeContentList"));
 const AddEditFreeContent = lazy(() => import("./pages/FreeContent/AddEditFreeContent"));
+const TestSeriesList = lazy(() => import("./pages/TestSeries/TestSeriesList"));
+const AddEditTestSeries = lazy(() => import("./pages/TestSeries/AddEditTestSeries"));
+const EbookList = lazy(() => import("./pages/Ebooks/EbookList"));
+const AddEditEbook = lazy(() => import("./pages/Ebooks/AddEditEbook"));
 
 
 export default function App() {
@@ -293,6 +297,16 @@ export default function App() {
                 <Route path="/free-content" element={<FreeContentList />} />
                 <Route path="/free-content/add" element={<AddEditFreeContent />} />
                 <Route path="/free-content/edit/:id" element={<AddEditFreeContent />} />
+
+                {/* Test Series */}
+                <Route path="/test-series" element={<TestSeriesList />} />
+                <Route path="/test-series/add" element={<AddEditTestSeries />} />
+                <Route path="/test-series/edit/:id" element={<AddEditTestSeries />} />
+
+                {/* Ebooks */}
+                <Route path="/ebooks" element={<EbookList />} />
+                <Route path="/ebooks/add" element={<AddEditEbook />} />
+                <Route path="/ebooks/edit/:id" element={<AddEditEbook />} />
               </Route>
             </Route>
 

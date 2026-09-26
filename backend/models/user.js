@@ -26,6 +26,8 @@ const userSchema = new mongoose.Schema({
 
   // Student-specific
   enrolledCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
+  purchasedEbooks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ebook' }],
+  purchasedTestSeries: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TestSeries' }],
   progress: [{
     course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
     completedLessons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' }]

@@ -143,7 +143,12 @@ const accessTokenAutoRefresh = async (req, res, next) => {
       // Blacklist old access token so it can't be reused after refresh
       if (accessToken) {
         const exp = decodedUser?.exp ? decodedUser.exp * 1000 : Date.now();
-        if (!(decodedUser?.role === "admin" || decodedUser?.roles?.includes("admin"))) {
+        const adminRoles = ["admin", "super_admin", "superadmin", "instructor", "news_editor"];
+        const isAdmin = adminRoles.includes(decodedUser?.role) || 
+                       (Array.isArray(decodedUser?.roles) && decodedUser?.roles.some(r => adminRoles.includes(r))) || 
+                       adminRoles.includes(decodedUser?.roles);
+                       
+        if (!isAdmin) {
           await Token.blacklistAccessToken(accessToken, exp);
         }
       }

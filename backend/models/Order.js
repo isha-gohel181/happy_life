@@ -7,7 +7,9 @@ const orderSchema = new Schema({
         courseId: { type: Schema.Types.ObjectId, ref: 'Course' },
         courseBundleId: { type: Schema.Types.ObjectId, ref: 'CourseBundle' },
         coursePlanId: { type: Schema.Types.ObjectId, ref: 'CoursePlan' }, // <-- add plan support
-        type: { type: String, enum: ['course', 'courseBundle', 'coursePlan'], required: true },
+        ebookId: { type: Schema.Types.ObjectId, ref: 'Ebook' },
+        testSeriesId: { type: Schema.Types.ObjectId, ref: 'TestSeries' },
+        type: { type: String, enum: ['course', 'courseBundle', 'coursePlan', 'ebook', 'testSeries'], required: true },
         pricePaid: { type: mongoose.Types.Decimal128, required: true },
         currency: { type: String, required: true }
     }],
