@@ -54,7 +54,7 @@ const Footer = () => {
         {/* Brand Logo & Name Container */}
         <div className="footer-reveal mb-8">
           <Link to="/" className="flex items-center gap-3 group">
-            <img src="/logo/os_full_logo.jpeg" alt="OS Academy Logo" className="h-12 md:h-16 w-auto object-contain rounded-xl group-hover:scale-105 transition-transform duration-300 shadow-xs" />
+            <img src="/logo/osa_logo.png" alt="OS Academy Logo" className="h-12 md:h-16 w-auto object-contain rounded-xl group-hover:scale-105 transition-transform duration-300 shadow-xs" />
           </Link>
         </div>
 

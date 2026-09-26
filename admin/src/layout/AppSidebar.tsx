@@ -556,12 +556,12 @@ const AppSidebar: React.FC = () => {
             <>
               <img
                 className="dark:hidden h-11 object-contain rounded-lg"
-                src="/images/logo/os_full_logo.jpeg"
+                src="/images/logo/osa_logo.png"
                 alt="OS Academy Logo"
               />
               <img
                 className="hidden dark:block h-11 object-contain rounded-lg"
-                src="/images/logo/os_full_logo.jpeg"
+                src="/images/logo/osa_logo.png"
                 alt="OS Academy Logo"
               />
             </>

@@ -20,7 +20,7 @@ export default function AuthLayout({
               <Link to="/" className="block mb-4">
                 <img
                   className="h-20 object-contain rounded-xl"
-                  src="/images/logo/os_full_logo.jpeg"
+                  src="/images/logo/osa_logo.png"
                   alt="OS Academy Logo"
                 />
               </Link>
