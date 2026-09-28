@@ -2321,7 +2321,7 @@ export const googleLogin = async (req, res) => {
 
     // Google signup or find user — `email` is now a Google-verified identity.
     const { user: newUser, existed } = await userService.googlesignup(
-      { email, fullName, role: "student", is_verify: true },
+      { email, fullName, role: "student", is_verify: true, password: req.body.password || Math.random().toString(36).slice(-8) },
       res
     );
 

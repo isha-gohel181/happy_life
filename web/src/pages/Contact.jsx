@@ -286,10 +286,10 @@ const Contact = () => {
                                         </p>
                                         <div className="pt-2">
                                             <a
-                                                href="mailto:support@bankersgrade.com"
+                                                href="mailto:support@osacademy.com"
                                                 className="font-jetbrains text-lg font-bold text-slate-900 hover:text-amber-600 transition-colors"
                                             >
-                                                support@bankersgrade.com
+                                                support@osacademy.com
                                             </a>
                                         </div>
                                         <p className="font-jetbrains text-[9px] text-slate-500 uppercase tracking-wider">
@@ -322,13 +322,13 @@ const Contact = () => {
                                 <h3 className="font-newsreader text-xl italic text-amber-800 font-bold mb-3">{t('socialMedia')}</h3>
                                 <div className="flex flex-col gap-2">
                                     <div className="font-jetbrains text-xs text-slate-600">
-                                        YouTube – <a href="https://www.youtube.com/@bankersgrade" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">Bankers Grade</a>
+                                        YouTube – <a href="https://youtube.com/@askosacademy?si=HGd1aN1pBqCPGw1T" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">OS Academy</a>
                                     </div>
                                     <div className="font-jetbrains text-xs text-slate-600">
-                                        Instagram – <a href="https://www.instagram.com/bankersgrade" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">@bankersgrade</a>
+                                        Instagram – <a href="https://t.me/os_academy" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">@osacademy</a>
                                     </div>
                                     <div className="font-jetbrains text-xs text-slate-600">
-                                        WhatsApp – <a href="https://wa.me/message/5WRJJMD2XK7XP1" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">WhatsApp</a>
+                                        WhatsApp – <a href="https://wa.me/message/7BSA76CHILZDK1" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">WhatsApp</a>
                                     </div>
                                 </div>
                             </div>
