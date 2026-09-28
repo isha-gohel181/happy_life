@@ -106,6 +106,7 @@ const TestSeriesList = lazy(() => import("./pages/TestSeries/TestSeriesList"));
 const AddEditTestSeries = lazy(() => import("./pages/TestSeries/AddEditTestSeries"));
 const EbookList = lazy(() => import("./pages/Ebooks/EbookList"));
 const AddEditEbook = lazy(() => import("./pages/Ebooks/AddEditEbook"));
+const BookOrderList = lazy(() => import("./pages/Ebooks/BookOrderList"));
 
 
 export default function App() {
@@ -303,10 +304,11 @@ export default function App() {
                 <Route path="/test-series/add" element={<AddEditTestSeries />} />
                 <Route path="/test-series/edit/:id" element={<AddEditTestSeries />} />
 
-                {/* Ebooks */}
+                {/* Physical Books */}
                 <Route path="/ebooks" element={<EbookList />} />
                 <Route path="/ebooks/add" element={<AddEditEbook />} />
                 <Route path="/ebooks/edit/:id" element={<AddEditEbook />} />
+                <Route path="/ebooks/orders" element={<BookOrderList />} />
               </Route>
             </Route>
 

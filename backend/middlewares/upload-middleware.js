@@ -3,7 +3,7 @@ import path from "path";
 
 const ALLOWED_MIME = [
   'image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp', 'image/svg+xml',
-  'application/pdf',
+  'application/pdf', 'application/epub+zip',
   'application/msword',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'text/plain',

@@ -23,6 +23,7 @@ import {
 import UserRefreshToken from "../models/UserRefreshToken.js";
 import DeviceApproval from "../models/DeviceApproval.js";
 import LoginLog from "../models/LoginLog.js";
+import axios from "axios";
 
 const userService = new UserService();
 
@@ -2287,19 +2288,14 @@ export const googleLogin = async (req, res) => {
 
     let googleProfile;
     try {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 8000);
-      const userInfoRes = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+      const userInfoRes = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
         headers: { Authorization: `Bearer ${googleAccessToken}` },
-        signal: controller.signal,
+        timeout: 8000
       });
-      clearTimeout(timer);
-      if (!userInfoRes.ok) {
-        return res.status(401).json({ message: "Invalid Google credentials", success: false });
-      }
-      googleProfile = await userInfoRes.json();
+      googleProfile = userInfoRes.data;
     } catch (e) {
-      return res.status(401).json({ message: "Could not verify Google credentials", success: false });
+      console.error("Google Auth Error:", e.response?.data || e.message);
+      return res.status(401).json({ message: "Could not verify Google credentials", success: false, details: e.response?.data?.error_description });
     }
 
     const email = String(googleProfile.email || "").toLowerCase().trim();

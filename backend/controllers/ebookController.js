@@ -32,7 +32,14 @@ export const getEbookById = async (req, res) => {
 // POST /api/ebooks - Create an ebook (Admin only)
 export const createEbook = async (req, res) => {
   try {
-    const ebook = new Ebook(req.body);
+    const ebookData = { ...req.body };
+    if (ebookData.isActive !== undefined) {
+      ebookData.isActive = ebookData.isActive === 'true' || ebookData.isActive === true;
+    }
+    if (req.file) {
+      ebookData.coverImage = `/uploads/${req.file.filename}`;
+    }
+    const ebook = new Ebook(ebookData);
     await ebook.save();
     res.status(201).json({ success: true, ebook });
   } catch (error) {
@@ -43,7 +50,14 @@ export const createEbook = async (req, res) => {
 // PUT /api/ebooks/:id - Update an ebook (Admin only)
 export const updateEbook = async (req, res) => {
   try {
-    const ebook = await Ebook.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    const ebookData = { ...req.body };
+    if (ebookData.isActive !== undefined) {
+      ebookData.isActive = ebookData.isActive === 'true' || ebookData.isActive === true;
+    }
+    if (req.file) {
+      ebookData.coverImage = `/uploads/${req.file.filename}`;
+    }
+    const ebook = await Ebook.findByIdAndUpdate(req.params.id, ebookData, { new: true, runValidators: true });
     if (!ebook) {
       return res.status(404).json({ success: false, message: 'Ebook not found' });
     }
@@ -124,7 +138,7 @@ export const ebookCheckoutInit = async (req, res) => {
 // POST /api/ebooks/checkout/verify
 export const ebookCheckoutVerify = async (req, res) => {
   try {
-    const { ebookId, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const { ebookId, razorpay_order_id, razorpay_payment_id, razorpay_signature, shippingAddress } = req.body;
     const userId = req.user._id;
 
     const ebook = await Ebook.findById(ebookId);
@@ -169,17 +183,66 @@ export const ebookCheckoutVerify = async (req, res) => {
         provider: 'razorpay',
         paymentIntent: razorpay_payment_id,
         status: 'paid'
-      }
+      },
+      shippingAddress: shippingAddress,
+      deliveryStatus: 'pending'
     });
-
     await order.save();
 
-    // Grant access
     await User.findByIdAndUpdate(userId, {
       $addToSet: { purchasedEbooks: ebook._id }
     });
 
-    res.status(200).json({ success: true, message: "Payment successful, Ebook purchased!", orderId: order._id });
+    res.status(200).json({ success: true, message: "Payment verified successfully", order });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// GET /api/ebooks/orders/my-orders
+export const getMyBookOrders = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const orders = await Order.find({ userId, "items.type": "ebook" })
+      .populate('items.ebookId')
+      .sort({ createdAt: -1 });
+    
+    res.status(200).json({ success: true, orders });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// GET /api/ebooks/orders/all
+export const getAllBookOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ "items.type": "ebook" })
+      .populate('userId', 'fullName email phone')
+      .populate('items.ebookId')
+      .sort({ createdAt: -1 });
+    
+    res.status(200).json({ success: true, orders });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// PUT /api/ebooks/orders/:id/status
+export const updateDeliveryStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const validStatuses = ['pending', 'shipped', 'delivered', 'cancelled'];
+    
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ success: false, message: "Invalid delivery status" });
+    }
+
+    const order = await Order.findByIdAndUpdate(req.params.id, { deliveryStatus: status }, { new: true });
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+
+    res.status(200).json({ success: true, message: "Delivery status updated successfully", order });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

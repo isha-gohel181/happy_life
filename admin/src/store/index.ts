@@ -34,6 +34,8 @@ import banner from "./slices/banner";
 import news from "./slices/news";
 import securityReducer from "./slices/securitySlice";
 import zoomReducer from "./slices/zoomSlice";
+import testSeries from "./slices/testSeries";
+import ebook from "./slices/ebook";
 
 export const store = configureStore({
   reducer: {
@@ -70,7 +72,9 @@ export const store = configureStore({
     banner: banner,
     news: news,
     security: securityReducer,
-    zoom: zoomReducer
+    zoom: zoomReducer,
+    testSeries: testSeries,
+    ebook: ebook
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

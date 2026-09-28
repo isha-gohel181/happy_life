@@ -60,8 +60,11 @@ const navItems: NavItem[] = [
   },
   {
     icon: <BoxCubeIcon />,
-    name: "Ebooks",
-    path: "/ebooks",
+    name: "Physical Books",
+    subItems: [
+      { name: "Manage Books", path: "/ebooks" },
+      { name: "Book Orders", path: "/ebooks/orders" }
+    ]
   },
 
   // {

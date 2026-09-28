@@ -23,6 +23,18 @@ const orderSchema = new Schema({
         name: { type: String, trim: true },
         gstNumber: { type: String, default: null }
     },
+    // ✅ Physical Delivery Info
+    shippingAddress: {
+        lat: { type: Number },
+        lng: { type: Number },
+        flatNo: { type: String },
+        street: { type: String },
+        city: { type: String },
+        state: { type: String },
+        zipCode: { type: String },
+        phone: { type: String }
+    },
+    deliveryStatus: { type: String, enum: ['pending', 'shipped', 'delivered', 'cancelled'], default: 'pending' },
     payment: {
         provider: { type: String, enum: ['stripe', 'razorpay', 'paypal', 'free', 'apple_iap', 'google_play'], required: true },
         paymentIntent: { type: String, default: null }, // Store payment intent or transaction ID
