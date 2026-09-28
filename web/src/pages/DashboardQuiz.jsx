@@ -38,6 +38,10 @@ const DashboardQuiz = () => {
     const [showWarningModal, setShowWarningModal] = useState(false)
     const [showConfirmModal, setShowConfirmModal] = useState(false)
 
+    // Review State
+    const [activeReviewSectionIndex, setActiveReviewSectionIndex] = useState(0)
+    const [activeReviewQuestionId, setActiveReviewQuestionId] = useState(null)
+
     // Fetch data if missing
     useEffect(() => {
         if (courseId) {
@@ -295,7 +299,7 @@ const DashboardQuiz = () => {
                     </div>
                 </header>
                 <main className="flex-grow flex items-center justify-center p-6">
-                    <div className="bg-white border border-slate-200 max-w-2xl w-full p-8 md:p-12 rounded-2xl shadow-sm text-center space-y-8">
+                    <div className={`bg-white border border-slate-200 w-full p-8 md:p-12 rounded-2xl shadow-sm text-center space-y-8 transition-all ${resultView === 'review' ? 'max-w-5xl' : 'max-w-2xl'}`}>
                         <div className="space-y-3">
                             <p className="font-mono text-xs text-[#D99B2A] uppercase tracking-[0.3em] font-black">Protocol Complete</p>
                             <h1 className="font-newsreader italic text-5xl md:text-6xl text-slate-900 font-extralight tracking-tight leading-none uppercase">Evaluation Success</h1>
@@ -304,7 +308,7 @@ const DashboardQuiz = () => {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
                             <div className="p-6 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
                                 <p className="font-mono text-[9px] text-slate-400 uppercase tracking-widest">Score Achieved</p>
-                                <p className="font-newsreader text-4xl text-[#D99B2A] font-bold italic">{submitResult?.data?.score || 0}%</p>
+                                <p className="font-newsreader text-4xl text-[#D99B2A] font-bold italic">{Math.round(submitResult?.data?.score || 0)}%</p>
                             </div>
                             <div className="p-6 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
                                 <p className="font-mono text-[9px] text-slate-400 uppercase tracking-widest">Status</p>
@@ -384,50 +388,138 @@ const DashboardQuiz = () => {
                             )}
 
                             {resultView === 'review' && (
-                                <div className="space-y-6 animate-fade-in text-left">
-                                    <h3 className="text-xl font-bold text-slate-800 border-b pb-2">Answer Review</h3>
-                                    {allQuestions.map((q, idx) => {
-                                        const userAns = selections[q.id]
-                                        const isCorrect = userAns === q.correctAnswer
-                                        return (
-                                            <div key={q.id} className="p-5 border rounded-xl space-y-3 bg-white shadow-sm">
-                                                <div className="flex justify-between items-start">
-                                                    <span className="font-bold text-slate-700">Q{idx + 1}. {sanitizeDisplay(q.question)}</span>
-                                                    {userAns ? (
-                                                        <span className={`px-2 py-1 text-xs font-bold rounded ${isCorrect ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                                            {isCorrect ? 'Correct' : 'Incorrect'}
-                                                        </span>
-                                                    ) : (
-                                                        <span className="px-2 py-1 text-xs font-bold rounded bg-slate-100 text-slate-600">Unanswered</span>
-                                                    )}
+                                <div className="space-y-6 animate-fade-in text-left mt-8 border-t pt-8">
+                                    <div className="flex flex-col md:flex-row gap-6">
+                                        {/* Left Side: Navigation */}
+                                        <div className="w-full md:w-1/3 flex flex-col gap-6">
+                                            {/* Section Tabs */}
+                                            {quiz.sections && quiz.sections.length > 1 && (
+                                                <div className="space-y-2">
+                                                    <h4 className="font-bold text-slate-800 text-sm uppercase tracking-wider">Sections</h4>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {quiz.sections.map((section, idx) => (
+                                                            <button
+                                                                key={idx}
+                                                                onClick={() => {
+                                                                    setActiveReviewSectionIndex(idx)
+                                                                    setActiveReviewQuestionId(null) // reset to first question of new section
+                                                                }}
+                                                                className={`px-4 py-2 text-sm font-semibold rounded-lg border transition-colors ${activeReviewSectionIndex === idx ? 'bg-[#D99B2A] text-white border-[#D99B2A]' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+                                                            >
+                                                                {section.sectionTitle || `Section ${idx + 1}`}
+                                                            </button>
+                                                        ))}
+                                                    </div>
                                                 </div>
-                                                
-                                                <div className="space-y-2 mt-3 text-sm">
-                                                    {q.options.map((opt, oIdx) => {
-                                                        const isUserSelection = userAns === opt.label
-                                                        const isActualCorrect = q.correctAnswer === opt.label
+                                            )}
+                                            
+                                            {/* Question Buttons */}
+                                            <div className="space-y-2">
+                                                <h4 className="font-bold text-slate-800 text-sm uppercase tracking-wider">Questions</h4>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {allQuestions.filter(q => q.sectionIndex === activeReviewSectionIndex).map((q) => {
+                                                        const globalIndex = allQuestions.findIndex(fq => fq.id === q.id) + 1
+                                                        const isActive = (activeReviewQuestionId === q.id) || (!activeReviewQuestionId && allQuestions.filter(aq => aq.sectionIndex === activeReviewSectionIndex)[0]?.id === q.id)
+                                                        const isCorrect = selections[q.id] === q.correctAnswer
+                                                        const isUnanswered = !selections[q.id]
                                                         
-                                                        let optClass = "p-2 border rounded-lg text-slate-600"
-                                                        if (isActualCorrect) optClass = "p-2 border-green-500 bg-green-50 text-green-800 font-medium"
-                                                        else if (isUserSelection && !isCorrect) optClass = "p-2 border-red-500 bg-red-50 text-red-800"
+                                                        let bgClass = "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                                                        if (isActive) {
+                                                            bgClass = "bg-slate-800 text-white border-slate-800 shadow-md"
+                                                        } else if (isCorrect) {
+                                                            bgClass = "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
+                                                        } else if (!isUnanswered) {
+                                                            bgClass = "bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
+                                                        }
 
                                                         return (
-                                                            <div key={oIdx} className={optClass}>
-                                                                {opt.label}. {sanitizeDisplay(opt.text)}
-                                                                {isUserSelection && <span className="ml-2 italic opacity-75">(Your Answer)</span>}
-                                                            </div>
+                                                            <button
+                                                                key={q.id}
+                                                                onClick={() => setActiveReviewQuestionId(q.id)}
+                                                                className={`w-10 h-10 flex items-center justify-center font-bold text-sm rounded-lg border transition-all ${bgClass}`}
+                                                                title={`Question ${globalIndex}`}
+                                                            >
+                                                                {globalIndex}
+                                                            </button>
                                                         )
                                                     })}
                                                 </div>
-
-                                                {q.explanation && (
-                                                    <div className="mt-4 p-4 bg-amber-50 border border-amber-100 rounded-lg text-sm text-[#D99B2A]">
-                                                        <strong>Explanation:</strong> {sanitizeDisplay(q.explanation)}
-                                                    </div>
-                                                )}
                                             </div>
-                                        )
-                                    })}
+                                        </div>
+
+                                        {/* Right Side: Question Detail */}
+                                        <div className="w-full md:w-2/3">
+                                            {(() => {
+                                                const reviewQuestions = allQuestions.filter(q => q.sectionIndex === activeReviewSectionIndex)
+                                                const reviewQ = allQuestions.find(q => q.id === activeReviewQuestionId) || reviewQuestions[0]
+                                                if (!reviewQ) return null
+                                                
+                                                const userAns = selections[reviewQ.id]
+                                                const isCorrect = userAns === reviewQ.correctAnswer
+                                                const globalIdx = allQuestions.findIndex(q => q.id === reviewQ.id)
+
+                                                return (
+                                                    <div className="p-6 border border-slate-200 rounded-2xl bg-white shadow-sm flex flex-col gap-6">
+                                                        <div className="flex justify-between items-start gap-4">
+                                                            <h3 className="font-bold text-lg text-slate-800 leading-snug">
+                                                                <span className="text-[#D99B2A] mr-2">Q{globalIdx + 1}.</span> 
+                                                                {sanitizeDisplay(reviewQ.question)}
+                                                            </h3>
+                                                            {userAns ? (
+                                                                <span className={`shrink-0 px-3 py-1 text-xs font-bold rounded-full border ${isCorrect ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
+                                                                    {isCorrect ? 'Correct' : 'Incorrect'}
+                                                                </span>
+                                                            ) : (
+                                                                <span className="shrink-0 px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 border border-slate-200">Unanswered</span>
+                                                            )}
+                                                        </div>
+
+                                                        <div className="grid grid-cols-1 gap-3">
+                                                            {reviewQ.options.map((opt, oIdx) => {
+                                                                const isUserSelection = userAns === opt.label
+                                                                const isActualCorrect = reviewQ.correctAnswer === opt.label
+                                                                
+                                                                let optClass = "p-4 border rounded-xl text-slate-700 bg-slate-50 flex items-center justify-between"
+                                                                let icon = null
+                                                                
+                                                                if (isActualCorrect) {
+                                                                    optClass = "p-4 border-2 border-green-500 bg-green-50 text-green-900 font-medium flex items-center justify-between"
+                                                                    icon = <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                                                                } else if (isUserSelection && !isCorrect) {
+                                                                    optClass = "p-4 border-2 border-red-400 bg-red-50 text-red-900 flex items-center justify-between"
+                                                                    icon = <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                                }
+
+                                                                return (
+                                                                    <div key={oIdx} className={optClass}>
+                                                                        <div className="flex gap-3">
+                                                                            <span className="font-bold opacity-50">{opt.label}.</span>
+                                                                            <span>{sanitizeDisplay(opt.text)}</span>
+                                                                        </div>
+                                                                        <div className="flex items-center gap-2">
+                                                                            {isUserSelection && <span className="text-xs font-bold uppercase tracking-wider opacity-60">(Your Answer)</span>}
+                                                                            {icon}
+                                                                        </div>
+                                                                    </div>
+                                                                )
+                                                            })}
+                                                        </div>
+
+                                                        {reviewQ.explanation && (
+                                                            <div className="mt-2 rounded-xl overflow-hidden border border-amber-100 bg-amber-50/50">
+                                                                <div className="bg-amber-100/50 px-4 py-2 border-b border-amber-100 flex items-center gap-2">
+                                                                    <svg className="w-4 h-4 text-[#D99B2A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                                    <span className="text-xs font-bold text-[#D99B2A] uppercase tracking-wider">Explanation</span>
+                                                                </div>
+                                                                {/* Render rich text explanation directly using dangerouslySetInnerHTML */}
+                                                                <div className="p-4 text-sm text-slate-700 prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1" dangerouslySetInnerHTML={{ __html: reviewQ.explanation }} />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )
+                                            })()}
+                                        </div>
+                                    </div>
                                 </div>
                             )}
                         </div>

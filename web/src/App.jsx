@@ -30,6 +30,7 @@ import DashboardJobPosts from './pages/DashboardJobPosts'
 import JobDetail from './pages/JobDetail'
 import MyForum from './pages/MyForum'
 import MySubmissions from './pages/MySubmissions'
+import MyResults from './pages/MyResults'
 import Notifications from './pages/dashboard/Notifications'
 import DashboardQuiz from './pages/DashboardQuiz'
 import DashboardAssignment from './pages/DashboardAssignment'
@@ -352,6 +353,7 @@ const AppContent = () => {
               <Route path="job/:id" element={<JobDetail />} />
               <Route path="my-forum" element={<MyForum />} />
               <Route path="my-submissions" element={<MySubmissions />} />
+              <Route path="my-results" element={<MyResults />} />
               <Route path="notifications" element={<Notifications />} />
 
 

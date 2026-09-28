@@ -48,6 +48,7 @@ const DashboardHeader = () => {
       subItems: [
         { key: 'myForum', name: (t('myForum') || 'MY FORUM').toUpperCase(), path: '/dashboard/my-forum' },
         { key: 'mySubmissions', name: (t('mySubmissions') || 'MY SUBMISSIONS').toUpperCase(), path: '/dashboard/my-submissions' },
+        { key: 'myResults', name: (t('myResults') || 'MY RESULTS').toUpperCase(), path: '/dashboard/my-results' },
       ]
     },
     { key: 'myPurchases', name: (t('myPurchases') || 'MY PURCHASES').toUpperCase(), path: '/dashboard/purchases' },
