@@ -336,6 +336,8 @@ export const getMyProfile = async (req, res) => {
           roles: user.roles,
           profilePicture: user.profilePicture,
           enrolledCourses: user.enrolledCourses,
+          purchasedEbooks: user.purchasedEbooks,
+          purchasedTestSeries: user.purchasedTestSeries,
           teachingCourses: user.teachingCourses,
           qualifications: user.qualifications,
           documentation: user.documentation,

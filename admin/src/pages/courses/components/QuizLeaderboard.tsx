@@ -196,7 +196,7 @@ const QuizLeaderboard: React.FC<QuizLeaderboardProps> = ({
                         Score
                       </p>
                       <p className="font-bold text-slate-800">
-                        {entry.score} / {entry.totalMarks}
+                        {Number.isInteger(entry.score) ? entry.score : Number(entry.score).toFixed(2)} / {entry.totalMarks}
                       </p>
                     </div>
                     

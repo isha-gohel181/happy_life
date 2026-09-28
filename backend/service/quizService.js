@@ -116,7 +116,7 @@ async submitQuiz(quizId, userId, answers, timeTakenFrontend = 0) {
         if (isCorrect) {
           score += marksPerQuestion;
           totalCorrectQuestions += 1;
-        } else {
+        } else if (answer.selectedOption !== null && answer.selectedOption !== undefined && answer.selectedOption !== '') {
           totalWrongQuestions += 1;
         }
 
@@ -180,8 +180,17 @@ async submitQuiz(quizId, userId, answers, timeTakenFrontend = 0) {
     if (quiz.showLeaderboard === false) {
       return {
         _id: submission._id,
+        score: submission.score,
+        totalMarks: submission.totalMarks,
+        passed: submission.passed,
+        is_completed: submission.is_completed,
         courseId: submission.courseId,
         lessonId: submission.lessonId,
+        totalQuestions: submission.totalQuestions,
+        totalCorrectQuestions: submission.totalCorrectQuestions,
+        totalWrongQuestions: submission.totalWrongQuestions,
+        percentage: submission.percentage,
+        timeTaken: submission.timeTaken,
         message: "Successfully Submitted"
       };
     }

@@ -161,10 +161,13 @@ export const submitQuiz = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Answers are required and must be an array' });
     }
 
-    // Validate that each answer has question and selectedOption (A, B, C, D, E)
+    // Validate that each answer has question and selectedOption (A, B, C, D, E, or null)
     for (const answer of answers) {
-      if (!answer.question || !['A', 'B', 'C', 'D', 'E'].includes(answer.selectedOption)) {
-        return res.status(400).json({ success: false, message: 'Each answer must have question and selectedOption (A, B, C, D, or E)' });
+      if (!answer.question) {
+        return res.status(400).json({ success: false, message: 'Each answer must have a question' });
+      }
+      if (answer.selectedOption !== null && answer.selectedOption !== undefined && answer.selectedOption !== '' && !['A', 'B', 'C', 'D', 'E'].includes(answer.selectedOption)) {
+        return res.status(400).json({ success: false, message: 'Each answer must have selectedOption (A, B, C, D, E, or null)' });
       }
     }
 

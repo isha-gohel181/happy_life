@@ -10,8 +10,8 @@ const quizSubmissionSchema = new mongoose.Schema({
     question: { type: String, required: true },
     selectedOption: { 
       type: String, 
-      required: true, 
-      enum: ['A', 'B', 'C', 'D', 'E'] 
+      required: false,
+      enum: ['A', 'B', 'C', 'D', 'E', null, '']
     }
   }],
   score: { type: Number, required: true },

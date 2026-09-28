@@ -376,7 +376,7 @@ const DashboardQuiz = () => {
                                                                 {entry.firstName} {entry.lastName}
                                                                 {entry.userId === user?._id && <span className="ml-2 text-[10px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full">You</span>}
                                                             </td>
-                                                            <td className="px-4 py-3 text-right font-bold text-[#D99B2A]">{entry.score} / {entry.totalMarks}</td>
+                                                            <td className="px-4 py-3 text-right font-bold text-[#D99B2A]">{Number.isInteger(entry.score) ? entry.score : Number(entry.score).toFixed(2)} / {entry.totalMarks}</td>
                                                             <td className="px-4 py-3 text-right text-slate-500">{entry.timeTaken}s</td>
                                                         </tr>
                                                     ))}

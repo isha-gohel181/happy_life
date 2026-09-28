@@ -102,7 +102,7 @@ export default function BookOrderList() {
                         ) : "N/A"}
                       </div>
                     </td>
-                    <td className="px-4 py-3 font-medium text-brand-500">₹{order.grandTotal}</td>
+                    <td className="px-4 py-3 font-medium text-brand-500">₹{typeof order.grandTotal === 'object' ? (order.grandTotal as any).$numberDecimal : order.grandTotal}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium 
                         ${order.deliveryStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
