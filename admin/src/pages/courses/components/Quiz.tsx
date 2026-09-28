@@ -24,7 +24,11 @@ import {
   Brain,
   Sparkles,
   Loader2,
+  ArrowLeft,
+  Upload,
 } from "lucide-react";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 import {
   createQuiz,
   upadateQuiz,
@@ -219,13 +223,69 @@ const Quiz = ({
     isVisible: boolean;
     message: string;
     type: "success" | "error" | "warning" | "info" | "";
+    isSaveAction?: boolean;
   }>({
     isVisible: false,
     message: "",
     type: "",
+    isSaveAction: false,
   });
   const [isEditMode, setIsEditMode] = useState(false);
   const [hasSaveAttempted, setHasSaveAttempted] = useState(false); // NEW: Track if save was attempted
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleBulkUpload = async (file: File, sectionIndex?: number) => {
+    setIsUploading(true);
+    setPopup({ isVisible: true, message: "Parsing file...", type: "info" });
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      // Using axiosInstance from the project
+      const { default: axiosInstance } = await import("../../../services/axiosConfig");
+
+      const response = await axiosInstance.post(`/quiz/bulk-upload`, formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+
+      const parsedQuestions = response.data.questions || [];
+
+      if (parsedQuestions.length === 0) {
+        setPopup({ isVisible: true, message: "No questions found in the file.", type: "warning" });
+        return;
+      }
+
+      const updatedSections = [...sections];
+      let targetIndex = sectionIndex;
+      
+      if (sectionIndex !== undefined) {
+        updatedSections[sectionIndex].questions = [
+          ...updatedSections[sectionIndex].questions,
+          ...parsedQuestions
+        ];
+      } else {
+        updatedSections.push({
+          sectionTitle: "Bulk Imported Questions",
+          sectionDescription: "Questions imported from " + file.name,
+          questions: parsedQuestions
+        });
+        targetIndex = updatedSections.length - 1;
+      }
+      
+      setSections(updatedSections);
+      
+      if (targetIndex !== undefined && !expandedSections.includes(targetIndex)) {
+        setExpandedSections([...expandedSections, targetIndex]);
+      }
+      
+      setPopup({ isVisible: true, message: `Successfully imported ${parsedQuestions.length} questions!`, type: "success" });
+    } catch (err: any) {
+      console.error(err);
+      setPopup({ isVisible: true, message: err.response?.data?.message || "Failed to upload file. Ensure the format is correct.", type: "error" });
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const getData = async () => {
     const response = await dispatch(fetchQuizById(quizId) as any);
@@ -324,6 +384,7 @@ const Quiz = ({
             isVisible: true,
             message: `Quiz ${isEditMode ? "updated" : "created"} successfully!`,
             type: "success",
+            isSaveAction: true,
           });
           if (onSaveSuccess) {
             onSaveSuccess(saveData);
@@ -332,9 +393,8 @@ const Quiz = ({
       } else if (saveError) {
         setPopup({
           isVisible: true,
-          message: `Failed to ${
-            isEditMode ? "update" : "create"
-          } quiz: ${saveError}`,
+          message: `Failed to ${isEditMode ? "update" : "create"
+            } quiz: ${saveError}`,
           type: "error",
         });
       }
@@ -493,11 +553,11 @@ const Quiz = ({
 
   // FIXED: Handle popup close and modal close separately
   const handlePopupClose = () => {
-    setPopup({ isVisible: false, message: "", type: "" });
-    // If it was a success popup, close the modal
-    if (popup.type === "success") {
+    // If it was a success popup from saving, close the modal
+    if (popup.type === "success" && popup.isSaveAction) {
       onClose();
     }
+    setPopup({ isVisible: false, message: "", type: "", isSaveAction: false });
   };
 
   if (loading && isEditMode) {
@@ -533,10 +593,10 @@ const Quiz = ({
 
   return (
     <>
-      <div className="w-full max-w-7xl mx-auto max-h-[600px]">
+      <div className="w-full mx-auto">
         {/* Enhanced Header - Responsive */}
-        <div className="bg-white  dark:bg-[#182131] rounded-xl md:rounded-2xl shadow-lg md:shadow-xl border border-gray-100 overflow-hidden">
-          <div className="bg-blue-500 p-4 sm:p-6 text-white">
+        <div className="bg-white  dark:bg-[#182131] rounded-xl md:rounded-2xl shadow-lg md:shadow-xl border border-gray-100">
+          <div className="bg-blue-500 p-4 sm:p-6 text-white sticky top-0 z-50 rounded-t-xl md:rounded-t-2xl">
             <div className="flex sm:flex-row items-center sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3 sm:gap-4">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white bg-opacity-20 rounded-lg sm:rounded-xl flex items-center justify-center">
@@ -563,7 +623,7 @@ const Quiz = ({
           </div>
 
           {/* Content - Responsive */}
-          <div className="p-4 sm:p-6 lg:p-8 space-y-6 !pb-36 sm:space-y-8 max-h-[600px] overflow-y-auto">
+          <div className="p-4 sm:p-6 lg:p-8 space-y-6 !pb-36 sm:space-y-8">
             {/* Basic Quiz Information */}
             <div className=" rounded-xl p-4 sm:p-6 border-2 border-indigo-200 shadow-sm">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white/90 mb-4 flex items-center">
@@ -645,9 +705,16 @@ const Quiz = ({
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-sm font-semibold dark:text-white/90 text-gray-700">
-                        <Trophy className="w-4 h-4" />
-                        Total Marks *
+                      <label className="flex items-center justify-between gap-2 text-sm font-semibold dark:text-white/90 text-gray-700">
+                        <span className="flex items-center gap-2">
+                          <Trophy className="w-4 h-4" />
+                          Total Marks *
+                        </span>
+                        {getTotalQuestions() > 0 && (
+                          <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-md whitespace-nowrap">
+                            {(quizData.totalMarks / getTotalQuestions()).toFixed(2)} Marks / Q
+                          </span>
+                        )}
                       </label>
                       <input
                         type="number"
@@ -784,19 +851,35 @@ const Quiz = ({
                       Organize your quiz into sections with questions
                     </p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setEditingSection(null);
-                      setShowSectionBuilder(true);
-                    }}
-                    className="w-full sm:w-auto bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-md hover:shadow-lg"
-                  >
-                    <FolderPlus className="w-4 h-4" />
-                    Add Section
-                  </button>
+                  <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                    <label className={`w-full sm:w-auto px-4 py-2 border border-green-500 text-green-600 dark:text-green-400 dark:border-green-400 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/40 transition-colors flex items-center justify-center gap-2 cursor-pointer ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                      {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                      Bulk Upload (.docx, .csv, .xlsx)
+                      <input
+                        type="file"
+                        accept=".docx,.csv,.xlsx"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleBulkUpload(file);
+                          e.target.value = '';
+                        }}
+                      />
+                    </label>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setEditingSection(null);
+                        setShowSectionBuilder(true);
+                      }}
+                      className="w-full sm:w-auto bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-md hover:shadow-lg"
+                    >
+                      <FolderPlus className="w-4 h-4" />
+                      Add Section
+                    </button>
+                  </div>
                 </div>
               </div>
               <div className="p-4 sm:p-6">
@@ -809,18 +892,34 @@ const Quiz = ({
                     <p className="text-gray-500 mb-4">
                       Start building your quiz by adding sections
                     </p>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setShowSectionBuilder(true);
-                      }}
-                      className="bg-blue-500 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg inline-flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-200"
-                    >
-                      <FolderPlus className="w-4 h-4" />
-                      Add First Section
-                    </button>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                      <label className={`bg-white border-2 border-dashed border-blue-300 text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg inline-flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                        {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                        Bulk Upload Questions
+                        <input
+                          type="file"
+                          accept=".docx,.csv,.xlsx"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handleBulkUpload(file);
+                            e.target.value = '';
+                          }}
+                        />
+                      </label>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setShowSectionBuilder(true);
+                        }}
+                        className="bg-blue-500 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg inline-flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all duration-200"
+                      >
+                        <FolderPlus className="w-4 h-4" />
+                        Add First Section
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -887,14 +986,13 @@ const Quiz = ({
                     !quizData.quizTitle.trim() ||
                     getTotalQuestions() === 0
                   }
-                  className={`w-full sm:w-auto px-6 sm:px-8 py-2 sm:py-3 text-sm font-semibold text-white border border-transparent rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 ${
-                    loading ||
-                    sections.length === 0 ||
-                    !quizData.quizTitle.trim() ||
-                    getTotalQuestions() === 0
+                  className={`w-full sm:w-auto px-6 sm:px-8 py-2 sm:py-3 text-sm font-semibold text-white border border-transparent rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 ${loading ||
+                      sections.length === 0 ||
+                      !quizData.quizTitle.trim() ||
+                      getTotalQuestions() === 0
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-blue-500 hover:from-indigo-700 hover:to-purple-700"
-                  }`}
+                    }`}
                 >
                   {loading ? (
                     <>
@@ -945,8 +1043,8 @@ const Quiz = ({
           question={
             editingQuestion !== null
               ? sections[editingQuestion.sectionIndex].questions[
-                  editingQuestion.questionIndex
-                ]
+              editingQuestion.questionIndex
+              ]
               : null
           }
           onSave={(questionData: QuestionType) => {
@@ -1151,123 +1249,166 @@ const QuestionBuilder = ({
   };
 
   return (
-    <div className="fixed inset-0 z-60 flex items-center justify-center bg-transparent backdrop-blur-lg p-4">
-      <div className="bg-white dark:bg-[#101828]  rounded-xl max-w-lg w-full p-6 space-y-4 shadow-lg overflow-auto max-h-[90vh]">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white/90">
+    <div className="fixed inset-0 z-[100] flex flex-col bg-gray-50 dark:bg-[#0b1120] w-full h-full overflow-hidden">
+      {/* Full-Screen Header */}
+      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800 shrink-0 flex items-center bg-white dark:bg-[#101828] shadow-sm z-20 w-full">
+        <button
+          onClick={onClose}
+          className="mr-4 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full flex items-center justify-center"
+          title="Go Back"
+        >
+          <ArrowLeft className="w-6 h-6" />
+        </button>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white/90">
           {question ? "Edit Question" : "Add New Question"}
-        </h3>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-white/90 mb-1">
-            Instruction (Optional)
-          </label>
-          <textarea
-            rows={2}
-            value={instruction}
-            onChange={(e) => setInstruction(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:text-white/70 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
-            placeholder="e.g. Read the passage and answer..."
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-white/90 mb-1">
-            Question Text *
-          </label>
-          <textarea
-            rows={3}
-            value={questionText}
-            onChange={(e) => setQuestionText(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:text-white/70 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
-            placeholder="Enter the question"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-white/90 mb-1">
-            Options *
-          </label>
-          {options.map((option, index) => (
-            <div key={index} className="flex items-center gap-2 mb-2">
-              <input
-                type="text"
-                value={option.text}
-                onChange={(e) => handleOptionChange(index, e.target.value)}
-                placeholder={`Option ${option.label}`}
-                className="flex-grow px-3 py-2 border dark:text-white/70 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
-              />
-              {options.length > 2 && (
-                <button
-                  type="button"
-                  onClick={() => removeOption(index)}
-                  title="Remove Option"
-                  className="text-red-600 hover:text-red-800 transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              )}
+        </h2>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 overflow-y-auto w-full custom-scrollbar pb-6">
+        <div className="w-full max-w-[1600px] mx-auto p-4 md:p-6">
+          <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+            
+            {/* Left Column: Question Details */}
+            <div className="xl:col-span-5 space-y-6">
+              <div className="bg-white dark:bg-[#101828] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 md:p-6">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 border-b border-gray-100 dark:border-gray-800 pb-3">Question Content</h3>
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-white/90 mb-2">
+                      Instruction (Optional)
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={instruction}
+                      onChange={(e) => setInstruction(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 dark:text-white/70 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical shadow-sm bg-gray-50/50 dark:bg-[#1a2231]"
+                      placeholder="e.g. Read the passage and answer..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-white/90 mb-2">
+                      Question Text *
+                    </label>
+                    <textarea
+                      rows={6}
+                      value={questionText}
+                      onChange={(e) => setQuestionText(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 dark:text-white/70 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical shadow-sm bg-gray-50/50 dark:bg-[#1a2231]"
+                      placeholder="Enter the question"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={addOption}
-            className="inline-flex items-center px-3 py-1 text-blue-600 hover:text-blue-800 font-medium space-x-1 transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Add Option</span>
-          </button>
+
+            {/* Right Column: Options & Settings */}
+            <div className="xl:col-span-7 space-y-6">
+              <div className="bg-white dark:bg-[#101828] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 md:p-6">
+                <div className="flex justify-between items-center mb-6 border-b border-gray-100 dark:border-gray-800 pb-3">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Answer Options *</h3>
+                  <button
+                    type="button"
+                    onClick={addOption}
+                    className="inline-flex items-center px-4 py-2 text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 rounded-lg font-semibold space-x-2 transition-colors shadow-sm text-sm"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Add Option</span>
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {options.map((option, index) => (
+                    <div key={index} className="flex items-center gap-3 bg-gray-50 dark:bg-[#1a2231] p-2.5 rounded-xl border border-gray-200 dark:border-gray-700 focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-400 transition-all">
+                      <span className="font-bold text-gray-500 dark:text-gray-400 px-3 text-lg bg-white dark:bg-[#101828] py-1.5 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800">{option.label}</span>
+                      <input
+                        type="text"
+                        value={option.text}
+                        onChange={(e) => handleOptionChange(index, e.target.value)}
+                        placeholder={`Option ${option.label}`}
+                        className="flex-grow px-2 py-2 bg-transparent dark:text-white/90 focus:outline-none focus:ring-0 border-transparent shadow-none"
+                        required
+                      />
+                      {options.length > 2 && (
+                        <button
+                          type="button"
+                          onClick={() => removeOption(index)}
+                          title="Remove Option"
+                          className="text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/40 p-2 rounded-lg transition-colors flex-shrink-0 mr-1"
+                        >
+                          <X className="w-5 h-5" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-white dark:bg-[#101828] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 md:p-6">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 border-b border-gray-100 dark:border-gray-800 pb-3">Resolution</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-white/90 mb-2">
+                      Correct Answer *
+                    </label>
+                    <select
+                      value={correctAnswer}
+                      onChange={(e) => setCorrectAnswer(e.target.value)}
+                      className="w-full px-4 py-3.5 bg-gray-50/50 dark:bg-[#1a2231] dark:text-white/90 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm font-medium"
+                      required
+                    >
+                      <option className="dark:text-black" value="">
+                        Select correct answer
+                      </option>
+                      {options.map((option, index) =>
+                        option.text.trim() ? (
+                          <option
+                            className="dark:text-black font-medium"
+                            key={index}
+                            value={option.label}
+                          >
+                            Option {option.label}: {option.text}
+                          </option>
+                        ) : null
+                      )}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-white/90 mb-2">
+                      Explanation (Optional)
+                    </label>
+                    <div className="bg-white dark:bg-[#1a2231] rounded-xl overflow-hidden border border-gray-300 dark:border-gray-700 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent">
+                      <ReactQuill
+                        theme="snow"
+                        value={explanation}
+                        onChange={setExplanation}
+                        className="dark:text-white/90 h-[100px] border-none"
+                        placeholder="Explain why this answer is correct..."
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-white/90 mb-1">
-            Correct Answer *
-          </label>
-          <select
-            value={correctAnswer}
-            onChange={(e) => setCorrectAnswer(e.target.value)}
-            className="w-full px-3 py-2 dark:text-white/70 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            required
-          >
-            <option className="dark:text-black" value="">
-              Select correct answer
-            </option>
-            {options.map((option, index) =>
-              option.text.trim() ? (
-                <option
-                  className="dark:text-black"
-                  key={index}
-                  value={option.label}
-                >
-                  {option.label}: {option.text}
-                </option>
-              ) : null
-            )}
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-white/90 mb-1">
-            Explanation (Optional)
-          </label>
-          <textarea
-            rows={2}
-            value={explanation}
-            onChange={(e) => setExplanation(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:text-white/70 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
-            placeholder="Explain why this answer is correct..."
-          />
-        </div>
-        <div className="flex justify-end gap-3 mt-4">
-          <button
-            onClick={onClose}
-            className="px-5 py-2 rounded-lg border dark:hover:text-black dark:text-white/90 border-gray-300 hover:bg-gray-100 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-          >
-            Save Question
-          </button>
-        </div>
+      </div>
+
+      {/* Sticky Footer */}
+      <div className="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#101828] p-4 md:px-6 flex justify-end gap-4 shrink-0 z-20 w-full shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <button
+          onClick={onClose}
+          className="px-8 py-3 rounded-xl border dark:hover:text-black dark:text-white/90 border-gray-300 hover:bg-gray-100 transition-colors font-semibold text-base shadow-sm"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleSave}
+          className="px-8 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors font-semibold shadow-md text-base"
+        >
+          Save Question
+        </button>
       </div>
     </div>
   );
@@ -1284,6 +1425,8 @@ const SectionCard = ({
   onEditQuestion,
   onDeleteQuestion,
   onAddQuestion,
+  onBulkUpload,
+  isUploading
 }: {
   section: SectionType;
   sectionIndex: number;
@@ -1294,6 +1437,8 @@ const SectionCard = ({
   onEditQuestion: (questionIndex: number) => void;
   onDeleteQuestion: (questionIndex: number) => void;
   onAddQuestion: () => void;
+  onBulkUpload?: (file: File) => void;
+  isUploading?: boolean;
 }) => {
   return (
     <div className="bg-gray-5  dark:bg-white/[0.06] border border-gray-200 rounded-lg overflow-hidden">
@@ -1405,18 +1550,36 @@ const SectionCard = ({
                   onDelete={() => onDeleteQuestion(questionIndex)}
                 />
               ))}
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onAddQuestion();
-                }}
-                className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:text-blue-600 hover:border-blue-300 transition-colors flex items-center justify-center gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                Add Another Question
-              </button>
+              <div className="p-4 bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-gray-700 rounded-xl flex flex-col sm:flex-row gap-3">
+                <label className={`w-full sm:w-1/2 py-3 border-2 border-dashed border-indigo-300 rounded-lg text-indigo-600 dark:text-indigo-400 dark:border-indigo-400 hover:text-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors flex items-center justify-center gap-2 cursor-pointer ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                  {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                  Bulk Upload (.docx, .csv, .xlsx)
+                  <input
+                    type="file"
+                    accept=".docx,.csv,.xlsx"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file && onBulkUpload) {
+                        onBulkUpload(file);
+                      }
+                      e.target.value = '';
+                    }}
+                  />
+                </label>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onAddQuestion();
+                  }}
+                  className="w-full sm:w-1/2 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-white/70 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center justify-center gap-2"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Question Manually
+                </button>
+              </div>
             </div>
           )}
         </div>

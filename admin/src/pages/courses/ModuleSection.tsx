@@ -78,7 +78,7 @@ const Modal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[1000] h-full min-h-[700px] flex bg-[#00000021] bg-opacity-70 items-center justify-center p-4 animate-fade-in">
+    <div className="fixed inset-0 z-[1000] h-full flex bg-[#00000021] bg-opacity-70 items-center justify-center p-4 animate-fade-in">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-[#00000021] bg-opacity-70 backdrop-blur-sm transition-opacity"
@@ -87,15 +87,14 @@ const Modal = ({
 
       {/* Modal Container */}
       <div
-        className={`relative w-fit max-h-[70vh] min-h-fit overflow-scroll hide-scrollbar rounded-xl transform scale-95 animate-scale-in
+        className={`relative w-full max-h-[90vh] overflow-hidden flex flex-col rounded-xl transform scale-95 animate-scale-in
                     max-w-${maxWidth}`}
       >
         {/* Modal Body */}
         <div
-          className="  overflow-y-auto custom-scrollbar"
+          className="overflow-y-auto custom-scrollbar flex-1"
           style={{
-            maxHeight:
-              "calc(90vh - 120px - (var(--header-height, 0) + var(--footer-height, 0)))",
+            maxHeight: "90vh"
           }}
         >
           {children}
@@ -382,21 +381,21 @@ const LessonEditor = ({
   const getDisplayImage = () => {
     if (imagePreview) return imagePreview;
     if (lesson.image && typeof lesson.image === "string") {
-        if (lesson.image.startsWith("http")) return lesson.image;
-        let cleanPath = lesson.image.replace(/\\/g, "/");
-        if (cleanPath.includes("/uploads/")) {
-            cleanPath = cleanPath.substring(cleanPath.indexOf("/uploads/"));
-        } else if (cleanPath.includes("uploads/")) {
-            cleanPath = "/" + cleanPath.substring(cleanPath.indexOf("uploads/"));
-        }
-        let base = "";
-        try {
-            const url = new URL(import.meta.env.VITE_BASE_URL);
-            base = url.origin;
-        } catch (e) {
-            base = (import.meta.env.VITE_BASE_URL || "").replace(/\/api\/v1\/?$/, "");
-        }
-        return `${base}${cleanPath.startsWith("/") ? cleanPath : "/" + cleanPath}`;
+      if (lesson.image.startsWith("http")) return lesson.image;
+      let cleanPath = lesson.image.replace(/\\/g, "/");
+      if (cleanPath.includes("/uploads/")) {
+        cleanPath = cleanPath.substring(cleanPath.indexOf("/uploads/"));
+      } else if (cleanPath.includes("uploads/")) {
+        cleanPath = "/" + cleanPath.substring(cleanPath.indexOf("uploads/"));
+      }
+      let base = "";
+      try {
+        const url = new URL(import.meta.env.VITE_BASE_URL);
+        base = url.origin;
+      } catch (e) {
+        base = (import.meta.env.VITE_BASE_URL || "").replace(/\/api\/v1\/?$/, "");
+      }
+      return `${base}${cleanPath.startsWith("/") ? cleanPath : "/" + cleanPath}`;
     }
     return null;
   };
@@ -891,11 +890,10 @@ const LessonEditor = ({
         <button
           type="button"
           onClick={() => getData(lesson)}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-            hasExistingContent
+          className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${hasExistingContent
               ? "bg-amber-600 text-white hover:bg-amber-700"
               : "bg-blue-600 text-white hover:bg-blue-700"
-          }`}
+            }`}
         >
           <Edit className="w-4 h-4" />
           <span>{hasExistingContent ? "Edit Content" : "Create Content"}</span>
@@ -1054,11 +1052,10 @@ const LessonEditor = ({
                     onChange({ ...lesson, type: e.target.value })
                   }
                   disabled={savedLessonId}
-                  className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-base ${
-                    savedLessonId
+                  className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-base ${savedLessonId
                       ? "bg-gray-100 text-gray-500 cursor-not-allowed"
                       : ""
-                  }`}
+                    }`}
                 >
                   <option value="video-lesson">ðŸŽ¬ Video Lesson</option>
                   <option value="video">ðŸ“¹ File</option>
@@ -1198,10 +1195,9 @@ const LessonEditor = ({
       <Modal
         isOpen={showContentModal}
         onClose={() => setShowContentModal(false)}
-        title={`${hasExistingContent ? "Edit" : "Create"} ${
-          currentConfig?.label
-        } Content`}
-        maxWidth="6xl"
+        title={`${hasExistingContent ? "Edit" : "Create"} ${currentConfig?.label
+          } Content`}
+        maxWidth={lesson?.type === "quiz" ? "none" : "6xl"}
       >
         <div className="space-y-6">
           {/* Lesson Info Header */}
@@ -1267,7 +1263,7 @@ const SavedModuleDisplay = ({
             {(() => {
               const imgSrc = module.image || module?.module?.image;
               if (!imgSrc) return null;
-              
+
               let src = "";
               if (imgSrc.startsWith("http")) {
                 src = imgSrc;
@@ -1330,9 +1326,8 @@ const SavedModuleDisplay = ({
             </span>
             <div className="flex items-center justify-center w-6 h-6">
               <svg
-                className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
-                  isExpanded ? "rotate-90" : ""
-                }`}
+                className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""
+                  }`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -1351,9 +1346,8 @@ const SavedModuleDisplay = ({
 
       {/* Expandable Content with Smooth Animation */}
       <div
-        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isExpanded ? "max-h-fit opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? "max-h-fit opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
         <div className="border-t border-gray-200 bg-gray-50">
           <div className="p-6">
@@ -1379,26 +1373,24 @@ const SavedModuleDisplay = ({
               </div>
 
               <div
-                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
-                  (
+                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${(
                     module.isPublished !== undefined
                       ? module.isPublished
                       : module.module?.isPublished
                   )
                     ? "bg-emerald-100 text-emerald-800"
                     : "bg-amber-100 text-amber-800"
-                }`}
+                  }`}
               >
                 <div
-                  className={`w-2 h-2 rounded-full mr-2 ${
-                    (
+                  className={`w-2 h-2 rounded-full mr-2 ${(
                       module.isPublished !== undefined
                         ? module.isPublished
                         : module.module?.isPublished
                     )
                       ? "bg-emerald-500"
                       : "bg-amber-500"
-                  }`}
+                    }`}
                 ></div>
                 {(
                   module.isPublished !== undefined
@@ -1500,18 +1492,18 @@ const SavedModuleDisplay = ({
               )}
             </div>
 
-             <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  addLesson();
-                }}
-                className="flex mt-4 items-center space-x-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium shadow-sm hover:shadow-md transition-all duration-200"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Add Lesson</span>
-              </button>
-            
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                addLesson();
+              }}
+              className="flex mt-4 items-center space-x-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium shadow-sm hover:shadow-md transition-all duration-200"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add Lesson</span>
+            </button>
+
           </div>
         </div>
       </div>
@@ -1626,11 +1618,11 @@ const ModuleSection = ({
     const updatedModules = savedModules.map((module, idx) =>
       idx === moduleIndex
         ? {
-            ...module,
-            lessons: (module.lessons || []).map((lesson: any, lIdx: number) =>
-              lIdx === lessonIndex ? updatedLesson : lesson
-            ),
-          }
+          ...module,
+          lessons: (module.lessons || []).map((lesson: any, lIdx: number) =>
+            lIdx === lessonIndex ? updatedLesson : lesson
+          ),
+        }
         : module
     );
 
@@ -1651,11 +1643,11 @@ const ModuleSection = ({
       const updatedModules = savedModules.map((module, idx) =>
         idx === moduleIndex
           ? {
-              ...module,
-              lessons: (module.lessons || []).filter(
-                (_: any, lIdx: number) => lIdx !== lessonIndex
-              ),
-            }
+            ...module,
+            lessons: (module.lessons || []).filter(
+              (_: any, lIdx: number) => lIdx !== lessonIndex
+            ),
+          }
           : module
       );
 
@@ -1787,21 +1779,19 @@ const ModuleSection = ({
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-200 flex-1 justify-center ${
-                      isActive
+                    className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-200 flex-1 justify-center ${isActive
                         ? `bg-white dark:bg-white/[0.1] shadow-sm text-${tab.color}-600 border border-${tab.color}-200`
                         : "text-gray-600 dark:text-white/70 hover:text-gray-800 hover:bg-gray-50 dark:hover:bg-white/[0.06] dark:hover:text-white/90"
-                    }`}
+                      }`}
                   >
                     <Icon className="w-5 h-5" />
                     <span>{tab.label}</span>
                     {tab.id === "modules" && totalModules > 0 && (
                       <span
-                        className={`ml-2 px-2 py-0.5 text-xs rounded-full ${
-                          isActive
+                        className={`ml-2 px-2 py-0.5 text-xs rounded-full ${isActive
                             ? `bg-${tab.color}-100 text-${tab.color}-700`
                             : "bg-gray-200  text-gray-600"
-                        }`}
+                          }`}
                       >
                         {totalModules}
                       </span>
@@ -1824,4 +1814,4 @@ const ModuleSection = ({
 };
 
 export default ModuleSection;
-           
+

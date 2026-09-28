@@ -4,6 +4,8 @@ import NotificationService from '../service/notificationService.js'; // Import n
 
 const quizService = new QuizService();
 
+import { parseQuizFile } from '../utils/quizParser.js';
+
 export const createQuiz = async (req, res) => {
   try {
     const quizData = { ...req.body };
@@ -22,6 +24,28 @@ export const createQuiz = async (req, res) => {
     res.status(201).json({ success: true, message: 'Quiz created', data: quiz });
   } catch (err) {
     console?.log('Error creating quiz:', err?.message);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+import fs from 'fs';
+
+export const bulkUploadQuizQuestions = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'No file uploaded' });
+    }
+    
+    // The file is saved to disk because of the default multer config
+    const fileBuffer = fs.readFileSync(req.file.path);
+    const parsedQuestions = await parseQuizFile(fileBuffer, req.file.mimetype, req.file.originalname);
+    
+    // Clean up the uploaded file
+    try { fs.unlinkSync(req.file.path); } catch (e) {}
+    
+    res.status(200).json({ success: true, message: 'Questions parsed successfully', questions: parsedQuestions });
+  } catch (err) {
+    console.error('Error during bulk upload:', err.message);
     res.status(500).json({ success: false, message: err.message });
   }
 };

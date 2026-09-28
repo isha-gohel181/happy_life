@@ -12,6 +12,8 @@ const ALLOWED_MIME = [
   'application/zip', 'application/x-zip-compressed',
   'application/vnd.ms-excel',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'text/csv',
+  'application/csv',
 ];
 
 const storage = multer.diskStorage({

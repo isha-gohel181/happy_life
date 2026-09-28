@@ -54,6 +54,19 @@ quizRouter.post(
 );
 
 quizRouter.post(
+  '/bulk-upload',
+  accessTokenAutoRefresh,
+  passport.authenticate('jwt', { session: false }),
+  isAdmin,
+  upload.single('file'),
+  (req, res, next) => {
+    import('../controllers/QuizController.js')
+      .then(module => module.bulkUploadQuizQuestions(req, res, next))
+      .catch(next);
+  }
+);
+
+quizRouter.post(
   '/:quizId/submit',
   accessTokenAutoRefresh,
   passport.authenticate('jwt', { session: false }),
