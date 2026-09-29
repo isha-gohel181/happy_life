@@ -115,11 +115,11 @@ const navItems: NavItem[] = [
     path: "/students/all",
 
   },
-  {
-    icon: <UserCircleIcon />,
-    name: "Add Reporter",
-    path: "/reporters/add",
-  },
+  // {
+  //   icon: <UserCircleIcon />,
+  //   name: "Add Reporter",
+  //   path: "/reporters/add",
+  // },
   {
     icon: <TableIcon />,
     name: "Assignment Submissions",
@@ -155,21 +155,21 @@ const navItems: NavItem[] = [
     name: "Testimonials",
     path: "/testimonials"
   },
-  {
-    icon: <Bot />,
-    name: "AI Tool",
-    path: "/ai-tool"
-  },
+  // {
+  //   icon: <Bot />,
+  //   name: "AI Tool",
+  //   path: "/ai-tool"
+  // },
   {
     icon: <PieChartIcon />,
     name: "Leaderboard Settings",
     path: "/leaderboard-setting"
   },
-  {
-    icon: <TaskIcon />,
-    name: "Personality Test",
-    path: "/personality-test"
-  },
+  // {
+  //   icon: <TaskIcon />,
+  //   name: "Personality Test",
+  //   path: "/personality-test"
+  // },
   {
     icon: <PageIcon />,
     name: "Security",
