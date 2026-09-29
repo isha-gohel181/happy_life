@@ -17,7 +17,7 @@ export const fetchTestSeries = createAsyncThunk(
   "testSeries/fetchTestSeries",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/test-series");
+      const response = await axiosInstance.get("/test-series/admin/list");
       return response.data;
     } catch (err: any) {
       return rejectWithValue(err.response?.data?.message || err.message);

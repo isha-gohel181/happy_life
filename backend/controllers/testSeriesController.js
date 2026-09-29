@@ -20,6 +20,17 @@ export const getTestSeriesList = async (req, res) => {
   }
 };
 
+// GET /api/test-series/admin/list - Fetch all test series for admin
+export const getAdminTestSeriesList = async (req, res) => {
+  try {
+    const testSeries = await TestSeries.find({})
+      .sort({ createdAt: -1 });
+    res.status(200).json({ success: true, testSeries });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // GET /api/test-series/:id - Fetch a specific test series by ID
 export const getTestSeriesById = async (req, res) => {
   try {

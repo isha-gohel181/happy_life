@@ -94,13 +94,15 @@ export const fetchAssignmentById = createAsyncThunk(
 
 export const fetchAssignmentSubmissions = createAsyncThunk(
   "assignment/fetchAssignmentSubmissions",
-  async (params?: { page?: number; limit?: number; search?: string }, { rejectWithValue }) => {
+  async (params?: { page?: number; limit?: number; search?: string; courseId?: string; studentName?: string }, { rejectWithValue }) => {
     try {
       const queryParams = new URLSearchParams();
       
       if (params?.page) queryParams.append('page', params.page.toString());
       if (params?.limit) queryParams.append('limit', params.limit.toString());
       if (params?.search) queryParams.append('search', params.search);
+      if (params?.courseId) queryParams.append('courseId', params.courseId);
+      if (params?.studentName) queryParams.append('studentName', params.studentName);
 
       const response = await axiosInstance.get(`/assignment-submissions?${queryParams.toString()}`, {
         headers: {

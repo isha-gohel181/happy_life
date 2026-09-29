@@ -8,6 +8,7 @@ import axiosInstance from "../../services/axiosConfig";
 export default function FreeContentList() {
   const [contents, setContents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedType, setSelectedType] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,13 +52,29 @@ export default function FreeContentList() {
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
             Free Content List
           </h3>
-          <Link
-            to="/free-content/add"
-            className="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600"
-          >
-            <PlusIcon />
-            Add Content
-          </Link>
+          <div className="flex gap-4">
+            {contents.length > 0 && (
+              <select
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
+                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+              >
+                <option value="">All Types</option>
+                {Array.from(new Set(contents.map((c: any) => c.contentType))).map(type => (
+                  <option key={type as string} value={type as string}>
+                    {(type as string).toUpperCase()}
+                  </option>
+                ))}
+              </select>
+            )}
+            <Link
+              to="/free-content/add"
+              className="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600"
+            >
+              <PlusIcon />
+              Add Content
+            </Link>
+          </div>
         </div>
 
         {loading ? (
@@ -74,7 +91,9 @@ export default function FreeContentList() {
                 </tr>
               </thead>
               <tbody>
-                {contents.map((item: any) => (
+                {contents
+                  .filter((item: any) => selectedType ? item.contentType === selectedType : true)
+                  .map((item: any) => (
                   <tr key={item._id} className="border-b dark:border-gray-700">
                     <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
                       {item.title}

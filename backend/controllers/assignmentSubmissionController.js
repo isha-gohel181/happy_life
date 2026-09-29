@@ -165,12 +165,14 @@ export const getAllSubmissions = async (req, res) => {
     const search = req.query.search || "";
     const status = req.query.status;
     const is_complete = req.query.is_complete;
+    const courseId = req.query.courseId;
+    const studentName = req.query.studentName;
 
     const { submissions, total } = await service.getAllSubmissions({
       skip,
       limit,
       search,
-      filters: { status, is_complete },
+      filters: { status, is_complete, courseId, studentName },
     });
 
     const response = {

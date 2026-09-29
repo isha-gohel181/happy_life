@@ -249,13 +249,13 @@ const navItems: NavItem[] = [
 ];
 
 const othersItems: NavItem[] = [
-  {
-    icon: <PlugInIcon />,
-    name: "Settings",
-    subItems: [
-      { name: "App Menu Settings", path: "/settings/app-menu" },
-    ],
-  },
+  // {
+  //   icon: <PlugInIcon />,
+  //   name: "Settings",
+  //   subItems: [
+  //     { name: "App Menu Settings", path: "/settings/app-menu" },
+  //   ],
+  // },
 ];
 
 const AppSidebar: React.FC = () => {

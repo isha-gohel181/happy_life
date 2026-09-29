@@ -9,7 +9,8 @@ import {
   submitTestSeries,
   getSubmittedTestSeries,
   testSeriesCheckoutInit,
-  testSeriesCheckoutVerify
+  testSeriesCheckoutVerify,
+  getAdminTestSeriesList
 } from '../controllers/testSeriesController.js';
 import { isAdmin } from '../middlewares/isAdmin.js';
 import passport from 'passport';
@@ -31,6 +32,7 @@ router.post('/checkout/init', passport.authenticate('jwt', { session: false }), 
 router.post('/checkout/verify', passport.authenticate('jwt', { session: false }), testSeriesCheckoutVerify);
 
 // Admin routes
+router.get('/admin/list', passport.authenticate('jwt', { session: false }), isAdmin, getAdminTestSeriesList);
 router.post('/', passport.authenticate('jwt', { session: false }), isAdmin, upload.fields([{ name: 'coverImage', maxCount: 1 }]), createTestSeries);
 router.put('/:id', passport.authenticate('jwt', { session: false }), isAdmin, upload.fields([{ name: 'coverImage', maxCount: 1 }]), updateTestSeries);
 router.delete('/:id', passport.authenticate('jwt', { session: false }), isAdmin, deleteTestSeries);

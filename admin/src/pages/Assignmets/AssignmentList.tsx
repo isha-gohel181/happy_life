@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useAppDispatch } from "../../hooks/redux";
 import { fetchAssignmentSubmissions } from "../../store/slices/assignment";
+import { fetchCourses } from "../../store/slices/course";
+import { useAppSelector } from "../../hooks/redux";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
 import toast from "react-hot-toast";
@@ -174,6 +176,13 @@ const AssignmentList = () => {
   const dispatch = useAppDispatch();
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [studentNameInput, setStudentNameInput] = useState("");
+  const [debouncedStudentName, setDebouncedStudentName] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState("");
+
+  const courseList = useAppSelector(
+    (state: any) => state.course.data?.courses || []
+  );
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [assignmentToDelete, setAssignmentToDelete] =
     useState<Assignment | null>(null);
@@ -190,6 +199,7 @@ const AssignmentList = () => {
 
     searchTimeoutRef.current = setTimeout(() => {
       setDebouncedSearch(searchInput);
+      setDebouncedStudentName(studentNameInput);
     }, 500);
 
     return () => {
@@ -199,10 +209,34 @@ const AssignmentList = () => {
     };
   }, [searchInput]);
 
+  // Debounce student name input
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    searchTimeoutRef.current = setTimeout(() => {
+      setDebouncedSearch(searchInput);
+      setDebouncedStudentName(studentNameInput);
+    }, 500);
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [studentNameInput]);
+
+  useEffect(() => {
+    if (!courseList.length) {
+      dispatch(fetchCourses({ page: 1, limit: 100 }));
+    }
+  }, [dispatch, courseList.length]);
+
   // Fetch data when page or search changes
   useEffect(() => {
     fetchData();
-  }, [pagination.page, debouncedSearch, searchInput]);
+  }, [pagination.page, debouncedSearch, debouncedStudentName, selectedCourse]);
 
   const fetchData = async () => {
     try {
@@ -221,6 +255,8 @@ const AssignmentList = () => {
           page: pagination.page,
           limit: pagination.limit,
           search: debouncedSearch.trim(),
+          studentName: debouncedStudentName.trim(),
+          courseId: selectedCourse,
         })
       ).unwrap();
 
@@ -267,6 +303,9 @@ const AssignmentList = () => {
     console.log("🔄 Reset search");
     setSearchInput("");
     setDebouncedSearch("");
+    setStudentNameInput("");
+    setDebouncedStudentName("");
+    setSelectedCourse("");
   };
 
   const openDeleteModal = (assignment: Assignment) => {
@@ -381,6 +420,37 @@ const AssignmentList = () => {
                 </div>
               )}
             </div>
+            
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                value={studentNameInput}
+                onChange={(e) => setStudentNameInput(e.target.value)}
+                placeholder="Search by student name..."
+                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+              />
+              {debouncedStudentName !== studentNameInput && (
+                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <div className="w-4 h-4 border-2 border-gray-300 border-t-indigo-500 rounded-full animate-spin"></div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex-1 relative">
+              <select
+                value={selectedCourse}
+                onChange={(e) => setSelectedCourse(e.target.value)}
+                className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+              >
+                <option value="">All Courses</option>
+                {courseList.map((c: any) => (
+                  <option key={c._id} value={c._id}>
+                    {c.title}
+                  </option>
+                ))}
+              </select>
+            </div>
             <button
               onClick={handleSearchReset}
               disabled={loading}
@@ -452,9 +522,14 @@ const AssignmentList = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
-                    <div className="max-w-xs truncate" title={assignment.submittedBy?.fullName || "User"}>
+                    <div className="max-w-xs truncate font-medium text-gray-900 dark:text-white" title={assignment.submittedBy?.fullName || "User"}>
                       {assignment.submittedBy?.fullName || "User"}
                     </div>
+                    {assignment.submittedBy?.email && (
+                      <div className="text-xs text-gray-500 truncate" title={assignment.submittedBy.email}>
+                        {assignment.submittedBy.email}
+                      </div>
+                    )}
                   </td>
                   <td className="px-6 py-4 text-sm">
                     <span

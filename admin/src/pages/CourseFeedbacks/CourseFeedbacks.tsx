@@ -31,6 +31,7 @@ export default function CourseFeedbacks() {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<string>("");
 
   const fetchFeedbacks = async () => {
     try {
@@ -61,9 +62,30 @@ export default function CourseFeedbacks() {
       <PageBreadcrumb pageTitle="Course Feedbacks" />
 
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6">
-        <h3 className="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90">
-          All Course Feedbacks
-        </h3>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 gap-4">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
+            All Course Feedbacks
+          </h3>
+          
+          {feedbacks.length > 0 && (
+            <div className="w-full sm:w-64">
+              <select
+                value={selectedCourse}
+                onChange={(e) => setSelectedCourse(e.target.value)}
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+              >
+                <option value="">All Courses</option>
+                {Array.from(new Map(feedbacks.map(f => [f.course?._id, f.course])).values())
+                  .filter(Boolean)
+                  .map(c => (
+                    <option key={c!._id} value={c!._id}>
+                      {c!.title}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          )}
+        </div>
 
         {loading ? (
           <div className="flex justify-center py-10">
@@ -88,7 +110,9 @@ export default function CourseFeedbacks() {
                 </tr>
               </thead>
               <tbody>
-                {feedbacks.map((fb) => (
+                {feedbacks
+                  .filter(fb => selectedCourse ? fb.course?._id === selectedCourse : true)
+                  .map((fb) => (
                   <tr
                     key={fb._id}
                     className="border-b bg-white dark:border-gray-800 dark:bg-transparent"

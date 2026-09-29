@@ -1,4 +1,4 @@
-
+import mongoose from "mongoose";
 import AssignmentSubmission from "../models/assignmentSubmission.js";
 
 class AssignmentSubmissionRepository {
@@ -107,7 +107,7 @@ class AssignmentSubmissionRepository {
 
  async findAllPaginated(skip = 0, limit = 10, search = "", filters = {}) {
   try {
-    const { status, is_complete } = filters;
+    const { status, is_complete, courseId, studentName } = filters;
 
     const matchConditions = [];
 
@@ -131,6 +131,14 @@ class AssignmentSubmissionRepository {
 
     if (typeof is_complete !== "undefined") {
       matchConditions.push({ is_complete: is_complete === "true" });
+    }
+
+    if (courseId) {
+      matchConditions.push({ "courseId._id": new mongoose.Types.ObjectId(courseId) });
+    }
+
+    if (studentName && studentName.trim()) {
+      matchConditions.push({ "submittedBy.fullName": new RegExp(studentName, "i") });
     }
 
     const pipeline = [
