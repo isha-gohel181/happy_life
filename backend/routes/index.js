@@ -70,6 +70,7 @@ import adminActivityLogRouter from "./adminActivityLogRoutes.js";
 import freeContentRouter from "./freeContentRoutes.js";
 import ebookRouter from "./ebookRoutes.js";
 import testSeriesRouter from "./testSeriesRoutes.js";
+import courseFeedbackRouter from "./courseFeedbackRoutes.js";
 import { Route } from "express";
 
 router.get("/", (req, res) => {
@@ -143,6 +144,7 @@ router.use("/admin-activity-logs", adminActivityLogRouter);
 router.use("/free-content", freeContentRouter); // Free content routes
 router.use("/ebooks", ebookRouter);
 router.use("/test-series", testSeriesRouter);
+router.use("/course-feedback", courseFeedbackRouter);
 
 // Image upload route for EditorJS (requires authentication)
 const handleMulterError = (err, req, res, next) => {

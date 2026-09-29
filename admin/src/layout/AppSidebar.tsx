@@ -49,6 +49,11 @@ const navItems: NavItem[] = [
     path: "/courses/all/courses"
   },
   {
+    icon: <MessageCircle />,
+    name: "Course Feedbacks",
+    path: "/course-feedbacks",
+  },
+  {
     icon: <PageIcon />,
     name: "Free Content",
     path: "/free-content",

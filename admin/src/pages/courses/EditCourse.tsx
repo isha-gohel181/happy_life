@@ -1262,14 +1262,14 @@ const EditCourse = () => {
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Media Files</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FileUpload
-                        label="Thumbnail Image *"
+                        label="Thumbnail Image * (1280x720px)"
                         accept="image/*"
                         onFileChange={setThumbnailFile}
                         currentFile={thumbnailFile}
                         icon={Image}
                       />
                       <FileUpload
-                        label="Cover Image"
+                        label="Cover Image (1920x1080px)"
                         accept="image/*"
                         onFileChange={setCoverImageFile}
                         currentFile={coverImageFile}
@@ -1278,14 +1278,14 @@ const EditCourse = () => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FileUpload
-                        label="Vertical Carousel Image"
+                        label="Vertical Carousel Image (1080x1350px)"
                         accept="image/*"
                         onFileChange={setVerticalCarouselImageFile}
                         currentFile={verticalCarouselImageFile}
                         icon={Image}
                       />
                       <FileUpload
-                        label="Featured Image Banner"
+                        label="Featured Image Banner (1920x1080px)"
                         accept="image/*"
                         onFileChange={setFeaturedImageBannerFile}
                         currentFile={featuredImageBannerFile}

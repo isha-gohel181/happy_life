@@ -107,6 +107,7 @@ const AddEditTestSeries = lazy(() => import("./pages/TestSeries/AddEditTestSerie
 const EbookList = lazy(() => import("./pages/Ebooks/EbookList"));
 const AddEditEbook = lazy(() => import("./pages/Ebooks/AddEditEbook"));
 const BookOrderList = lazy(() => import("./pages/Ebooks/BookOrderList"));
+const CourseFeedbacks = lazy(() => import("./pages/CourseFeedbacks/CourseFeedbacks"));
 
 
 export default function App() {
@@ -159,6 +160,7 @@ export default function App() {
                   path="/courses/text-courses/:lessonId"
                   element={<EditTextLessonEditor />}
                 />
+                <Route path="/course-feedbacks" element={<CourseFeedbacks />} />
 
 
                 <Route path="/reporters/add" element={<AddReporter />} />

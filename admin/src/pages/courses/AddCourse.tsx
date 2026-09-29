@@ -1081,14 +1081,14 @@ const AddCourse = () => {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FileUpload
-                    label="Course Thumbnail *"
+                    label="Course Thumbnail * (1280x720px)"
                     accept="image/*"
                     onFileChange={(file) => setThumbnailFile(file)}
                     currentFile={thumbnailFile}
                     icon={Image}
                   />
                   <FileUpload
-                    label="Cover Image"
+                    label="Cover Image (1920x1080px)"
                     accept="image/*"
                     onFileChange={(file) => setCoverImageFile(file)}
                     currentFile={coverImageFile}
@@ -1097,14 +1097,14 @@ const AddCourse = () => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FileUpload
-                    label="Vertical Carousel Image"
+                    label="Vertical Carousel Image (1080x1350px)"
                     accept="image/*"
                     onFileChange={(file) => setVerticalCarouselImageFile(file)}
                     currentFile={verticalCarouselImageFile}
                     icon={Image}
                   />
                   <FileUpload
-                    label="Featured Image Banner"
+                    label="Featured Image Banner (1920x1080px)"
                     accept="image/*"
                     onFileChange={(file) => setFeaturedImageBannerFile(file)}
                     currentFile={featuredImageBannerFile}

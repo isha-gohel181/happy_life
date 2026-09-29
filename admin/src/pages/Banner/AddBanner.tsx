@@ -153,7 +153,7 @@ const AddBanner: React.FC = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Image</label>
+          <label className="block mb-1">Image (1920x1080px)</label>
           <input
             type="file"
             accept="image/*"
@@ -165,7 +165,7 @@ const AddBanner: React.FC = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Mobile Image</label>
+          <label className="block mb-1">Mobile Image (1080x1080px)</label>
           <input
             type="file"
             accept="image/*"
