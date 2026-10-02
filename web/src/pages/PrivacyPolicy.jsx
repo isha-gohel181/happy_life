@@ -43,9 +43,12 @@ const PrivacyPolicy = () => {
             We may use third-party services (such as payment gateways and video hosting) that have their own privacy policies. We are not responsible for the practices of these third parties.
           </p>
 
-          <h2 className="text-xl font-bold text-amber-400 mt-6">5. Contact Us</h2>
+          <h2 className="text-xl font-bold text-amber-600 mt-6">5. Contact Us</h2>
           <p>
-            If you have any questions regarding this Privacy Policy, please contact our support team.
+            If you have any questions regarding this Privacy Policy, please contact our support team at{' '}
+            <a href="mailto:happylifereport@gmail.com" className="text-amber-600 font-bold hover:underline">
+              happylifereport@gmail.com
+            </a>.
           </p>
         </div>
       </div>

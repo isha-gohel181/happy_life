@@ -35,7 +35,11 @@ const RefundPolicy = () => {
 
           <h2 className="text-xl font-bold text-amber-600 mt-6">3. How to Request a Refund</h2>
           <p>
-            If you believe you are eligible for a refund, please contact our support team within 48 hours of purchase with your transaction details and a clear explanation of the issue.
+            If you believe you are eligible for a refund, please contact our support team at{' '}
+            <a href="mailto:happylifereport@gmail.com" className="text-amber-600 font-bold hover:underline">
+              happylifereport@gmail.com
+            </a>{' '}
+            within 48 hours of purchase with your transaction details and a clear explanation of the issue.
           </p>
           
           <h2 className="text-xl font-bold text-amber-600 mt-6">4. Processing Time</h2>

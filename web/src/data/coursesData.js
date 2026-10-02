@@ -1,297 +1,219 @@
 export const dummyCourses = [
   {
-    id: 'gs-1',
-    category: 'GS COURSES',
-    title: 'GS Foundation Comprehensive Program 2026',
-    description: 'Master General Studies Papers I, II, III & IV with structured video lectures, analytical notes, and daily answer writing guidance.',
-    shortDescription: 'Complete GS Prelims & Mains foundation batch with mentorship.',
+    id: 'astro-1',
+    category: 'ASTRO-VASTU COURSES',
+    title: 'Astro-Vastu Foundation & Master Consultation Program',
+    description: 'Master the principles of Vedic Astrology combined with Vastu Shastra. Learn birth chart mapping, house significations, and non-destructive spatial remedies with Dr. Yogesh Sharma.',
+    shortDescription: 'Complete Vedic Astro-Vastu foundation program with practical remedies.',
     price: '18,999',
     salePrice: '12,999',
     difficulty: 'Intermediate',
-    duration: '240 hours',
-    totalLessons: 85,
+    duration: '120 hours',
+    totalLessons: 45,
     level: ['Beginner', 'Intermediate'],
     thumbnail: '/courses/architecture.png',
     isNew: true,
-    tags: ['GS', 'Prelims', 'Mains', 'Foundation'],
-    mentorName: 'Dr. Sahil Khanna & Senior Faculty',
+    tags: ['Astro-Vastu', 'Kundli', 'Remedies', 'Masterclass'],
+    mentorName: 'Dr. Yogesh Sharma',
   },
   {
-    id: 'gs-2',
-    category: 'GS COURSES',
-    title: 'Indian Polity, Governance & Constitution In-Depth',
-    description: 'Comprehensive coverage of Indian Constitution, statutory bodies, public policy, and landmark Supreme Court verdicts for GS Paper II.',
-    shortDescription: 'Master Indian Constitution, Governance & Landmark Judgments.',
+    id: 'astro-2',
+    category: 'ASTRO-VASTU COURSES',
+    title: 'Vedic Kundli Decoding & Predictive Astrology',
+    description: 'Comprehensive coverage of 12 Houses, Planetary Conjunctions (Yutis), Mahadasha cycles, and predictive transits for career, health, and marriage.',
+    shortDescription: 'Master Indian birth chart analysis, planetary dashas, and transits.',
     price: '9,999',
     salePrice: '5,999',
     difficulty: 'Intermediate',
-    duration: '90 hours',
-    totalLessons: 42,
+    duration: '60 hours',
+    totalLessons: 32,
     level: ['Intermediate'],
     thumbnail: '/courses/typography.png',
     isNew: false,
-    tags: ['GS', 'Polity', 'Governance', 'GS Paper 2'],
-    mentorName: 'Adv. Rajesh Verma',
+    tags: ['Astrology', 'Kundli', 'Prediction', 'Vedic'],
+    mentorName: 'Dr. Yogesh Sharma',
   },
   {
-    id: 'gs-3',
-    category: 'GS COURSES',
-    title: 'Modern Indian History, Art & Culture Masterclass',
-    description: 'From 18th century decline of Mughals to Freedom Struggle, Post-Independence consolidation and Indian architectural heritage.',
-    shortDescription: 'Complete History & Art-Culture syllabus breakdown.',
+    id: 'astro-3',
+    category: 'ASTRO-VASTU COURSES',
+    title: 'Non-Destructive Home & Commercial Vastu Masterclass',
+    description: 'Learn how to detect spatial energy imbalances and apply practical remedies using colors, elements, and simple object placements without any demolition.',
+    shortDescription: 'Practical Vastu for homes, offices, and commercial establishments.',
     price: '8,499',
     salePrice: '4,999',
     difficulty: 'Beginner',
-    duration: '75 hours',
-    totalLessons: 36,
+    duration: '45 hours',
+    totalLessons: 24,
     level: ['Beginner'],
     thumbnail: '/courses/motion.png',
     isNew: true,
-    tags: ['GS', 'History', 'Culture', 'GS Paper 1'],
-    mentorName: 'Prof. Ananya Sen',
+    tags: ['Vastu', 'Home Energy', 'Commercial Vastu', 'Remedies'],
+    mentorName: 'Dr. Yogesh Sharma',
   },
   {
-    id: 'opt-1',
-    category: 'OPTIONAL COURSES',
-    title: 'Public Administration Optional - Theory & Practice',
-    description: 'Complete Paper 1 (Administrative Theory) and Paper 2 (Indian Administration) syllabus coverage with previous 10 years question solutions.',
-    shortDescription: 'Comprehensive Pub Ad Optional batch with 10-year PYQ analysis.',
-    price: '24,999',
-    salePrice: '16,499',
+    id: 'astro-4',
+    category: 'SPECIALIZED COURSES',
+    title: 'Planetary Remedies (Upay) for Modern Life Challenges',
+    description: 'Demystify Rahu, Ketu, Shani, and Venus alignments. Actionable and doable daily lifestyle habits and psychological adjustments that bring harmony.',
+    shortDescription: 'Logic-backed remedies for Rahu, Saturn, and financial/career blocks.',
+    price: '14,999',
+    salePrice: '8,499',
     difficulty: 'Advanced',
-    duration: '180 hours',
-    totalLessons: 68,
+    duration: '50 hours',
+    totalLessons: 28,
     level: ['Advanced'],
     thumbnail: '/courses/curator.png',
     isNew: true,
-    tags: ['Optional', 'Pub Ad', 'Administration', 'Mains'],
-    mentorName: 'Dr. Sahil Khanna',
+    tags: ['Remedies', 'Upay', 'Rahu', 'Shani Dev'],
+    mentorName: 'Dr. Yogesh Sharma',
   },
   {
-    id: 'opt-2',
-    category: 'OPTIONAL COURSES',
-    title: 'Sociology Optional: Thinkers & Social Systems',
-    description: 'Deep dive into classical sociological thinkers (Marx, Weber, Durkheim) and contemporary Indian social structure and transformations.',
-    shortDescription: 'High-scoring Sociology Optional framework with model answers.',
-    price: '22,999',
-    salePrice: '15,999',
+    id: 'astro-5',
+    category: 'SPECIALIZED COURSES',
+    title: 'Numerology & Name Correction for Career & Business',
+    description: 'Unlock the power of numbers 1 through 9. Learn Driver & Conductor calculations, name vibration alignments, and auspicious date planning.',
+    shortDescription: 'Name spelling alignment and commercial numerology framework.',
+    price: '12,999',
+    salePrice: '7,999',
     difficulty: 'Intermediate',
-    duration: '160 hours',
-    totalLessons: 60,
+    duration: '40 hours',
+    totalLessons: 22,
     level: ['Intermediate', 'Advanced'],
     thumbnail: '/courses/narrative.png',
     isNew: false,
-    tags: ['Optional', 'Sociology', 'Thinkers', 'Mains'],
-    mentorName: 'Dr. Meera Nambiar',
+    tags: ['Numerology', 'Name Correction', 'Business Success'],
+    mentorName: 'Dr. Yogesh Sharma',
   },
   {
-    id: 'opt-3',
-    category: 'OPTIONAL COURSES',
-    title: 'Geography Optional - Physical & Human Landscapes',
-    description: 'Geomorphology, Climatology, Oceanography, and Economic Geography mapped with diagrammatic answer writing techniques.',
-    shortDescription: 'Diagram-oriented Geography Optional preparation program.',
-    price: '23,499',
-    salePrice: '15,499',
+    id: 'astro-6',
+    category: 'SPECIALIZED COURSES',
+    title: 'Financial Astrology & Business Energy Mapping',
+    description: 'Identify wealth-generating periods in horoscopes, resolve persistent debt, and align office Vastu for sustained cash flow and growth.',
+    shortDescription: 'Astrological guidance for investments, business ventures, and prosperity.',
+    price: '15,499',
+    salePrice: '9,499',
     difficulty: 'Advanced',
-    duration: '175 hours',
-    totalLessons: 64,
+    duration: '55 hours',
+    totalLessons: 30,
     level: ['Advanced'],
     thumbnail: '/courses/pricing.png',
     isNew: true,
-    tags: ['Optional', 'Geography', 'Mapping', 'Mains'],
-    mentorName: 'Prof. Vikram Chauhan',
+    tags: ['Finance', 'Business Astrology', 'Wealth Vastu'],
+    mentorName: 'Dr. Yogesh Sharma',
   }
 ];
 
 export const testSeriesData = [
   {
     id: 'test-1',
-    title: 'GS Prelims Paper 1 All-India Mock Test 2026',
-    category: 'GS Prelims Mock',
+    title: 'Vedic Astrology Fundamentals & Kundli Reading Mock',
+    category: 'Vedic Astrology',
     questionsCount: 20,
     durationMinutes: 25,
     difficulty: 'Intermediate',
     rating: 4.9,
     attempts: '18.4k',
-    badge: 'National Mock',
-    description: 'Full-syllabus UPSC Prelims General Studies simulated examination with negative marking analytics and subject-wise breakdown.',
+    badge: 'National Quiz',
+    description: 'Comprehensive test covering the 12 Houses, Zodiac Signs, planetary aspects, and basic Kundli analysis techniques.',
     questions: [
       {
-        question: 'Under which Article of the Indian Constitution is the provision for the Finance Commission established?',
-        options: ['Article 280', 'Article 324', 'Article 312', 'Article 356'],
+        question: 'Which house in a Vedic birth chart is known as the house of Longevity, Sudden Transformations, and Occult knowledge (Ayur Bhava)?',
+        options: ['6th House', '8th House', '10th House', '12th House'],
+        correctIndex: 1,
+        explanation: 'The 8th House governs longevity (Ayushya), sudden events, occult sciences, inheritance, and transformations.'
+      },
+      {
+        question: 'Which planet is regarded as the significator (Karaka) for Wealth and General Prosperity in Vedic astrology?',
+        options: ['Saturn', 'Jupiter (Guru)', 'Mars', 'Rahu'],
+        correctIndex: 1,
+        explanation: 'Jupiter (Guru/Brihaspati) is the prime natural significator of wealth, fortune, and higher wisdom.'
+      },
+      {
+        question: 'The Lagna (1st house) of a horoscope represents which vital aspect of life?',
+        options: ['Physical Body, Vitality and Personality', 'Expenditure and Foreign travel', 'Spouse and Partnerships', 'Higher Education'],
         correctIndex: 0,
-        explanation: 'Article 280 of the Constitution of India provides for a Finance Commission as a quasi-judicial body constituted by the President every five years.'
+        explanation: 'The 1st House or Lagna defines the self, physical constitution, vitality, mental disposition, and overall approach to life.'
       },
       {
-        question: 'Which of the following Indus Valley Civilization sites provides the evidence of a ploughed field?',
-        options: ['Harappa', 'Kalibangan', 'Lothal', 'Mohenjo-daro'],
+        question: 'In Vedic Astrology, which planet rules over communication, speech, logic, and commercial trade?',
+        options: ['Mercury (Budh)', 'Venus (Shukra)', 'Sun (Surya)', 'Moon (Chandra)'],
+        correctIndex: 0,
+        explanation: 'Mercury (Budh) governs speech, intellect, commerce, accounting, and mathematical skills.'
+      },
+      {
+        question: 'What is a Mahadasha in the Vimshottari Dasha system?',
+        options: ['A daily transit', 'A major planetary operating period influencing a segment of life', 'An eclipse phase', 'A lunar eclipse timing'],
         correctIndex: 1,
-        explanation: 'Kalibangan in Rajasthan provides evidence of a ploughed field belonging to the early Harappan phase.'
-      },
-      {
-        question: 'The term "Western Disturbances" in Indian meteorology refers to weather systems originating from which region?',
-        options: ['Bay of Bengal', 'Arabian Sea', 'Mediterranean Sea', 'Indian Ocean'],
-        correctIndex: 2,
-        explanation: 'Western Disturbances originate in the Mediterranean region and travel eastwards, bringing crucial winter rainfall to North-Western India.'
-      },
-      {
-        question: 'Which Schedule of the Indian Constitution contains provisions regarding the administration and control of Scheduled Areas and Scheduled Tribes?',
-        options: ['Fourth Schedule', 'Fifth Schedule', 'Sixth Schedule', 'Seventh Schedule'],
-        correctIndex: 1,
-        explanation: 'The Fifth Schedule deals with the administration and control of Scheduled Areas and Scheduled Tribes in states other than Assam, Meghalaya, Tripura, and Mizoram (which are covered under Sixth Schedule).'
-      },
-      {
-        question: 'What is the primary indicator used by the Reserve Bank of India (RBI) to measure headline retail inflation?',
-        options: ['Wholesale Price Index (WPI)', 'Consumer Price Index - Combined (CPI-C)', 'GDP Deflator', 'Index of Industrial Production (IIP)'],
-        correctIndex: 1,
-        explanation: 'The Reserve Bank of India uses the Consumer Price Index - Combined (CPI-C) as the primary anchor for inflation targeting in its monetary policy framework.'
+        explanation: 'Vimshottari Dasha assigns specific multi-year periods to each planet, during which that planets qualities and house rulership become active.'
       }
     ]
   },
   {
     id: 'test-2',
-    title: 'Indian Polity & Constitutional Framework Speed Quiz',
-    category: 'Subject Mock',
+    title: 'Vastu Shastra Directional Energy Assessment',
+    category: 'Vastu Shastra',
     questionsCount: 15,
     durationMinutes: 20,
     difficulty: 'Intermediate',
     rating: 4.8,
     attempts: '12.1k',
     badge: 'High Yield',
-    description: 'Focused test covering Fundamental Rights, Directive Principles, Parliamentary Procedures, and Constitutional Amendments.',
+    description: 'Focused test covering the 16 Vastu zones, element balancing (Panchatatva), and practical home remedies.',
     questions: [
       {
-        question: 'Which constitutional amendment added the Fundamental Duty of parent/guardian to provide education to children aged 6-14 years?',
-        options: ['42nd Amendment Act', '44th Amendment Act', '86th Amendment Act', '91st Amendment Act'],
-        correctIndex: 2,
-        explanation: 'The 86th Constitutional Amendment Act, 2002 inserted Article 21A, modified Article 45, and added Article 51A(k).'
-      },
-      {
-        question: 'A money bill can be introduced in which house of the Indian Parliament?',
-        options: ['Only in Lok Sabha', 'Only in Rajya Sabha', 'In either House of Parliament', 'In a joint sitting of both Houses'],
+        question: 'Which direction in Vastu Shastra represents the Water element and should ideally be kept light, clean, and open?',
+        options: ['North-East (Ishan)', 'South-West (Nairutya)', 'South-East (Agneya)', 'North-West (Vayavya)'],
         correctIndex: 0,
-        explanation: 'Under Article 109, a Money Bill can be introduced only in the Lok Sabha with the prior recommendation of the President.'
+        explanation: 'North-East (Ishan) is the sacred zone representing the Water element and divine energy flow.'
       },
       {
-        question: 'Who acts as the Chairman of the Rajya Sabha?',
-        options: ['Speaker of Lok Sabha', 'Prime Minister of India', 'Vice-President of India', 'Chief Justice of India'],
+        question: 'Which zone in a home or office is ideal for the master bedroom and master suite to ensure family stability and authority?',
+        options: ['North-East', 'South-East', 'South-West', 'North-West'],
         correctIndex: 2,
-        explanation: 'Under Article 64, the Vice-President of India is the ex-officio Chairman of the Council of States (Rajya Sabha).'
+        explanation: 'South-West (Nairutya) represents the Earth element (stability, grounding, and leadership authority).'
+      },
+      {
+        question: 'The kitchen stove and fire element should ideally be positioned in which directional zone?',
+        options: ['North-East', 'South-East (Agneya)', 'North', 'West'],
+        correctIndex: 1,
+        explanation: 'South-East is ruled by Lord Agni (Fire), making it the natural place for cooking stoves and heat appliances.'
       }
     ]
   },
   {
     id: 'test-3',
-    title: 'Modern Indian History & National Movement Quiz',
-    category: 'History & Culture',
+    title: 'Planetary Remedies & Astrological Upay Speed Quiz',
+    category: 'Planetary Remedies',
     questionsCount: 20,
     durationMinutes: 25,
     difficulty: 'Beginner to Medium',
     rating: 4.9,
     attempts: '14.8k',
-    badge: 'PYQ Mapped',
-    description: 'From the socio-religious reform movements and 1857 revolt to Gandhian phase and independence struggle.',
+    badge: 'Remedies Mapped',
+    description: 'Practical knowledge on daily lifestyle remedies for Rahu, Saturn, Venus, and Mars without superstition.',
     questions: [
       {
-        question: 'Who among the following was known as the "Grand Old Man of India"?',
-        options: ['Gopal Krishna Gokhale', 'Dadabhai Naoroji', 'Bal Gangadhar Tilak', 'Surendranath Banerjee'],
-        correctIndex: 1,
-        explanation: 'Dadabhai Naoroji was revered as the "Grand Old Man of India" and pioneered the Drain of Wealth theory.'
-      },
-      {
-        question: 'In which year did the Non-Cooperation Movement formally commence under Mahatma Gandhi?',
-        options: ['1919', '1920', '1922', '1930'],
-        correctIndex: 1,
-        explanation: 'The Non-Cooperation Movement was launched in August 1920 by Mahatma Gandhi following the Jallianwala Bagh massacre and Khilafat issue.'
-      },
-      {
-        question: 'The Ryotwari System of land revenue settlement was primarily introduced in which region of British India?',
-        options: ['Bengal and Bihar', 'Madras and Bombay Presidencies', 'Punjab and North-West Provinces', 'Awadh and Rohilkhand'],
-        correctIndex: 1,
-        explanation: 'The Ryotwari system was formulated by Thomas Munro and Captain Read and introduced across the Madras and Bombay Presidencies.'
-      }
-    ]
-  },
-  {
-    id: 'test-4',
-    title: 'CSAT Paper 2: Quantitative Aptitude & Analytical Reasoning Sprint',
-    category: 'CSAT Sprint',
-    questionsCount: 15,
-    durationMinutes: 30,
-    difficulty: 'Medium to Hard',
-    rating: 4.7,
-    attempts: '9.6k',
-    badge: 'Qualifying Booster',
-    description: 'Speed-based practice on number systems, logical deductions, reading comprehension inferences, and data interpretation.',
-    questions: [
-      {
-        question: 'If 30% of a number is added to 84, the result is the number itself. What is the number?',
-        options: ['120', '140', '160', '180'],
-        correctIndex: 0,
-        explanation: 'Let number be x. 0.30x + 84 = x => 0.70x = 84 => x = 84 / 0.70 = 120.'
-      },
-      {
-        question: 'A train 150 meters long is running at a speed of 54 km/h. How much time will it take to cross a standing electric pole?',
-        options: ['8 seconds', '10 seconds', '12 seconds', '15 seconds'],
-        correctIndex: 1,
-        explanation: 'Speed = 54 * (5/18) = 15 m/s. Time = Distance / Speed = 150 / 15 = 10 seconds.'
-      }
-    ]
-  },
-  {
-    id: 'test-5',
-    title: 'Public Administration & Governance Case Quiz',
-    category: 'Optional Mock',
-    questionsCount: 15,
-    durationMinutes: 20,
-    difficulty: 'Advanced',
-    rating: 5.0,
-    attempts: '6.2k',
-    badge: 'Optional Drill',
-    description: 'Theoretical models of Taylor, Weber, Simon, and Riggs applied to contemporary administrative problem statements.',
-    questions: [
-      {
-        question: 'Who introduced the "Bounded Rationality" and "Satisficing" decision-making model in administrative theory?',
-        options: ['Herbert A. Simon', 'Chester Barnard', 'Max Weber', 'F.W. Taylor'],
-        correctIndex: 0,
-        explanation: 'Herbert Simon received the Nobel Memorial Prize for his pioneering work on bounded rationality and decision-making processes in organizations.'
-      },
-      {
-        question: 'The "Prismatic Model" and "Sala Model" of developing societies administration was formulated by which scholar?',
-        options: ['Dwight Waldo', 'Fred W. Riggs', 'Chris Argyris', 'Elton Mayo'],
-        correctIndex: 1,
-        explanation: 'Fred W. Riggs proposed the Ecological Approach in Public Administration including the Agraria-Industria and Prismatic-Sala models.'
-      }
-    ]
-  },
-  {
-    id: 'test-6',
-    title: 'Environment, Ecology & Climate Action Weekly Diagnostic',
-    category: 'Current Affairs & Eco',
-    questionsCount: 15,
-    durationMinutes: 20,
-    difficulty: 'Intermediate',
-    rating: 4.9,
-    attempts: '11.3k',
-    badge: 'Eco Focus',
-    description: 'Biodiversity hotspots, Ramsar wetlands, UNFCCC COP resolutions, wildlife corridors, and environmental jurisprudence in India.',
-    questions: [
-      {
-        question: 'Which Indian National Park is renowned as the last remaining natural refuge of the One-Horned Rhinoceros (Rhinoceros unicornis)?',
-        options: ['Jim Corbett National Park', 'Kaziranga National Park', 'Sundarbans National Park', 'Gir National Park'],
-        correctIndex: 1,
-        explanation: 'Kaziranga National Park in Assam holds the worlds largest population of Great Indian One-Horned Rhinoceroses and is a UNESCO World Heritage site.'
-      },
-      {
-        question: 'Montreux Record under the Ramsar Convention is a register of wetland sites that are:',
+        question: 'According to Dr. Yogesh Sharma, what is the best daily habit to pacify negative Rahu vibrations?',
         options: [
-          'Designated as international marine reserves',
-          'Facing ecological character changes due to human interference',
-          'Free from all industrial pollution',
-          'Situated strictly along international boundaries'
+          'Wearing costly gemstones without consulting',
+          'Keeping bathrooms, gadgets, and bedroom clutter-free with disciplined routines',
+          'Performing fearful rituals',
+          'Avoiding social interaction'
         ],
         correctIndex: 1,
-        explanation: 'The Montreux Record is a register of wetland sites on the Ramsar List where changes in ecological character have occurred, are occurring, or are likely to occur as a result of technological developments, pollution or other human interference.'
+        explanation: 'Rahu thrives on confusion and clutter. Cleanliness in personal spaces and electronics directly stabilizes Rahu.'
+      },
+      {
+        question: 'Honoring and treating workers, drivers, and cleaning helpers with dignity and fair pay is the supreme remedy for:',
+        options: ['Saturn (Shani)', 'Mars (Mangal)', 'Sun (Surya)', 'Jupiter (Guru)'],
+        correctIndex: 0,
+        explanation: 'Saturn represents the labor force and justice. Serving and respecting helpers directly brings Shanis grace.'
+      },
+      {
+        question: 'Which planet is strengthened by regular morning sunlight exposure, respect for father figures, and maintaining high self-integrity?',
+        options: ['Sun (Surya)', 'Moon (Chandra)', 'Venus (Shukra)', 'Rahu'],
+        correctIndex: 0,
+        explanation: 'The Sun represents the soul, father, authority, and vitality. Early sunlight and integrity directly strengthen Sun energy.'
       }
     ]
   }
@@ -300,10 +222,10 @@ export const testSeriesData = [
 export const buyBooksData = [
   {
     id: 'book-1',
-    title: 'GS Foundation Compendium: Indian Polity & Governance (Vol. 1)',
-    category: 'General Studies',
-    author: 'Happy Life Academic Research Faculty',
-    format: 'eBook (PDF) + Printable Mindmaps',
+    title: 'Astro-Vastu Handbook: Harmonizing Home & Destiny',
+    category: 'Astro-Vastu',
+    author: 'Dr. Yogesh Sharma',
+    format: 'eBook (PDF) + Directional Compass Guide',
     pages: 340,
     fileSize: '16.4 MB',
     rating: 4.9,
@@ -311,22 +233,22 @@ export const buyBooksData = [
     price: '₹499',
     originalPrice: '₹999',
     discount: '50% OFF',
-    coverImage: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80',
-    description: 'Exhaustive topic-by-topic handbook covering Constitution formulation, Fundamental Rights, Federal structure, Emergency provisions, and Supreme Court constitutional jurisprudence with diagrams.',
+    coverImage: 'https://images.unsplash.com/photo-1532012164546-f432f2e3edd4?w=600&auto=format&fit=crop&q=80',
+    description: 'Exhaustive topic-by-topic handbook covering non-destructive Vastu principles, 16 directional zones, and birth chart energy alignment with practical daily remedies.',
     highlights: [
-      'Complete Article-wise breakdown from Article 1 to 395',
-      '50+ High-yield visual constitutional mindmaps',
-      'Previous 15 years Prelims & Mains solved questions with model frameworks',
-      'Annotated landmark judgments up to 2026'
+      'Complete 16-zone Vastu energy breakdown',
+      '50+ High-yield visual remedy charts without demolition',
+      'Case studies on solving financial blockages and sleep disorders',
+      'Kundli and Vastu integration frameworks by Dr. Yogesh Sharma'
     ],
-    sampleExcerpt: 'Chapter 3: The Basic Structure Doctrine — Tracing the evolutionary arc from Shankari Prasad (1951) and Golaknath (1967) to Kesavananda Bharati (1973) and Minerva Mills (1980).'
+    sampleExcerpt: 'Chapter 3: The North-East Ishan Principle — How keeping this zone pure and uncluttered activates mental clarity and divine intuition.'
   },
   {
     id: 'book-2',
-    title: 'Indian History & Architectural Heritage Handbook (Vol. 2)',
-    category: 'General Studies',
-    author: 'Prof. Ananya Sen & Happy Life Faculty',
-    format: 'eBook (PDF) + Chronology Timelines',
+    title: 'Vedic Kundli Decoding: A Practical Modern Guide',
+    category: 'Vedic Astrology',
+    author: 'Dr. Yogesh Sharma',
+    format: 'eBook (PDF) + 12 Houses Chart',
     pages: 410,
     fileSize: '24.8 MB',
     rating: 5.0,
@@ -335,21 +257,21 @@ export const buyBooksData = [
     originalPrice: '₹1,199',
     discount: '54% OFF',
     coverImage: 'https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=600&auto=format&fit=crop&q=80',
-    description: 'Structured narrative of Ancient, Medieval, Modern Indian History, Tribal and Peasant uprisings, and classical Indian art, sculpture, and Temple architecture styles.',
+    description: 'Structured handbook explaining birth chart interpretation, planetary strengths, Mahadasha analysis, and predictive techniques for real-world life choices.',
     highlights: [
-      'High-resolution temple architecture architectural cross-sections',
-      'Chronological timelines of Governor-Generals and key policies',
-      'Sub-altern perspectives on Indian national freedom struggle',
-      'Bhakti & Sufi movement literature compendium'
+      'Detailed analysis of all 12 houses and 9 planets',
+      'Vimshottari Dasha timeline decoding for career and marriage',
+      'Debunking astrological superstitions and fear-based predictions',
+      'Practical daily remedies tailored for each zodiac sign'
     ],
-    sampleExcerpt: 'Chapter 7: Temple Architecture Typology — Nagara, Dravida, and Vesara styles: Shikhara geometry, Mandapa arrangements, and regional Deccan idioms.'
+    sampleExcerpt: 'Chapter 7: Career & the 10th House — Evaluating natural planetary strengths and timing promotions through transit analysis.'
   },
   {
     id: 'book-3',
-    title: 'Public Administration Mastery: Administrative Thinkers & Indian Polity',
-    category: 'Optional Subjects',
-    author: 'Dr. Sahil Khanna',
-    format: 'eBook (PDF) + Answer Writing Blueprints',
+    title: 'Rahu, Ketu & Shani: Turning Planetary Challenges into Strengths',
+    category: 'Planetary Remedies',
+    author: 'Dr. Yogesh Sharma',
+    format: 'eBook (PDF) + Daily Upay Checklists',
     pages: 380,
     fileSize: '19.2 MB',
     rating: 4.9,
@@ -358,82 +280,13 @@ export const buyBooksData = [
     originalPrice: '₹1,499',
     discount: '53% OFF',
     coverImage: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=600&auto=format&fit=crop&q=80',
-    description: 'The definitive guide for Public Administration Optional students. Synthesizes classical & modern organizational thinkers with real administrative case studies from Indian governance.',
+    description: 'The definitive guide to understanding shadow and karmic planets. Learn why challenges arise and how simple, doable daily practices turn them into blessings.',
     highlights: [
-      'Comparative thinker matrix: Taylor, Fayol, Weber, Simon, Waldo',
-      'New Public Management (NPM) & Digital Governance paradigms',
-      'Paper 2 Indian Administration contemporary challenges analysis',
-      '25 Model 20-markers answers with diagrams'
+      'Demystifying Sade Sati, Dhaiya, and Rahu Mahadasha',
+      'Practical, non-superstitious remedies for mental stress and delays',
+      'Ethical and behavioral karma corrections',
+      'Step-by-step checklists for daily peace and progress'
     ],
-    sampleExcerpt: 'Chapter 4: Herbert Simons Decision-Making Theory — Fact-value dichotomy, cognitive limitations of administrators, and algorithmic governance applications.'
-  },
-  {
-    id: 'book-4',
-    title: 'Sociology Optional: Sociological Thinkers & Indian Social Structure',
-    category: 'Optional Subjects',
-    author: 'Dr. Meera Nambiar',
-    format: 'eBook (PDF) + Essay Templates',
-    pages: 350,
-    fileSize: '17.5 MB',
-    rating: 4.8,
-    reviewsCount: 290,
-    price: '₹649',
-    originalPrice: '₹1,299',
-    discount: '50% OFF',
-    coverImage: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&auto=format&fit=crop&q=80',
-    description: 'Comprehensive study notes on classical sociology (Marx, Durkheim, Weber, Parsons, Merton, Mead) and structural analysis of Caste, Class, Kinship, and Religion in India.',
-    highlights: [
-      'Core sociological concepts explained with contemporary Indian examples',
-      'Perspective comparisons: Functionalist vs Conflict vs Phenomenological',
-      'Social movements, agrarian transitions, and gender inequality essays',
-      'Direct PYQ solutions with quote references'
-    ],
-    sampleExcerpt: 'Chapter 2: Emile Durkheims Division of Labour and Suicide — Mechanical vs Organic solidarity and the conceptual application of Anomie to modern urban stress.'
-  },
-  {
-    id: 'book-5',
-    title: 'Ethics, Integrity & Case Studies Workbook (GS Paper IV)',
-    category: 'General Studies',
-    author: 'Happy Life Ethics Board',
-    format: 'eBook (PDF) + 100 Case Studies Solver',
-    pages: 290,
-    fileSize: '14.0 MB',
-    rating: 5.0,
-    reviewsCount: 630,
-    price: '₹449',
-    originalPrice: '₹899',
-    discount: '50% OFF',
-    coverImage: 'https://images.unsplash.com/photo-1532012164546-f432f2e3edd4?w=600&auto=format&fit=crop&q=80',
-    description: 'Master moral philosophy, administrative ethics, emotional intelligence, and 100+ real-world ethical dilemma case studies with ethical framework decision matrices.',
-    highlights: [
-      'Deontological, Utilitarian, and Virtue Ethics simplified',
-      'Nolan Committee 7 principles of public life deep dive',
-      '100 Real-life administrative case study solutions step-by-step',
-      'Quotations, idioms and ethical thinkers handbook'
-    ],
-    sampleExcerpt: 'Case Study 14: Conflict between loyalty to immediate departmental superior and statutory whistleblower duty under environmental protection laws.'
-  },
-  {
-    id: 'book-6',
-    title: 'Geography Optional: Physical Geomorphology & Climatology Atlas',
-    category: 'Optional Subjects',
-    author: 'Prof. Vikram Chauhan',
-    format: 'eBook (PDF) + High-Res Geological Maps',
-    pages: 420,
-    fileSize: '29.5 MB',
-    rating: 4.9,
-    reviewsCount: 310,
-    price: '₹699',
-    originalPrice: '₹1,399',
-    discount: '50% OFF',
-    coverImage: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&auto=format&fit=crop&q=80',
-    description: 'Full coverage of Plate Tectonics, Davis & Penck cycles of erosion, Jet streams, El Nino-Southern Oscillation, and Indian Monsoon dynamics with 200+ hand-drawn illustrations.',
-    highlights: [
-      '200+ Diagrammatic illustrations for GS and Optional papers',
-      'Plate tectonic boundaries and seismic zone classifications',
-      'Koppen and Thornthwaite climatic classification models',
-      'Comprehensive regional planning & resource geography notes'
-    ],
-    sampleExcerpt: 'Chapter 5: Tropical Cyclogenesis — Thermodynamic criteria, Coriolis threshold, Upper tropospheric divergence, and Bay of Bengal cyclonic tracks.'
+    sampleExcerpt: 'Chapter 4: Rahus Role in Innovation — Harnessing the intense desire of Rahu to fuel creativity, modern technology, and strategic thinking.'
   }
 ];

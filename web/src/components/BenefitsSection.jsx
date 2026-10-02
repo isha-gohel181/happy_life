@@ -28,27 +28,27 @@ BenefitsSection = ({ course, section }) => {
   }, [])
 
   return (
-    <section ref={containerRef} className="max-w-7xl mx-auto py-20">
-      <div className="grid grid-cols-1 min-[1301px]:grid-cols-[1fr_1.8fr] gap-12 min-[1301px]:gap-20 items-start mb-24 px-4 md:px-0">
+    <section ref={containerRef} className="max-w-7xl mx-auto py-20 px-4 md:px-0">
+      <div className="grid grid-cols-1 min-[1301px]:grid-cols-[1fr_1.8fr] gap-12 min-[1301px]:gap-20 items-start mb-24">
         <div className="space-y-8 min-[1301px]:sticky min-[1301px]:top-32 transition-all duration-500">
-          <h2 className="font-newsreader italic text-4xl md:text-5xl lg:text-6xl text-white font-extralight tracking-tight leading-[1.1]">
+          <h2 className="font-newsreader italic text-4xl md:text-5xl lg:text-6xl text-slate-900 font-extralight tracking-tight leading-[1.1]">
             {sanitizeDisplay(section?.title || "What You Will Achieve").split(' ').map((word, i, arr) => (
               <React.Fragment key={i}>
                 {i === arr.length - 1 ? (
-                  <span className="text-accent">{word}</span>
+                  <span className="text-[#2171B5]">{word}</span>
                 ) : (
                   word + ' '
                 )}
               </React.Fragment>
             ))}
           </h2>
-          <div className="h-[2px] bg-accent/40 w-24" />
+          <div className="h-[2px] bg-[#2171B5]/40 w-24" />
         </div>
 
         {section?.content && (
-          <div className="min-[1301px]:border-l border-white/10 pl-0 min-[1301px]:pl-12 space-y-10 py-2">
+          <div className="min-[1301px]:border-l border-slate-200 pl-0 min-[1301px]:pl-12 space-y-8 py-2">
             {section.content.blocks?.map((block, i) => (
-              <p key={i} className={`font-montserrat leading-[1.8] tracking-wide ${i === 0 ? 'text-lg md:text-xl text-white/95 font-medium' : 'text-sm md:text-base text-white/70 font-light'}`}>
+              <p key={i} className={`font-montserrat leading-[1.8] tracking-wide ${i === 0 ? 'text-lg md:text-xl text-slate-800 font-medium' : 'text-sm md:text-base text-slate-600 font-normal'}`}>
                 {sanitizeDisplay(block.data?.text || '').replace(/&nbsp;/g, ' ')}
               </p>
             ))}
@@ -58,13 +58,13 @@ BenefitsSection = ({ course, section }) => {
 
       <div className="benefit-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {section?.points?.map((feat, i) => (
-          <div key={i} className="benefit-card border border-white/5 bg-white/[0.01] p-8 md:p-10 backdrop-blur-xl relative group hover:border-accent/40 transition-all duration-700">
-            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
-              <span className="font-jetbrains text-[40px] font-black text-accent">{String(i + 1).padStart(2, '0')}</span>
+          <div key={i} className="benefit-card border border-slate-200/80 bg-white p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-md hover:border-[#2171B5]/50 relative group transition-all duration-300 h-full flex flex-col justify-start min-h-[140px]">
+            <div className="absolute top-3 right-4 select-none pointer-events-none">
+              <span className="font-jetbrains text-3xl md:text-4xl font-black text-[#2171B5]/20 group-hover:text-[#2171B5]/40 transition-colors">{String(i + 1).padStart(2, '0')}</span>
             </div>
-            <div className="flex items-center gap-6">
-              <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse shadow-[0_0_8px_#8B5CF6]" />
-              <span className="font-montserrat text-[12px] text-normal font-bold tracking-[0.2em] uppercase leading-relaxed">
+            <div className="flex items-start gap-4 pr-8 relative z-10">
+              <div className="w-2.5 h-2.5 bg-[#2171B5] rounded-full mt-1.5 shrink-0 shadow-[0_0_8px_rgba(33,113,181,0.35)]" />
+              <span className="font-montserrat text-sm md:text-[15px] text-slate-800 font-semibold tracking-wide leading-relaxed">
                 {feat}
               </span>
             </div>

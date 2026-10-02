@@ -249,56 +249,63 @@ class UserRepository extends CrudRepository {
         paidSalesCount,
         platformIncome
       ] = await Promise.all([
-        this.model.db.models.Course.countDocuments({ isDeleted: false, isPublished: true }),
-        this.model.db.models.SupportTicket.countDocuments({ isDeleted: false }),
-        this.count({ role: 'student', isActive: true }),
-        this.model.db.models.ForumThread.countDocuments(),
-        this.CourseEnrollment.countDocuments({
+        Course.countDocuments({ isDeleted: false, isPublished: true }).catch(() => 0),
+        SupportTicket.countDocuments({ isDeleted: false }).catch(() => 0),
+        User.countDocuments({ role: 'student', isActive: true, isDeleted: { $ne: true } }).catch(() => 0),
+        ForumThread.countDocuments().catch(() => 0),
+        CourseEnrollment.countDocuments({
           enrolledAt: { $gte: startOfDay },
           status: 'active',
           enrollmentSource: 'purchase'
-        }),
-        this.CourseEnrollment.countDocuments({
+        }).catch(() => 0),
+        CourseEnrollment.countDocuments({
           enrolledAt: { $gte: startOfMonth },
           status: 'active',
           enrollmentSource: 'purchase'
-        }),
-        this.CourseEnrollment.countDocuments({
+        }).catch(() => 0),
+        CourseEnrollment.countDocuments({
           enrolledAt: { $gte: startOfYear },
           status: 'active',
           enrollmentSource: 'purchase'
-        }),
-        this.CourseEnrollment.countDocuments({ status: 'active', enrollmentSource: 'purchase' }),
-        this.model.db.models.Order.aggregate([
+        }).catch(() => 0),
+        CourseEnrollment.countDocuments({ status: 'active', enrollmentSource: 'purchase' }).catch(() => 0),
+        Order.aggregate([
           { $match: { 'payment.status': 'paid', isRefunded: false } },
           { $group: { _id: null, total: { $sum: '$grandTotal' } } },
           { $project: { _id: 0, total: { $toDouble: '$total' } } }
-        ]).then(result => result[0]?.total || 0)
+        ]).then(result => result[0]?.total || 0).catch(() => 0)
       ]);
+
       // --- Add revenue and sales count from admin enrollments ---
-      const adminEnrollmentsAgg = await this.CourseEnrollment.aggregate([
-        { $match: { enrollmentSource: 'admin', addToRevenue: true, pricePaid: { $gt: 0 } } },
-        { $group: { _id: null, total: { $sum: '$pricePaid' }, count: { $sum: 1 } } }
-      ]);
-      const adminRevenue = Number(adminEnrollmentsAgg[0]?.total || 0);
-      const adminSalesCount = Number(adminEnrollmentsAgg[0]?.count || 0);
+      let adminRevenue = 0;
+      let adminSalesCount = 0;
+      try {
+        const adminEnrollmentsAgg = await CourseEnrollment.aggregate([
+          { $match: { enrollmentSource: 'admin', addToRevenue: true, pricePaid: { $gt: 0 } } },
+          { $group: { _id: null, total: { $sum: '$pricePaid' }, count: { $sum: 1 } } }
+        ]);
+        adminRevenue = Number(adminEnrollmentsAgg[0]?.total || 0);
+        adminSalesCount = Number(adminEnrollmentsAgg[0]?.count || 0);
+      } catch (e) {}
 
       // Parallel queries for latest records
       const [latestCourses, latestSupportTickets, latestForumThreads] = await Promise.all([
-        this.model.db.models.Course
+        Course
           .find({ isDeleted: false, isPublished: true })
           .sort({ createdAt: -1 })
           .limit(5)
-          .select('title slug thumbnail createdAt')
-          .lean(),
-        this.model.db.models.SupportTicket
+          .select('title slug thumbnail createdAt price salePrice')
+          .lean()
+          .catch(() => []),
+        SupportTicket
           .find({ isDeleted: false })
           .sort({ createdAt: -1 })
           .limit(5)
           .select('subject category status createdAt')
           .populate('userId', 'fullName email')
-          .lean(),
-        this.model.db.models.ForumThread
+          .lean()
+          .catch(() => []),
+        ForumThread
           .find()
           .sort({ createdAt: -1 })
           .limit(5)
@@ -306,18 +313,39 @@ class UserRepository extends CrudRepository {
           .populate('createdBy', 'fullName')
           .populate('courseId', 'title')
           .lean()
+          .catch(() => [])
       ]);
 
+      const counts = {
+        totalCourses: totalCourses || 0,
+        totalSupportTickets: totalSupportTickets || 0,
+        totalStudents: totalStudents || 0,
+        totalForumThreads: totalForumThreads || 0,
+        todaySales: todaySales || 0,
+        thisMonthSales: thisMonthSales || 0,
+        thisYearSales: thisYearSales || 0,
+        totalSales: (paidSalesCount || 0) + adminSalesCount,
+        platformIncome: (platformIncome || 0) + adminRevenue,
+      };
+
+      const latest = {
+        courses: latestCourses || [],
+        supportTickets: latestSupportTickets || [],
+        forumThreads: latestForumThreads || []
+      };
+
       return {
-        totalCourses,
-        totalSupportTickets,
-        totalStudents,
-        totalForumThreads,
-        todaySales,
-        thisMonthSales,
-        thisYearSales,
-        totalSales: paidSalesCount + adminSalesCount, // <-- include admin sales count
-        platformIncome: (platformIncome || 0) + adminRevenue, // <-- include admin revenue
+        counts,
+        latest,
+        totalCourses: counts.totalCourses,
+        totalSupportTickets: counts.totalSupportTickets,
+        totalStudents: counts.totalStudents,
+        totalForumThreads: counts.totalForumThreads,
+        todaySales: counts.todaySales,
+        thisMonthSales: counts.thisMonthSales,
+        thisYearSales: counts.thisYearSales,
+        totalSales: counts.totalSales,
+        platformIncome: counts.platformIncome,
         latestCourses,
         latestSupportTickets,
         latestForumThreads

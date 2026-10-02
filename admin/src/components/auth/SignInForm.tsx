@@ -230,24 +230,18 @@ export default function SignInForm() {
                 
                 <div>
                   <button
-                    className="w-full"
                     type="submit"
                     disabled={isLoading}
+                    className="w-full flex items-center justify-center py-3.5 px-5 text-sm font-semibold text-white bg-[#2171B5] hover:bg-[#1a5c96] rounded-xl shadow-md transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Button 
-                      className="w-full" 
-                      size="sm"
-                      disabled={isLoading}
-                    >
-                      {isLoading ? (
-                        <div className="flex items-center justify-center gap-2">
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          Signing in...
-                        </div>
-                      ) : (
-                        "Sign in"
-                      )}
-                    </Button>
+                    {isLoading ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Signing in...
+                      </div>
+                    ) : (
+                      "Sign in"
+                    )}
                   </button>
                 </div>
               </div>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 55" width="220" height="55" fill="none">
+  <!-- Jag Bani Typography and Emblem -->
+  <circle cx="22" cy="28" r="14" fill="#0f172a" opacity="0.1"/>
+  <text x="22" y="34" font-family="'Times New Roman', serif" font-weight="900" font-size="16" fill="#0f172a" text-anchor="middle">JB</text>
+  <text x="46" y="27" font-family="'Inter', 'Arial Black', sans-serif" font-weight="900" font-size="18" fill="#0f172a" letter-spacing="1">JAG BANI</text>
+  <text x="46" y="44" font-family="'Gurmukhi MN', 'Arial', sans-serif" font-weight="700" font-size="14" fill="#334155" letter-spacing="1">ਜਗ ਬਾਣੀ</text>
+</svg>

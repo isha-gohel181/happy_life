@@ -170,7 +170,7 @@ const FreeContent = () => {
               Free <span className="italic font-normal text-amber-600">Knowledge Hub</span>
             </h1>
             <p className="mt-3 text-slate-600 max-w-2xl text-sm sm:text-base leading-relaxed">
-              Accelerate your engineering journey with our curated repository of downloadable PDF guides, comprehensive video lecture classes, and interactive skill assessment tests.
+              Discover authentic Vedic wisdom and Astro-Vastu knowledge with our curated repository of downloadable PDF guides, insightful video lectures & remedies by Dr. Yogesh Sharma, and astrological quizzes.
             </p>
           </div>
 

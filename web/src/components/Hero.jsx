@@ -46,8 +46,8 @@ const Hero = ({ isLoaded = true }) => {
         <div className="absolute w-[450px] md:w-[600px] h-[450px] md:h-[600px] bg-gradient-to-tr from-[#2171B5]/20 via-sky-300/20 to-transparent rounded-full blur-3xl opacity-70" />
         <img 
           ref={imageRef}
-          src="/sahil_khanna.png" 
-          alt="Sahil Khanna" 
+          src="/hero_image.png" 
+          alt="Dr. Yogesh Sharma" 
           className="h-[80%] md:h-[100%] w-auto max-w-none object-contain opacity-75 brightness-90 translate-y-10 md:translate-y-20"
           style={{
             maskImage: 'linear-gradient(to bottom, black 60%, transparent 95%)',
@@ -64,8 +64,8 @@ const Hero = ({ isLoaded = true }) => {
         <div className="w-fit flex flex-col items-start space-y-3 md:space-y-4">
           {/* Top Tagline */}
           <div ref={taglineRef} className="flex items-center justify-start gap-4">
-            <span className="font-jetbrains text-[9px] md:text-xs text-accent uppercase tracking-[0.4em] font-bold">
-              -- WHERE AMBITION MEETS EXECUTION
+            <span className="font-jetbrains text-[9px] md:text-xs text-accent uppercase tracking-[0.4em] font-medium">
+              -- ALIGN YOUR ENERGY • UNLOCK SUCCESS
             </span>
           </div>
 
@@ -73,18 +73,18 @@ const Hero = ({ isLoaded = true }) => {
           <div className="flex flex-col items-center md:items-start text-center md:text-start w-full px-2">
             <h1 
               ref={heading1Ref} 
-              className="font-inter text-4xl sm:text-5xl md:text-6xl lg:text-[4.75rem] xl:text-[5.4rem] text-slate-900 leading-[0.92] md:leading-[0.88] tracking-[-0.025em] break-words md:whitespace-nowrap font-light"
-              style={{ fontWeight: 300 }}
+              className="font-inter text-4xl sm:text-5xl md:text-6xl lg:text-[4.75rem] xl:text-[5.4rem] text-slate-900 leading-[0.92] md:leading-[0.88] tracking-[-0.015em] break-words md:whitespace-nowrap font-extralight"
+              style={{ fontWeight: 200 }}
             >
-              Learn things that
+              Astrology & Vastu that
             </h1>
             <h1 
               ref={heading2Ref} 
-              className="font-inter text-4xl sm:text-5xl md:text-6xl lg:text-[4.75rem] xl:text-[5.4rem] text-slate-900 leading-[0.92] md:leading-[0.88] tracking-[-0.025em] break-words md:whitespace-nowrap mt-1 md:mt-2 font-light"
-              style={{ fontWeight: 300 }}
+              className="font-inter text-4xl sm:text-5xl md:text-6xl lg:text-[4.75rem] xl:text-[5.4rem] text-slate-900 leading-[0.92] md:leading-[0.88] tracking-[-0.015em] break-words md:whitespace-nowrap mt-1 md:mt-2 font-extralight"
+              style={{ fontWeight: 200 }}
             >
-              <span className="italic text-accent mr-2.5 font-light" style={{ fontWeight: 300 }}>actually</span>
-              <span>change your life</span>
+              <span className="italic text-accent mr-2.5 font-extralight" style={{ fontWeight: 200 }}>actually</span>
+              <span>transforms your life</span>
             </h1>
           </div>
         </div>

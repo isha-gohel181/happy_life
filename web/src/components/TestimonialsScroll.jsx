@@ -5,26 +5,16 @@ import { ScrollTrigger } from 'gsap/all'
 gsap.registerPlugin(ScrollTrigger)
 
 const staticTestimonials = [
-  { name: "Julian R.", role: "Agency Owner", text: "The blueprint literally saved my sanity. I went from burned out to $3.5k/mo in 90 days.", rating: 5 },
-  { name: "Sarah M.", role: "Freelance Designer", text: "Most courses are fluff. This is an architectural manual for freedom. Best investment of my career.", rating: 5 },
-  { name: "Marcus L.", role: "Content Creator", text: "Clean, professional, and brutally honest. It's a paradigm shift, not just a course.", rating: 5 },
-  { name: "Priya K.", role: "Digital Marketer", text: "I finally understand how to price my services correctly. Doubled my rates in 3 weeks.", rating: 5 },
-  { name: "James T.", role: "Startup Founder", text: "The AI tools module alone was worth the price. I automated 80% of my client work.", rating: 5 },
-  { name: "Ananya S.", role: "Consultant", text: "Sahil's clarity is unmatched. From zero to 2 retainer clients in under 60 days.", rating: 5 },
-  { name: "Ryan O.", role: "E-Commerce Expert", text: "The solopreneur mindset is what was missing from my life. Revenue tripled in one quarter.", rating: 4 },
-  { name: "Divya P.", role: "Social Media Manager", text: "The mentorship sessions changed how I think about business. Highly recommend to anyone serious.", rating: 5 },
-  { name: "Chris W.", role: "Video Producer", text: "I scaled to $5k/mo following exactly what was taught. No fluff, all execution.", rating: 5 },
-  { name: "Meera T.", role: "UX Designer", text: "This gave me a framework to productize my skill. It's the playbook I always needed.", rating: 5 },
-  { name: "Ravi N.", role: "Growth Hacker", text: "Best structured program I've taken. Each module builds on the last — total progression.", rating: 5 },
-  { name: "Leila H.", role: "Brand Strategist", text: "The program doesn't just teach — it transforms. My entire client acquisition changed.", rating: 5 },
-  { name: "Tom B.", role: "Web Developer", text: "Went from hourly billing to $3k retainers in 6 weeks. The pricing module is pure gold.", rating: 5 },
-  { name: "Nina G.", role: "Photographer", text: "I was skeptical but the ROI was immediate. Booked out 3 months within the first week of applying.", rating: 4 },
-  { name: "Arjun M.", role: "Marketing Analyst", text: "Sahil's no-filler approach is what makes this worth every rupee. I've recommended it to 12 people.", rating: 5 },
-  { name: "Sophia L.", role: "Copywriter", text: "The blueprint removed all my uncertainty. I now know exactly what to do every single day.", rating: 5 },
-  { name: "Diego C.", role: "Business Coach", text: "This is the system behind every 7-figure solopreneur. Now I understand the architecture.", rating: 5 },
-  { name: "Zara A.", role: "Life Coach", text: "Beyond expectations. The community alone is worth joining. Real results, real support.", rating: 5 },
-  { name: "Karan V.", role: "SEO Specialist", text: "From struggling freelancer to agency owner — this program was the catalyst for my transformation.", rating: 5 },
-  { name: "Emma S.", role: "Product Manager", text: "I implemented one strategy and made back 3x the course fee in a single month.", rating: 5 },
+  { name: "Rajesh K.", role: "Business Owner", text: "Dr. Yogesh Sharma's Vastu guidance completely restored harmony in our new office. Financial flow improved noticeably in 30 days.", rating: 5 },
+  { name: "Pooja M.", role: "IT Professional", text: "The birth chart reading was remarkably accurate and practical. His simple remedies for Rahu overthinking brought real mental peace.", rating: 5 },
+  { name: "Vikram S.", role: "Consultant", text: "No fear-mongering, no expensive rituals. Pure logical and Vedic insights that actually work in daily life. Highly recommended!", rating: 5 },
+  { name: "Priya V.", role: "Homemaker", text: "Following Dr. Sharma's non-destructive Vastu tips for our kitchen and bedroom transformed our family peace and health.", rating: 5 },
+  { name: "Amitabh G.", role: "Entrepreneur", text: "The name vibration and numerology session was eye-opening. Aligned my brand name and saw immediate client growth.", rating: 5 },
+  { name: "Ananya S.", role: "Teacher", text: "Dr. Yogesh Sharma's clarity is unmatched. Following his simple remedies transformed my household peace and career.", rating: 5 },
+  { name: "Ramesh P.", role: "Financial Advisor", text: "His practical analysis of planetary transits helped me make the right career moves at the right time.", rating: 5 },
+  { name: "Divya N.", role: "Healthcare Professional", text: "The consultation gave me immense clarity during a difficult Sade Sati phase. His advice is grounded in truth and compassion.", rating: 5 },
+  { name: "Suresh R.", role: "Real Estate Consultant", text: "Dr. Sharma's no-superstition, practical approach is what makes this authentic. I've recommended his consultations to my entire family.", rating: 5 },
+  { name: "Meera T.", role: "Designer", text: "Happy Life Astro has provided genuine direction to our family. Truly life-transforming guidance!", rating: 5 },
 ]
 
 const StarRating = ({ rating }) => (

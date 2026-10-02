@@ -49,12 +49,12 @@ const AboutUs = () => {
         </div>
         
         <h1 className="hero-animate text-[clamp(2.5rem,6vw,5.5rem)] font-black text-slate-900 leading-[1.05] tracking-tight mb-8">
-          Empowering Banking <br className="hidden md:block" />
-          Professionals <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-700">Worldwide.</span>
+          Transforming Lives Through <br className="hidden md:block" />
+          Vedic Wisdom <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-700">& Practical Remedies.</span>
         </h1>
         
         <p className="hero-animate text-lg md:text-2xl text-slate-600 max-w-3xl leading-relaxed font-medium">
-          Bankers Grade is an elite online educational platform and preparation guide designed specifically for career advancement and promotional exams.
+          Happy Life Astro is an astrology and Vastu consultancy led by Dr. Yogesh Sharma, dedicated to providing practical, logical, and doable remedies for modern life challenges.
         </p>
       </section>
 
@@ -62,10 +62,10 @@ const AboutUs = () => {
       <section className="scroll-section px-6 pb-24 max-w-6xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 bg-white p-8 md:p-12 rounded-[2rem] shadow-xl border border-slate-100">
           {[
-            { value: "100K+", label: "Active Students" },
-            { value: "50+", label: "Expert Courses" },
-            { value: "98%", label: "Success Rate" },
-            { value: "24/7", label: "Learning Access" }
+            { value: "500K+", label: "Community Members" },
+            { value: "15+ Yrs", label: "Astrological Experience" },
+            { value: "100%", label: "Logical & Non-Superstitious" },
+            { value: "24/7", label: "Learning & Guidance Access" }
           ].map((stat, i) => (
             <div key={i} className="flex flex-col items-center text-center p-4">
               <span className="text-3xl md:text-5xl font-black text-slate-900 mb-2">{stat.value}</span>
@@ -80,30 +80,30 @@ const AboutUs = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="relative rounded-[2rem] overflow-hidden shadow-2xl aspect-square lg:aspect-auto lg:h-[600px]">
             <img 
-              src="https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
-              alt="Banking Professionals" 
+              src="https://images.unsplash.com/photo-1532012164546-f432f2e3edd4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+              alt="Dr. Yogesh Sharma Guidance" 
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
             <div className="absolute bottom-10 left-10 right-10">
               <h3 className="text-white text-3xl font-bold mb-3">Our Mission</h3>
               <p className="text-white/80 text-lg leading-relaxed">
-                To democratize high-quality banking education, providing every professional with the insights, skills, and tools necessary to clear crucial promotional exams and ascend the corporate ladder with confidence.
+                To simplify the profound science of Vedic Astrology, Numerology, and Vastu Shastra into practical, actionable habits that bring peace, health, financial prosperity, and mental clarity.
               </p>
             </div>
           </div>
           
           <div className="flex flex-col justify-center">
             <h2 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight mb-8">
-              More than just an <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-[#2171B5]">educational platform.</span>
+              Astrology that works <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-[#2171B5]">for your modern life.</span>
             </h2>
             <div className="space-y-6 text-lg text-slate-600 leading-relaxed font-medium">
               <p>
-                We understand the unique pressures of the banking sector. Time is limited, and the competition for promotions is fierce. Bankers Grade was born out of a desire to streamline preparation.
+                We believe astrology is a blueprint of planetary energies—not a system of fear or fatalism. Dr. Yogesh Sharma brings a refreshing, unorthodox approach: no black magic, no overnight false guarantees, and no burdensome rituals.
               </p>
               <p>
-                By combining industry-leading expertise with cutting-edge technology, we've created a learning ecosystem that adapts to your schedule. We distill vast amounts of financial regulations, banking protocols, and quantitative reasoning into digestible, high-yield lessons.
+                Whether dealing with career bottlenecks, financial struggles, relationship friction, or home energy imbalances (Vastu dosha), our consultations and courses empower you with easy, everyday remedies that yield real harmony.
               </p>
             </div>
           </div>
@@ -118,41 +118,41 @@ const AboutUs = () => {
         
         <div className="relative z-10 max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black mb-6">Our Key Offerings</h2>
-            <p className="text-lg text-white/60 max-w-2xl mx-auto">Everything you need to excel in your banking career, consolidated into one powerful platform.</p>
+            <h2 className="text-4xl md:text-5xl font-black mb-6">Our Key Focus Areas</h2>
+            <p className="text-lg text-white/60 max-w-2xl mx-auto">Comprehensive Astro-Vastu guidance and learning modules designed to harmonize your life.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                icon: <path d="M22 10v6M2 10l10-5 10 5-10 5z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>,
-                title: "Exam Courses",
-                desc: "Tailored preparation modules for IBPS RRB Scale II & III, SBI CBO, JAIIB, and Bank of Maharashtra GO."
+                icon: <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>,
+                title: "Vedic Kundli Analysis",
+                desc: "In-depth birth chart analysis decoding planetary positions, mahadashas, and life transitions."
               },
               {
-                icon: <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>,
-                title: "Live & Recorded Classes",
-                desc: "Learn directly from industry veterans through interactive live sessions or watch recordings on your own schedule."
-              },
-              {
-                icon: <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>,
-                title: "Topic-wise Practice",
-                desc: "Test your knowledge with rigorous topic-wise practice tests designed to mimic real exam environments."
-              },
-              {
-                icon: <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>,
-                title: "Descriptive Writing & E-Books",
-                desc: "Specialized modules for descriptive writing and a vast library of comprehensive e-books and notes."
-              },
-              {
-                icon: <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>,
-                title: "Computer Aptitude",
-                desc: "Master computer awareness and aptitude, a crucial section in modern banking promotional exams."
+                icon: <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>,
+                title: "Non-Destructive Vastu Shastra",
+                desc: "Identify and rectify spatial energy imbalances in your home or office without demolition."
               },
               {
                 icon: <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>,
-                title: "Previous Year Papers",
-                desc: "Analyze and solve authentic previous year question papers to understand exam patterns and difficulty."
+                title: "Planetary Remedies (Upay)",
+                desc: "Practical, cost-effective daily remedies for Rahu, Ketu, Shani, and Venus alignments."
+              },
+              {
+                icon: <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>,
+                title: "Numerology & Name Correction",
+                desc: "Align your life path and business names with supportive numerical frequencies."
+              },
+              {
+                icon: <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>,
+                title: "Live Webinars & Masterclasses",
+                desc: "Interactive video sessions and courses directly mentored by Dr. Yogesh Sharma."
+              },
+              {
+                icon: <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>,
+                title: "Horoscope & Transit Forecasts",
+                desc: "Monthly and annual astrological forecasts for all 12 zodiac signs from Aries to Pisces."
               }
             ].map((item, i) => (
               <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-colors backdrop-blur-sm group">

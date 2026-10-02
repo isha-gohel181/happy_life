@@ -144,122 +144,123 @@ const ComparisonSection = ({ course, section }) => {
     <section ref={containerRef} className="max-w-7xl mx-auto mb-24 px-4 md:px-0">
 
       {/* SOLOPRENEUR INTRO */}
-      <div className="mb-32 text-center space-y-10">
-        <div className="space-y-6">
-          <h2 className="solo-heading font-newsreader mb-2 italic text-[clamp(2rem,6vw,5.5rem)] text-normal font-extralight leading-tight">
-            What is a <span className="text-accent underline-lime">{sanitize(course?.title) || 'Solopreneur'}?</span>
+      <div className="mb-24 text-center space-y-8">
+        <div className="space-y-4">
+          <h2 className="solo-heading font-newsreader mb-2 italic text-[clamp(2rem,6vw,5.5rem)] text-slate-900 font-extralight leading-tight">
+            What is a <span className="text-[#2171B5] underline-lime">{sanitize(course?.title) || 'Solopreneur'}?</span>
           </h2>
-          <p className="solo-heading font-montserrat pb-6 text-accent text-[14px] md:text-xs text-white/80 max-w-md mx-auto leading-[2.2] tracking-widest uppercase">
+          <p className="solo-heading font-montserrat pb-4 text-[#2171B5] text-[14px] md:text-xs font-semibold max-w-md mx-auto leading-[2.2] tracking-widest uppercase">
             {sanitizeDisplay(targetSection?.subtitle || course.subtitle || '')}
           </p>
 
           {targetSection?.description?.blocks ? (
-            <div className="solo-heading font-jetbrains text-xs md:text-sm text-normal/70 max-w-4xl mx-auto leading-[2] tracking-wide space-y-4">
+            <div className="solo-heading font-jetbrains text-xs md:text-sm text-slate-600 max-w-4xl mx-auto leading-[2] tracking-wide space-y-4">
               {targetSection.description.blocks.map((block, bi) => (
                 <p key={bi}>{sanitizeDisplay(block.data?.text || '').replace(/&nbsp;/g, ' ')}</p>
               ))}
             </div>
           ) : (
-            <div className="solo-heading font-jetbrains text-xs md:text-sm text-normal/70 max-w-4xl mx-auto leading-[2] tracking-wide">
+            <div className="solo-heading font-jetbrains text-xs md:text-sm text-slate-600 max-w-4xl mx-auto leading-[2] tracking-wide">
               {sanitizeDisplay(course.comparisonText || "Use AI, Freelancers and tools to automate high margin agency business without pressure of hiring. This offers flexible hours and allows you to work from anywhere.")}
             </div>
           )}
         </div>
 
         {/* Image */}
-        <div className="solo-image-wrap relative group overflow-hidden max-w-2xl mx-auto shadow-2xl">
-          {/* Decorative glows */}
-          <div className="absolute -inset-6 bg-accent/5 blur-[80px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-dark via-transparent to-dark/20 z-10 pointer-events-none" />
-
+        <div className="solo-image-wrap relative group overflow-hidden max-w-2xl mx-auto shadow-xl rounded-2xl border border-slate-200">
           {/* Decorative corner markers */}
-          <div className="absolute top-4 left-4 z-20 w-8 h-8 border-t-2 border-l-2 border-accent/40 opacity-0 group-hover:opacity-100 transition-all duration-500" />
-          <div className="absolute top-4 right-4 z-20 w-8 h-8 border-t-2 border-r-2 border-accent/40 opacity-0 group-hover:opacity-100 transition-all duration-500" />
-          <div className="absolute bottom-4 left-4 z-20 w-8 h-8 border-b-2 border-l-2 border-accent/40 opacity-0 group-hover:opacity-100 transition-all duration-500" />
-          <div className="absolute bottom-4 right-4 z-20 w-8 h-8 border-b-2 border-r-2 border-accent/40 opacity-0 group-hover:opacity-100 transition-all duration-500" />
+          <div className="absolute top-4 left-4 z-20 w-8 h-8 border-t-2 border-l-2 border-[#2171B5]/40 opacity-0 group-hover:opacity-100 transition-all duration-500" />
+          <div className="absolute top-4 right-4 z-20 w-8 h-8 border-t-2 border-r-2 border-[#2171B5]/40 opacity-0 group-hover:opacity-100 transition-all duration-500" />
+          <div className="absolute bottom-4 left-4 z-20 w-8 h-8 border-b-2 border-l-2 border-[#2171B5]/40 opacity-0 group-hover:opacity-100 transition-all duration-500" />
+          <div className="absolute bottom-4 right-4 z-20 w-8 h-8 border-b-2 border-r-2 border-[#2171B5]/40 opacity-0 group-hover:opacity-100 transition-all duration-500" />
 
           {/* LIVE badge */}
-          <div className="absolute top-6 left-6 z-20 flex items-center gap-2 bg-dark/80 backdrop-blur-sm px-4 py-2 border border-white/10">
+          <div className="absolute top-6 left-6 z-20 flex items-center gap-2 bg-slate-900/80 backdrop-blur-sm px-4 py-2 border border-white/10 rounded-lg">
             <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
-            <span className="font-jetbrains text-[9px] text-normal tracking-[0.4em] uppercase">LIVE</span>
+            <span className="font-jetbrains text-[9px] text-white tracking-[0.4em] uppercase font-bold">LIVE</span>
           </div>
 
-            <img
-              src={(() => {
-                  const img = course.coverImage;
-                  if (!img) return comparisonImg;
-                  if (img.startsWith('http')) return img;
-                  const rawBase = import.meta.env.VITE_IMAGE_URL || import.meta.env.VITE_BASE_URL || import.meta.env.VITE_API_BASE || 'https://api.edrilla.com';
-                  const baseUrl = rawBase.replace(/\/api\/v1\/?$/, '');
-                  return `${baseUrl}${img.startsWith('/') ? '' : '/'}${img}`;
-              })()} 
-              alt={sanitize(course.title)}
-            className="w-full object-cover border border-white/5 group-hover:border-accent/20 transition-all duration-700 group-hover:scale-[1.01]"
+          <img
+            src={(() => {
+                const img = course.coverImage;
+                if (!img) return comparisonImg;
+                if (img.startsWith('http')) return img;
+                const rawBase = import.meta.env.VITE_IMAGE_URL || import.meta.env.VITE_BASE_URL || import.meta.env.VITE_API_BASE || 'https://api.edrilla.com';
+                const baseUrl = rawBase.replace(/\/api\/v1\/?$/, '');
+                return `${baseUrl}${img.startsWith('/') ? '' : '/'}${img}`;
+            })()} 
+            alt={sanitize(course.title)}
+            className="w-full object-cover transition-all duration-700 group-hover:scale-[1.01]"
           />
         </div>
       </div>
 
       {/* Divider */}
-      <div className="flex items-center gap-8 mb-20 opacity-80">
-        <div className="flex-1 h-[1px] bg-white" />
-        <span className="font-jetbrains text-[8px] tracking-[0.6em] uppercase shrink-0">Program Comparison / Matrix</span>
-        <div className="flex-1 h-[1px] bg-white" />
+      <div className="flex items-center gap-8 mb-16 opacity-80">
+        <div className="flex-1 h-[1px] bg-slate-200" />
+        <span className="font-jetbrains text-[9px] text-slate-400 tracking-[0.4em] uppercase font-bold shrink-0">Program Comparison / Matrix</span>
+        <div className="flex-1 h-[1px] bg-slate-200" />
       </div>
 
       {/* COMPARISON HEADER */}
-      <div className="grid grid-cols-2 gap-12 lg:gap-16 md:mb-16 text-center border-b border-white/5 pb-10">
+      <div className="grid grid-cols-2 gap-8 lg:gap-16 md:mb-12 text-center border-b border-slate-200 pb-8">
         <div className="space-y-1">
-          <span className="font-jetbrains text-[9px] text-white/80 tracking-[0.4em] uppercase">Status / Outdated</span>
-          <h3 className="font-newsreader italic text-2xl md:text-3xl lg:text-5xl text-normal/80 font-extralight tracking-tight">
+          <span className="font-jetbrains text-[10px] text-slate-400 tracking-[0.3em] uppercase font-bold">Status / Outdated</span>
+          <h3 className="font-newsreader italic text-2xl md:text-3xl lg:text-5xl text-slate-700 font-extralight tracking-tight">
             {sanitizeDisplay(course.comparisonSection?.leftTitle || "Traditional Program")}
           </h3>
         </div>
         <div className="space-y-1">
-          <span className="font-jetbrains text-[9px] text-accent tracking-[0.4em] uppercase font-bold">Status / Optimal</span>
-          <h3 className="font-newsreader italic text-2xl md:text-3xl lg:text-5xl text-accent font-extralight tracking-tight">
+          <span className="font-jetbrains text-[10px] text-[#2171B5] tracking-[0.3em] uppercase font-bold">Status / Optimal</span>
+          <h3 className="font-newsreader italic text-2xl md:text-3xl lg:text-5xl text-[#2171B5] font-normal tracking-tight">
             {sanitizeDisplay(course.comparisonSection?.rightTitle || "Our Program")}
           </h3>
         </div>
       </div>
 
       {/* COMPARISON ROWS */}
-      <div className="space-y-4 md:space-y-0 ">
+      <div className="space-y-4 md:space-y-3 mb-16">
         {apiComparison.map((item, i) => (
-          <div key={i} className="comparison-row grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-3 py-2 border-b border-white/[0.02] items-center group">
-            {/* Traditional Column (Red Accent - Glowing) */}
-            <div className="flex items-center gap-4 px-4 md:px-5 lg:px-8 py-4 bg-red-500/[0.3] border-l-2 border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.05)] transition-all duration-700">
-              <div className="w-9 h-9 rounded-full border border-red-500/60 flex items-center justify-center shrink-0 bg-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.4)]">
+          <div key={i} className="comparison-row grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4 py-1 items-center group">
+            {/* Traditional Column */}
+            <div className="flex items-center gap-4 px-4 md:px-5 lg:px-8 py-4 bg-red-50 border-l-4 border-red-500 rounded-xl shadow-xs transition-all duration-300">
+              <div className="w-8 h-8 rounded-full border border-red-200 flex items-center justify-center shrink-0 bg-red-100">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="4"><path d="M18 6L6 18M6 6l12 12" /></svg>
               </div>
-              <p className="font-montserrat text-[12px] md:text-[9px] lg:text-xs text-red-400 font-normal tracking-[0.15em] uppercase italic">{sanitizeDisplay(item.traditional)}</p>
+              <p className="font-montserrat text-xs md:text-xs lg:text-sm text-red-700 font-semibold tracking-wide uppercase">{sanitizeDisplay(item.traditional)}</p>
             </div>
 
-            {/* Our Program Column (Vibrant Green - Glowing) */}
-            <div className="flex items-center gap-4 px-4 md:px-6 lg:px-12 py-4 bg-accent/[0.2] border-l-2 border-accent shadow-[0_0_30px_rgba(139, 92, 246,0.08)] transition-all duration-700">
-              <div className="w-9 h-9 rounded-full border border-accent/60 flex items-center justify-center shrink-0 bg-accent/20 shadow-[0_0_15px_rgba(139, 92, 246,0.5)]">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="4"><path d="M20 6L9 17l-5-5" /></svg>
+            {/* Our Program Column */}
+            <div className="flex items-center gap-4 px-4 md:px-6 lg:px-8 py-4 bg-blue-50/80 border-l-4 border-[#2171B5] rounded-xl shadow-xs transition-all duration-300">
+              <div className="w-8 h-8 rounded-full border border-blue-200 flex items-center justify-center shrink-0 bg-blue-100">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2171B5" strokeWidth="4"><path d="M20 6L9 17l-5-5" /></svg>
               </div>
-              <p className="font-montserrat text-[12px] md:text-[9px] lg:text-xs text-accent font-normal tracking-[0.05em] uppercase">{sanitizeDisplay(item.our)}</p>
+              <p className="font-montserrat text-xs md:text-xs lg:text-sm text-[#2171B5] font-semibold tracking-wide uppercase">{sanitizeDisplay(item.our)}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* LOGO MARQUEE */}
-      {/* <div className="mb-24"> */}
+      <div className="mb-20">
         <LogoMarquee />
-      {/* </div> */}
+      </div>
 
-      {/* FEATURE GRID */}
+      {/* FEATURE GRID (Numbered cards 01-06) */}
       <div className="feature-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-24">
         {apiFeatures.map((feat, i) => (
-          <div key={i} className="feature-card border border-white/5 bg-white/[0.01] p-6 md:p-10 backdrop-blur-xl relative group hover:border-accent/40 transition-all duration-700 h-full flex flex-col justify-start min-h-[160px]">
-            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-40 transition-opacity">
-              <span className="font-jetbrains text-[40px] font-black text-accent">{String(i + 1).padStart(2, '0')}</span>
+          <div 
+            key={i} 
+            className="feature-card border border-slate-200/80 bg-white p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-md hover:border-[#2171B5]/50 relative group transition-all duration-300 h-full flex flex-col justify-start min-h-[140px]"
+          >
+            <div className="absolute top-3 right-4 select-none pointer-events-none">
+              <span className="font-jetbrains text-3xl md:text-4xl font-black text-[#2171B5]/20 group-hover:text-[#2171B5]/40 transition-colors">
+                {String(i + 1).padStart(2, '0')}
+              </span>
             </div>
-            <div className="flex items-start gap-5">
-              <div className="w-1.5 h-1.5 bg-accent rounded-full mt-2 shrink-0 shadow-[0_0_8px_#8B5CF6]" />
-              <span className="font-montserrat text-sm md:text-sm text-white/90 font-medium tracking-wide leading-relaxed">
+            <div className="flex items-start gap-4 pr-8 relative z-10">
+              <div className="w-2.5 h-2.5 bg-[#2171B5] rounded-full mt-1.5 shrink-0 shadow-[0_0_8px_rgba(33,113,181,0.35)]" />
+              <span className="font-montserrat text-sm md:text-[15px] text-slate-800 font-semibold tracking-wide leading-relaxed">
                 {feat}
               </span>
             </div>
@@ -269,19 +270,19 @@ const ComparisonSection = ({ course, section }) => {
 
       {/* BOTTOM CTA */}
       <div className="cta-reveal text-center space-y-8">
-        <h4 className="font-newsreader italic text-3xl md:text-3xl text-normal font-extralight tracking-tight opacity-60">
-          { "Beat the competition with innovative solutions."}
+        <h4 className="font-newsreader italic text-2xl md:text-4xl text-slate-800 font-light tracking-tight">
+          {"Beat the competition with innovative solutions."}
         </h4>
 
-        <div className="flex items-center justify-center gap-8 md:gap-12">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="1.5" className="opacity-60 hidden md:block"><path d="M5 12h14m-7-7 7 7-7 7" /></svg>
+        <div className="flex items-center justify-center gap-6 md:gap-10">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2171B5" strokeWidth="2" className="opacity-60 hidden md:block"><path d="M5 12h14m-7-7 7 7-7 7" /></svg>
           <button 
             onClick={() => document.getElementById('pricing-section')?.scrollIntoView({ behavior: 'smooth' })}
-            className="group relative bg-accent px-12 md:px-20 py-8 md:py-10 transition-all duration-700 hover:scale-[1.03] active:scale-95 flex flex-col items-center gap-3"
+            className="group relative bg-[#2171B5] hover:bg-[#1a5c96] px-10 md:px-16 py-5 md:py-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-95 flex flex-col items-center gap-2 cursor-pointer"
           >
-            <span className="relative z-10 font-jetbrains text-dark text-[11px] md:text-[13px] font-black tracking-[0.4em] uppercase">YES, I WANT TO BE CEO OF MY LIFE</span>
+            <span className="relative z-10 font-jetbrains text-white text-xs md:text-sm font-black tracking-[0.3em] uppercase">YES, I WANT TO BE CEO OF MY LIFE</span>
           </button>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="1.5" className="opacity-60 hidden md:block rotate-180"><path d="M5 12h14m-7-7 7 7-7 7" /></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2171B5" strokeWidth="2" className="opacity-60 hidden md:block rotate-180"><path d="M5 12h14m-7-7 7 7-7 7" /></svg>
         </div>
       </div>
 

@@ -216,10 +216,10 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl shadow-sm p-6 text-white">
+          <div className="bg-[#2171B5] rounded-xl shadow-sm p-6 text-white">
             <div className="flex sm:flex-row items-center sm:items-center justify-between gap-4 mb-4">
               <h3 className="text-lg font-semibold">Platform Revenue</h3>
-              <IndianRupee className="w-5 h-5" />
+              <IndianRupee className="w-5 h-5 text-white/90" />
             </div>
             <div className="text-center">
               <p className="text-3xl font-bold">

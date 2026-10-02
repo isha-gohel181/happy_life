@@ -6,31 +6,31 @@ import { useLanguage } from '../context/LanguageContext'
 
 const DEFAULT_SELECTIONS = [
   {
-    id: 'solopreneur',
-    title: 'Solopreneur',
-    subtitle: 'Build Life On Your Terms',
-    image: 'https://api.edrilla.com/uploads/1768298907356-ChatGPT Image Jan 13, 2026, 03_35_08 PM.png',
-    type: 'all_courses'
-  },
-  {
-    id: 'digital_curator',
-    title: 'Digital Curator',
-    subtitle: 'Curate & Monetize Knowledge',
-    image: '/digital_curator_card_v1.png',
-    type: 'all_courses'
-  },
-  {
-    id: 'mvp_engineering',
-    title: 'MVP Engineering',
-    subtitle: 'Ship Fast & Scale Effortlessly',
+    id: 'astro_vastu',
+    title: 'Astro-Vastu Mastery',
+    subtitle: 'Harmonize Your Home & Destiny',
     image: '/courses/architecture.png',
     type: 'all_courses'
   },
   {
-    id: 'motion_design',
-    title: 'Visual & Motion Design',
-    subtitle: 'Create Mesmerizing Interactions',
+    id: 'kundli_analysis',
+    title: 'Vedic Kundli & Remedies',
+    subtitle: 'Practical Solutions for Modern Challenges',
     image: '/courses/motion.png',
+    type: 'all_courses'
+  },
+  {
+    id: 'numerology_guidance',
+    title: 'Numerology & Name Alignment',
+    subtitle: 'Unlock The Power of Numbers',
+    image: '/courses/typography.png',
+    type: 'all_courses'
+  },
+  {
+    id: 'career_finance_astrology',
+    title: 'Career & Financial Astrology',
+    subtitle: 'Overcome Obstacles with Logical Upay',
+    image: '/courses/curator.png',
     type: 'all_courses'
   }
 ]

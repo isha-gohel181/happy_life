@@ -18,7 +18,6 @@ import {
   VideoIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
-import SidebarWidget from "./SidebarWidget";
 import { Files, Tag, UserCircle2Icon, Bell, MessageCircle, Bot } from "lucide-react";
 
 type NavSubItem = {
@@ -489,9 +488,9 @@ const AppSidebar: React.FC = () => {
                 )}
                 {(isExpanded || isHovered || isMobileOpen) && (
                   <ChevronDownIcon
-                    className={`ml-auto w-5 h-5 transition-transform duration-200 ${openSubmenu.includes(menuKey)
-                      ? "rotate-180 text-brand-500"
-                      : ""
+                    className={`ml-auto w-4 h-4 transition-transform duration-200 ${openSubmenu.includes(menuKey)
+                      ? "rotate-180 text-white"
+                      : "text-white/70 group-hover:text-white"
                       }`}
                   />
                 )}
@@ -549,7 +548,7 @@ const AppSidebar: React.FC = () => {
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
+      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-4 left-0 bg-[#2171B5] text-white h-screen transition-all duration-300 ease-in-out z-50 border-r border-blue-400/20 shadow-xl
         ${isExpanded || isMobileOpen
           ? "w-[290px]"
           : isHovered
@@ -562,26 +561,18 @@ const AppSidebar: React.FC = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className={`py-8 flex ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
-          }`}
+        className="py-5 flex items-center justify-center border-b border-white/15 mb-2"
       >
-        <Link to="/" className="flex items-end ">
+        <Link to="/" className="flex items-center justify-center w-full">
           {isExpanded || isHovered || isMobileOpen ? (
-            <>
-              <img
-                className="dark:hidden h-11 object-contain"
-                src="/images/logo/osa_logo.png"
-                alt="Happy Life Logo"
-              />
-              <img
-                className="hidden dark:block h-11 object-contain"
-                src="/images/logo/osa_logo.png"
-                alt="Happy Life Logo"
-              />
-            </>
+            <img
+              className="h-16 w-auto max-w-[200px] object-contain brightness-0 invert drop-shadow-md transition-transform duration-300 hover:scale-105"
+              src="/images/logo/osa_logo.png"
+              alt="Happy Life Logo"
+            />
           ) : (
             <img
-              className="h-10 w-auto max-w-[40px] object-contain"
+              className="h-11 w-auto max-w-[48px] object-contain brightness-0 invert drop-shadow-md"
               src="/images/logo/osa_logo.png"
               alt="Happy Life Logo"
             />
@@ -593,31 +584,31 @@ const AppSidebar: React.FC = () => {
           <div className="flex flex-col gap-4">
             <div>
               <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded && !isHovered
+                className={`mb-3 text-[11px] font-bold tracking-[0.2em] uppercase flex leading-[20px] text-white/60 ${!isExpanded && !isHovered
                   ? "lg:justify-center"
-                  : "justify-start"
+                  : "justify-start px-2"
                   }`}
               >
                 {isExpanded || isHovered || isMobileOpen ? (
                   "Menu"
                 ) : (
-                  <HorizontaLDots className="size-6" />
+                  <HorizontaLDots className="size-5 text-white/60" />
                 )}
               </h2>
               {renderMenuItems(filteredNavItems, "main")}
             </div>
-            {userRole !== "news_editor" && (
+            {userRole !== "news_editor" && othersItems.length > 0 && (
               <div className="">
                 <h2
-                  className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded && !isHovered
+                  className={`mb-3 text-[11px] font-bold tracking-[0.2em] uppercase flex leading-[20px] text-white/60 ${!isExpanded && !isHovered
                     ? "lg:justify-center"
-                    : "justify-start"
+                    : "justify-start px-2"
                     }`}
                 >
                   {isExpanded || isHovered || isMobileOpen ? (
                     "Others"
                   ) : (
-                    <HorizontaLDots />
+                    <HorizontaLDots className="size-5 text-white/60" />
                   )}
                 </h2>
                 {renderMenuItems(othersItems, "others")}
@@ -625,9 +616,6 @@ const AppSidebar: React.FC = () => {
             )}
           </div>
         </nav>
-        {isExpanded || isHovered || isMobileOpen ? (
-          userRole !== "news_editor" ? <SidebarWidget /> : null
-        ) : null}
       </div>
     </aside>
   );

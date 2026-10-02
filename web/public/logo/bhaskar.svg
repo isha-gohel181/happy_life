@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 60" width="260" height="60" fill="none">
+  <!-- Bhaskar Sun Emblem -->
+  <circle cx="30" cy="30" r="16" fill="#1e293b"/>
+  <circle cx="30" cy="30" r="13" fill="#f8fafc"/>
+  <circle cx="30" cy="30" r="8" fill="#1e293b"/>
+  <!-- Sun rays -->
+  <path d="M30 6 L30 11 M30 49 L30 54 M6 30 L11 30 M49 30 L54 30 M13 13 L17 17 M43 43 L47 47 M13 47 L17 43 M43 17 L47 13" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Dainik Bhaskar Typography -->
+  <text x="60" y="27" font-family="'Inter', 'Arial Black', sans-serif" font-weight="900" font-size="18" fill="#0f172a" letter-spacing="0.5">DAINIK BHASKAR</text>
+  <text x="60" y="47" font-family="'Noto Sans Devanagari', 'Mangal', 'Arial', sans-serif" font-weight="700" font-size="15" fill="#334155" letter-spacing="1">दैनिक भास्कर</text>
+</svg>

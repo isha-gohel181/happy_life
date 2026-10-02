@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 60" width="250" height="60" fill="none">
+  <!-- Lion / Emblem Silhouette -->
+  <path d="M12 42 C12 26 22 16 34 16 C38 16 42 18 45 22 C48 18 52 16 56 16 C68 16 78 26 78 42 L12 42 Z" fill="#0f172a" opacity="0.15"/>
+  <rect x="8" y="16" width="3" height="28" fill="#0f172a"/>
+  <!-- Punjab Kesari Typography -->
+  <text x="22" y="31" font-family="'Times New Roman', Times, serif" font-weight="900" font-size="20" fill="#0f172a" letter-spacing="1">PUNJAB KESARI</text>
+  <text x="22" y="49" font-family="'Noto Sans Devanagari', 'Mangal', 'Arial', sans-serif" font-weight="700" font-size="14" fill="#334155" letter-spacing="1">पंजाब केसरी</text>
+</svg>

@@ -286,10 +286,10 @@ const Contact = () => {
                                         </p>
                                         <div className="pt-2">
                                             <a
-                                                href="mailto:support@osacademy.com"
-                                                className="font-jetbrains text-lg font-bold text-slate-900 hover:text-amber-600 transition-colors"
+                                                href="mailto:happylifereport@gmail.com"
+                                                className="font-jetbrains text-base md:text-lg font-bold text-slate-900 hover:text-amber-600 transition-colors break-all"
                                             >
-                                                support@osacademy.com
+                                                happylifereport@gmail.com
                                             </a>
                                         </div>
                                         <p className="font-jetbrains text-[9px] text-slate-500 uppercase tracking-wider">
@@ -322,13 +322,13 @@ const Contact = () => {
                                 <h3 className="font-newsreader text-xl italic text-amber-800 font-bold mb-3">{t('socialMedia')}</h3>
                                 <div className="flex flex-col gap-2">
                                     <div className="font-jetbrains text-xs text-slate-600">
-                                        YouTube – <a href="https://youtube.com/@askosacademy?si=HGd1aN1pBqCPGw1T" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">Happy Life</a>
+                                        YouTube – <a href="https://youtube.com/@happylifeastro?si=6jttLMEZmVEyoDbS" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">Happy Life Astro</a>
                                     </div>
                                     <div className="font-jetbrains text-xs text-slate-600">
-                                        Instagram – <a href="https://t.me/os_academy" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">@happylife</a>
+                                        Instagram – <a href="https://www.instagram.com/happy_life_astro?utm_source=qr&stkn=MTA5NHpxc2tpeXE4Yg%3D%3D" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">@happy_life_astro</a>
                                     </div>
                                     <div className="font-jetbrains text-xs text-slate-600">
-                                        WhatsApp – <a href="https://wa.me/message/7BSA76CHILZDK1" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">WhatsApp</a>
+                                        Email – <a href="mailto:happylifereport@gmail.com" className="text-amber-800 font-bold hover:underline transition-all">happylifereport@gmail.com</a>
                                     </div>
                                 </div>
                             </div>

@@ -126,7 +126,7 @@ const Courses = () => {
       let gsResults = []
       if (apiAvailable) {
         gsResults = courses.filter(item => {
-          const cat = (item.category?.name || item.category || '').toUpperCase()
+          const cat = (item.categoryId?.name || item.category?.name || item.category || '').toUpperCase()
           const title = (item.title || '').toUpperCase()
           const tags = Array.isArray(item.tags) ? item.tags.join(' ').toUpperCase() : ''
           return cat.includes('GS') || cat.includes('GENERAL STUDIES') || title.includes('GS') || tags.includes('GS')
@@ -143,7 +143,7 @@ const Courses = () => {
       let optResults = []
       if (apiAvailable) {
         optResults = courses.filter(item => {
-          const cat = (item.category?.name || item.category || '').toUpperCase()
+          const cat = (item.categoryId?.name || item.category?.name || item.category || '').toUpperCase()
           const title = (item.title || '').toUpperCase()
           const tags = Array.isArray(item.tags) ? item.tags.join(' ').toUpperCase() : ''
           return cat.includes('OPTIONAL') || title.includes('OPTIONAL') || tags.includes('OPTIONAL')
@@ -634,7 +634,7 @@ const Courses = () => {
                   item={{
                     id: item._id || item.id,
                     title: item.title,
-                    category: item.category?.name || item.category || 'COURSE',
+                    category: item.categoryId?.name || item.category?.name || item.category || 'COURSE',
                     description: item.shortDescription || item.description,
                     price: item.salePrice ? `₹${item.salePrice}` : item.price ? `₹${item.price}` : 'FREE',
                     image: getImageUrl(item.thumbnail),

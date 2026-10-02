@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 55" width="250" height="55" fill="none">
+  <!-- TOI Box Tag -->
+  <rect x="5" y="10" width="52" height="35" rx="3" fill="#0f172a"/>
+  <text x="31" y="34" font-family="'Inter', 'Arial Black', sans-serif" font-weight="900" font-size="20" fill="#ffffff" text-anchor="middle" letter-spacing="1">TOI</text>
+  <!-- The Times of India subtitle -->
+  <text x="68" y="27" font-family="'Times New Roman', 'Georgia', serif" font-weight="900" font-size="14" fill="#0f172a" letter-spacing="1.5">THE TIMES OF INDIA</text>
+  <text x="68" y="42" font-family="'Inter', sans-serif" font-weight="600" font-size="9" fill="#64748b" letter-spacing="3">INDIA'S NO. 1 DAILY</text>
+</svg>

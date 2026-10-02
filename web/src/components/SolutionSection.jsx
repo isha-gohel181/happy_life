@@ -64,24 +64,24 @@ const SolutionSection = ({ course, section }) => {
 
       <div className="grid grid-cols-1 min-[1301px]:grid-cols-[1fr_1.8fr] gap-12 min-[1301px]:gap-20 items-start mb-28 px-4 md:px-0">
         <div className="space-y-8 min-[1301px]:sticky min-[1301px]:top-32 transition-all duration-500">
-          <h2 className="sol-title font-newsreader italic text-4xl md:text-5xl lg:text-6xl text-white font-extralight tracking-tight leading-[1.1]">
+          <h2 className="sol-title font-newsreader italic text-4xl md:text-5xl lg:text-6xl text-slate-900 font-extralight tracking-tight leading-[1.1]">
             {sanitizeDisplay(section?.title || "The Solution").split(' ').map((word, i, arr) => (
               <React.Fragment key={i}>
                 {i === arr.length - 1 ? (
-                  <span className="text-accent">{word}</span>
+                  <span className="text-[#2171B5]">{word}</span>
                 ) : (
                   word + ' '
                 )}
               </React.Fragment>
             ))}
           </h2>
-          <div className="h-[2px] bg-accent/40 w-24" />
+          <div className="h-[2px] bg-[#2171B5]/40 w-24" />
         </div>
 
-        <div className="min-[1301px]:border-l border-white/10 pl-0 min-[1301px]:pl-12 py-2">
+        <div className="min-[1301px]:border-l border-slate-200 pl-0 min-[1301px]:pl-12 py-2">
           <div className="space-y-4">
             {descriptionBlocks.map((text, i) => (
-              <p key={i} className={`font-montserrat leading-[1.8] tracking-wide ${i === 0 ? 'text-lg md:text-xl text-white/95 font-medium' : 'text-sm md:text-base text-white/70 font-light'}`}>
+              <p key={i} className={`font-montserrat leading-[1.8] tracking-wide ${i === 0 ? 'text-lg md:text-xl text-slate-800 font-medium' : 'text-sm md:text-base text-slate-600 font-normal'}`}>
                 {text}
               </p>
             ))}
@@ -94,7 +94,7 @@ const SolutionSection = ({ course, section }) => {
         <div className="space-y-16 mb-20">
           {section?.outcomeTitle && (
             <div className="text-center">
-              <h3 className="sol-title font-newsreader italic text-3xl md:text-5xl text-normal font-extralight tracking-tight">
+              <h3 className="sol-title font-newsreader italic text-3xl md:text-5xl text-slate-900 font-extralight tracking-tight">
                 {sanitizeDisplay(section.outcomeTitle)}
               </h3>
             </div>
@@ -102,11 +102,11 @@ const SolutionSection = ({ course, section }) => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
             {section?.outcomePoints?.map((p, i) => (
-              <div key={i} className="sol-point group flex  items-center gap-5 px-6 py-5 bg-red-500/[0.2] border-l-2 border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.02)] transition-all duration-500">
-                <div className="w-8 h-8 rounded-full border border-red-500/40 flex items-center justify-center shrink-0 bg-red-500/10 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+              <div key={i} className="sol-point group flex items-center gap-5 px-6 py-5 bg-red-50 border-l-4 border-red-500 rounded-xl shadow-xs transition-all duration-300">
+                <div className="w-8 h-8 rounded-full border border-red-200 flex items-center justify-center shrink-0 bg-red-100">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="4"><path d="M18 6L6 18M6 6l12 12" /></svg>
                 </div>
-                <span className="font-montserrat text-sm text-red-400 font-normal tracking-wide uppercase italic">{sanitizeDisplay(p)}</span>
+                <span className="font-montserrat text-xs md:text-sm text-red-700 font-semibold tracking-wide uppercase">{sanitizeDisplay(p)}</span>
               </div>
             ))}
           </div>
@@ -117,24 +117,24 @@ const SolutionSection = ({ course, section }) => {
       <div className="space-y-16">
         {section?.solutionTitle && (
           <div className="text-center">
-            <h3 className="sol-title font-newsreader italic text-3xl md:text-5xl text-normal font-extralight tracking-tight">
+            <h3 className="sol-title font-newsreader italic text-3xl md:text-5xl text-slate-900 font-extralight tracking-tight">
               {sanitizeDisplay(section.solutionTitle)}
             </h3>
           </div>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
           {section?.points?.map((p, i) => (
-            <div key={i} className="sol-point group flex items-center gap-5 px-6 py-5 bg-accent/[0.2] border-l-2 border-accent shadow-[0_0_30px_rgba(139, 92, 246,0.08)] transition-all duration-500">
-              <div className="w-8 h-8 rounded-full border border-accent/60 flex items-center justify-center shrink-0 bg-accent/20 shadow-[0_0_15px_rgba(139, 92, 246,0.5)]">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="4"><path d="M20 6L9 17l-5-5" /></svg>
+            <div key={i} className="sol-point group flex items-center gap-5 px-6 py-5 bg-blue-50/80 border-l-4 border-[#2171B5] rounded-xl shadow-xs transition-all duration-300">
+              <div className="w-8 h-8 rounded-full border border-blue-200 flex items-center justify-center shrink-0 bg-blue-100">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2171B5" strokeWidth="4"><path d="M20 6L9 17l-5-5" /></svg>
               </div>
-              <span className="font-montserrat text-sm text-accent font-normal tracking-wide uppercase">{sanitizeDisplay(p)}</span>
+              <span className="font-montserrat text-xs md:text-sm text-[#2171B5] font-semibold tracking-wide uppercase">{sanitizeDisplay(p)}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-accent/20 to-transparent mt-20" />
+      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#2171B5]/20 to-transparent mt-20" />
     </section>
   )
 }

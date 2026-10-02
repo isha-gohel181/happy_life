@@ -5,14 +5,13 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 const logos = [
-  { name: 'Hindustan Times', path: '/logo/hindustan_times.webp' },
-  { name: 'India Today', path: '/logo/india_today.webp' },
-  { name: 'The Week', path: '/logo/the_week.webp' },
-  { name: 'Economic Times', path: '/logo/economic_times.webp' },
-  { name: 'The Print', path: '/logo/the_print.webp' },
-  { name: 'YourStory', path: '/logo/yourstory.webp' },
-  { name: 'ANI', path: '/logo/ani.webp' },
-  { name: 'Daily Hunt', path: '/logo/daily_hunt.webp' },
+  { name: 'Bhaskar (Dainik Bhaskar)', path: '/logo/bhaskar.svg' },
+  { name: 'Punjab Kesari (पंजाब केसरी)', path: '/logo/punjab_kesari.svg' },
+  { name: 'Forbes (Business & Finance)', path: '/logo/forbes.svg' },
+  { name: 'TOI (Times of India)', path: '/logo/toi.svg' },
+  { name: 'Hindustan Times (National Daily)', path: '/logo/hindustan_times.webp' },
+  { name: 'JAG Bani (ਜਗ ਬਾਣੀ)', path: '/logo/jag_bani.svg' },
+  { name: 'Media featured', path: '/logo/media_featured.svg' },
 ]
 
 const LogoMarquee = () => {
@@ -127,4 +126,4 @@ const LogoMarquee = () => {
 }
 
 export default LogoMarquee
-// Force Vite HMR refresh
+
