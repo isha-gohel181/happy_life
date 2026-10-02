@@ -283,44 +283,44 @@ const Courses = () => {
   }
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-dark pt-0 pb-24 text-slate-900">
+    <div ref={containerRef} className="min-h-screen bg-dark pt-0 pb-24 text-normal">
 
       {/* 1. Dynamic Hero Banner */}
       {eventList && eventList.length > 0 && <EventHero events={eventList} />}
 
       {/* 2. Page Content Wrapper */}
-      <div className="px-4 md:px-12">
-        <div className="courses-hero max-w-7xl mx-auto mb-8 pt-36 sm:pt-40 md:pt-44">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="inline-block w-2 h-2 rounded-full bg-accent" />
-            <span className="font-jetbrains text-[10px] uppercase tracking-[0.3em] text-accent font-bold">
-              OS Academy Academic Programs
-            </span>
+      <div className="px-4 md:px-12 lg:px-20">
+        
+        {/* Hero Title */}
+        <div className={`courses-hero max-w-7xl mx-auto mb-8 ${eventList && eventList.length > 0 ? 'pt-8' : 'pt-28 md:pt-36'}`}>
+          <div className="flex items-baseline gap-6 flex-wrap">
+            <h1 className="font-newsreader text-4xl md:text-6xl font-extralight italic text-normal tracking-tight">
+              {t('ourCourses') || 'Our Courses'}
+            </h1>
           </div>
-          <h1 className="font-newsreader text-4xl sm:text-5xl md:text-6xl font-light text-slate-900 leading-tight">
-            {t('ourCourses')}
-          </h1>
-          <p className="mt-2 text-slate-600 text-xs sm:text-sm max-w-xl">
-            Explore industry-aligned curriculums, GS foundations, optional subjects, interactive test series, and comprehensive books.
+          <p className="font-jetbrains text-xs text-accent uppercase tracking-[0.4em] font-bold italic mt-2">
+            {t('coursesSubtitle') || 'Curated Academic Modules & Learning Tracks'}
           </p>
         </div>
 
-        {/* 2. Filter Row Header (5 Items Navbar Alignment) */}
+        {/* ── Filter Row & Advanced Drawer ── */}
         <div className="max-w-7xl mx-auto mb-12">
-          {/* Desktop Header Grid */}
-          <div className="hidden lg:grid grid-cols-12 items-end gap-6 w-full pb-6 border-b border-slate-200">
-            {/* Section 1: Filters (Cols 1-9) */}
-            <div className="col-span-9 flex items-center flex-wrap gap-2.5">
+          
+          {/* Desktop Filter Row */}
+          <div className="hidden md:grid grid-cols-12 items-end gap-12 w-full pb-8 border-b border-border">
+            
+            {/* Filter Buttons */}
+            <div className="col-span-8 flex items-center flex-wrap gap-3">
               {filterKeys.map(({ id, labelKey, defaultLabel }) => {
                 const isActive = activeFilter === id
                 return (
                   <button
                     key={id}
                     onClick={() => handleFilterChange(id)}
-                    className={`course-filter-reveal opacity-0 px-5 py-2.5 rounded-full font-inter text-[10.5px] font-bold tracking-[0.15em] border transition-all duration-300 uppercase cursor-pointer ${
+                    className={`course-filter-reveal opacity-0 px-6 py-3 font-montserrat text-[11px] font-bold tracking-[0.2em] border transition-all duration-500 uppercase rounded-none cursor-pointer ${
                       isActive
-                        ? 'bg-accent text-slate-950 border-amber-400 shadow-sm font-black'
-                        : 'text-slate-600 bg-white/80 border-slate-200 hover:border-amber-300 hover:text-slate-900'
+                        ? 'bg-accent text-white border-accent'
+                        : 'text-description border-border hover:border-accent/40 hover:text-normal'
                     }`}
                   >
                     <RollingText text={t(labelKey) || defaultLabel} />
@@ -329,55 +329,61 @@ const Courses = () => {
               })}
             </div>
 
-            {/* Section 2: Count & Filters Drawer Toggle (Cols 10-12) */}
-            <div className="col-span-3 flex flex-col items-end gap-4 course-filter-reveal opacity-0">
-              <span className="font-jetbrains text-[10px] text-slate-500 uppercase tracking-[0.15em] font-bold">
+            {/* Counter and Filter Toggle */}
+            <div className="col-span-4 flex flex-col items-end gap-10 course-filter-reveal opacity-0">
+              <span className="font-montserrat text-[11px] text-description/80 uppercase tracking-[0.15em] font-bold">
                 {activeFilter === 'TEST SERIES'
-                  ? `${testSeriesData.length} TEST SERIES AVAILABLE`
+                  ? `${testSeriesData.length} COURSES AVAILABLE`
                   : activeFilter === 'BUY BOOKS'
-                  ? `${buyBooksData.length} BOOKS & EBOOKS`
-                  : `${filteredCourses.length} COURSE${filteredCourses.length === 1 ? '' : 'S'} AVAILABLE`}
+                  ? `${buyBooksData.length} COURSES AVAILABLE`
+                  : `${filteredCourses.length} COURSES AVAILABLE`}
               </span>
 
               {activeFilter !== 'TEST SERIES' && activeFilter !== 'BUY BOOKS' && (
                 <button
                   onClick={() => setShowAdvanced(!showAdvanced)}
-                  className={`flex items-center gap-2 font-inter text-[11px] text-slate-600 font-bold tracking-[0.15em] transition-colors group/filters ${
-                    showAdvanced ? 'text-amber-800' : 'hover:text-amber-800'
-                  }`}
+                  className="flex items-center gap-3 font-montserrat text-[11px] text-description font-bold tracking-[0.2em] transition-colors group/filters hover:text-accent cursor-pointer"
                 >
-                  <svg width="16" height="12" viewBox="0 0 24 16" fill="none" className={`transition-transform duration-300 ${showAdvanced ? 'rotate-180 scale-110' : 'group-hover/filters:scale-110'}`}>
+                  <svg width="18" height="12" viewBox="0 0 24 16" fill="none" className="transition-transform duration-500 group-hover/filters:scale-110">
                     <path d="M4 4H20M7 8H17M10 12H14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
                   </svg>
                   <RollingText text={showAdvanced ? "HIDE FILTERS" : "MORE FILTERS"} />
                 </button>
               )}
             </div>
+
           </div>
 
-          {/* Collapsible Advanced Filters Drawer (for courses) */}
+          {/* Collapsible Advanced Filters Drawer */}
           {activeFilter !== 'TEST SERIES' && activeFilter !== 'BUY BOOKS' && (
             <div
               ref={advancedRef}
-              className={`overflow-hidden transition-all duration-500 ease-in-out ${showAdvanced ? 'max-h-[600px] opacity-100 mt-6 mb-8' : 'max-h-0 opacity-0'}`}
+              className={`overflow-hidden transition-all duration-700 ease-memo ${
+                showAdvanced ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
+              }`}
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-6 px-6 bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200 shadow-sm">
-                {/* 1. Difficulty Section */}
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
-                    <span className="text-amber-600">⚡</span>
-                    <span>Difficulty Level</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-16 py-12 border-t border-border">
+                
+                {/* 1. Difficulty */}
+                <div className="flex flex-col gap-8">
+                  <div className="flex items-center gap-4">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-accent">
+                      <path d="M13 18L13 6M13 6L11 9M13 6L15 9" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M5 18L5 12M5 12L3 15M5 12L7 15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M21 18L21 2M21 2L19 5M21 2L23 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <h3 className="font-newsreader text-2xl italic text-normal">Difficulty</h3>
                   </div>
 
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-3">
                     {['All', 'Beginner', 'Intermediate', 'Advanced'].map((level) => (
                       <button
                         key={level}
                         onClick={() => setSelectedDifficulty(level)}
-                        className={`px-4 py-2 rounded-xl font-inter text-xs font-bold tracking-wider border transition-all duration-300 uppercase ${
+                        className={`px-8 py-4 font-montserrat text-[11px] font-bold tracking-[0.2em] border transition-all duration-500 uppercase rounded-none cursor-pointer ${
                           selectedDifficulty === level
-                            ? 'bg-accent text-slate-950 border-amber-400 font-black shadow-xs'
-                            : 'text-slate-600 bg-slate-50 border-slate-200 hover:border-slate-300 hover:text-slate-900'
+                            ? 'bg-accent text-white border-accent'
+                            : 'text-description border-border hover:border-accent/30 hover:text-normal'
                         }`}
                       >
                         {level}
@@ -386,48 +392,65 @@ const Courses = () => {
                   </div>
                 </div>
 
-                {/* 2. Duration Section */}
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
-                    <span className="text-amber-600">⏱️</span>
-                    <span>Estimated Duration</span>
+                {/* 2. Duration */}
+                <div className="flex flex-col gap-8">
+                  <div className="flex items-center gap-4">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-accent">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" />
+                      <path d="M12 6V12L16 14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <h3 className="font-newsreader text-2xl italic text-normal">Duration</h3>
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {['All hours', '0-2 hours', '2-5 hours', '5-10 hours', '10-20 hours', '20+ hours'].map((range) => (
-                      <button
-                        key={range}
-                        onClick={() => setSelectedDuration(range)}
-                        className={`px-3 py-2 rounded-xl text-left font-inter text-xs font-semibold border transition-all duration-300 ${
-                          selectedDuration === range
-                            ? 'bg-amber-50 text-amber-900 border-amber-300 font-bold'
-                            : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        {range}
-                      </button>
-                    ))}
+                  <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+                    {['All hours', '0-2 hours', '2-5 hours', '5-10 hours', '10-20 hours', '20+ hours'].map((range) => {
+                      const isSelected = selectedDuration === range
+                      return (
+                        <div
+                          key={range}
+                          onClick={() => setSelectedDuration(range)}
+                          className="flex items-center gap-4 cursor-pointer group/dur"
+                        >
+                          <div className={`w-4 h-4 rounded-full border-2 transition-all duration-300 flex items-center justify-center ${
+                            isSelected ? 'border-accent bg-accent/10' : 'border-border group-hover/dur:border-accent/40'
+                          }`}>
+                            <div className={`w-1.5 h-1.5 rounded-full bg-accent transition-transform duration-300 ${
+                              isSelected ? 'scale-100' : 'scale-0'
+                            }`}></div>
+                          </div>
+                          <span className={`font-montserrat text-[11px] tracking-[0.1em] transition-colors ${
+                            isSelected ? 'text-normal font-bold' : 'text-description group-hover/dur:text-normal'
+                          }`}>
+                            {range}
+                          </span>
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
+
               </div>
             </div>
           )}
 
-          {/* Mobile Layout Filter Menu */}
-          <div className="lg:hidden flex flex-col gap-4">
+          {/* Mobile Filter Header */}
+          <div className="md:hidden flex flex-col gap-8">
             <div className="flex items-center justify-between">
-              <span className="font-jetbrains text-[9px] text-slate-500 uppercase tracking-[0.2em] font-bold">
+              <span className="font-jetbrains text-[8px] text-description/80 uppercase tracking-[0.2em] font-bold">
                 {activeFilter === 'TEST SERIES'
-                  ? `${testSeriesData.length} TESTS AVAILABLE`
+                  ? `${testSeriesData.length} COURSES AVAILABLE`
                   : activeFilter === 'BUY BOOKS'
-                  ? `${buyBooksData.length} EBOOKS AVAILABLE`
+                  ? `${buyBooksData.length} COURSES AVAILABLE`
                   : `${filteredCourses.length} COURSES AVAILABLE`}
               </span>
               {activeFilter !== 'TEST SERIES' && activeFilter !== 'BUY BOOKS' && (
                 <button
                   onClick={() => setShowAdvanced(!showAdvanced)}
-                  className={`flex items-center gap-1.5 font-jetbrains text-[10px] font-bold tracking-[0.2em] transition-colors ${showAdvanced ? 'text-amber-800' : 'text-slate-600'}`}
+                  className="flex items-center gap-2 font-jetbrains text-[9px] font-bold tracking-[0.2em] transition-colors text-description hover:text-accent cursor-pointer"
                 >
+                  <svg width="14" height="10" viewBox="0 0 24 16" fill="none" className="transition-transform duration-500">
+                    <path d="M4 4H20M7 8H17M10 12H14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                  </svg>
                   {showAdvanced ? "CLOSE" : "FILTERS"}
                 </button>
               )}
@@ -436,22 +459,22 @@ const Courses = () => {
             <div className="relative">
               <button
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className="w-full flex items-center justify-between px-5 py-3.5 bg-white rounded-2xl border border-slate-200 font-inter text-xs font-bold tracking-wider text-slate-800 shadow-xs"
+                className="w-full flex items-center justify-between px-6 py-5 bg-card border border-border font-montserrat text-[11px] font-bold tracking-[0.2em] text-normal cursor-pointer"
               >
                 <span>CATEGORY: {filterKeys.find(f => f.id === activeFilter)?.defaultLabel || activeFilter}</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className={`transition-transform duration-300 ${isFilterOpen ? 'rotate-180 text-amber-600' : ''}`} stroke="currentColor">
-                  <path d="M6 9l6 6 6-6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" className={`transition-transform duration-300 ${isFilterOpen ? 'rotate-180 text-accent' : ''}`} stroke="currentColor">
+                  <path d="M6 9l6 6 6-6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
 
               {isFilterOpen && (
-                <div className="absolute top-full left-0 w-full mt-2 z-50 bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden divide-y divide-slate-100">
+                <div className="absolute top-full left-0 w-full mt-2 z-50 bg-card border border-border shadow-2xl divide-y divide-border">
                   {filterKeys.map(({ id, labelKey, defaultLabel }) => (
                     <button
                       key={id}
                       onClick={() => handleFilterChange(id)}
-                      className={`w-full px-5 py-3 text-left font-inter text-xs font-bold transition-colors ${
-                        activeFilter === id ? 'bg-amber-50 text-amber-900' : 'text-slate-700 hover:bg-slate-50'
+                      className={`w-full px-6 py-4 text-left font-montserrat text-[11px] font-bold tracking-[0.15em] uppercase transition-colors cursor-pointer ${
+                        activeFilter === id ? 'bg-accent text-white' : 'text-description hover:bg-black/5 dark:hover:bg-white/5'
                       }`}
                     >
                       {t(labelKey) || defaultLabel}
@@ -461,6 +484,7 @@ const Courses = () => {
               )}
             </div>
           </div>
+
         </div>
 
         {/* 3. Main Views Conditional Rendering */}
@@ -472,39 +496,39 @@ const Courses = () => {
               {testSeriesData.map((test) => (
                 <div
                   key={test.id}
-                  className="bg-white rounded-2xl p-6 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-amber-300 transition-all duration-300 flex flex-col justify-between group"
+                  className="bg-card rounded-2xl p-6 border border-border shadow-sm hover:shadow-xl hover:border-accent transition-all duration-300 flex flex-col justify-between group"
                 >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-100">
+                      <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-accent/10 text-accent border border-accent/20">
                         {test.badge}
                       </span>
-                      <span className="text-xs font-mono font-semibold text-slate-500 flex items-center gap-1">
+                      <span className="text-xs font-mono font-semibold text-description flex items-center gap-1">
                         ★ {test.rating} ({test.attempts})
                       </span>
                     </div>
 
                     <div>
-                      <h3 className="font-newsreader text-2xl font-bold text-slate-900 group-hover:text-amber-800 transition-colors leading-snug">
+                      <h3 className="font-newsreader text-2xl font-bold text-normal group-hover:text-accent transition-colors leading-snug">
                         {test.title}
                       </h3>
-                      <p className="mt-2 text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                      <p className="mt-2 text-xs text-description line-clamp-2 leading-relaxed">
                         {test.description}
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2 py-3 px-3.5 bg-slate-50 rounded-xl border border-slate-100 text-center">
+                    <div className="grid grid-cols-3 gap-2 py-3 px-3.5 bg-black/5 dark:bg-white/5 rounded-xl border border-border text-center">
                       <div>
-                        <div className="text-[10px] text-slate-400 font-medium">Questions</div>
-                        <div className="text-xs font-mono font-bold text-slate-800">{test.questionsCount} Qs</div>
+                        <div className="text-[10px] text-description/60 font-medium">Questions</div>
+                        <div className="text-xs font-mono font-bold text-normal">{test.questionsCount} Qs</div>
                       </div>
                       <div>
-                        <div className="text-[10px] text-slate-400 font-medium">Time Limit</div>
-                        <div className="text-xs font-mono font-bold text-slate-800">{test.durationMinutes} Mins</div>
+                        <div className="text-[10px] text-description/60 font-medium">Time Limit</div>
+                        <div className="text-xs font-mono font-bold text-normal">{test.durationMinutes} Mins</div>
                       </div>
                       <div>
-                        <div className="text-[10px] text-slate-400 font-medium">Level</div>
-                        <div className="text-xs font-mono font-bold text-amber-700">{test.difficulty}</div>
+                        <div className="text-[10px] text-description/60 font-medium">Level</div>
+                        <div className="text-xs font-mono font-bold text-accent">{test.difficulty}</div>
                       </div>
                     </div>
                   </div>
@@ -512,7 +536,7 @@ const Courses = () => {
                   <div className="pt-6">
                     <button
                       onClick={() => startQuiz(test)}
-                      className="w-full py-3 px-4 rounded-xl bg-slate-900 text-white font-inter text-xs font-bold uppercase tracking-wider hover:bg-accent hover:text-slate-950 transition-all duration-300 flex items-center justify-center gap-2 shadow-sm active:scale-98 cursor-pointer"
+                      className="w-full py-3 px-4 rounded-none bg-accent text-white font-montserrat text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-all duration-300 flex items-center justify-center gap-2 shadow-sm active:scale-98 cursor-pointer"
                     >
                       <span>Start Test Series</span>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -533,45 +557,45 @@ const Courses = () => {
               {buyBooksData.map((book) => (
                 <div
                   key={book.id}
-                  className="bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-amber-300 transition-all duration-300 flex flex-col justify-between group"
+                  className="bg-card rounded-2xl overflow-hidden border border-border shadow-sm hover:shadow-xl hover:border-accent transition-all duration-300 flex flex-col justify-between group"
                 >
                   <div>
                     {/* Book Cover Banner */}
-                    <div className="relative h-48 overflow-hidden bg-slate-100">
+                    <div className="relative h-48 overflow-hidden bg-black/5 dark:bg-white/5">
                       <img
                         src={book.coverImage}
                         alt={book.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                      <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-rose-600 text-white shadow-sm">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                      <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-accent text-white shadow-sm">
                         {book.discount}
                       </div>
                       <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">
                         <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-black/60 backdrop-blur-xs">
                           {book.pages} Pages • {book.fileSize}
                         </span>
-                        <span className="text-[10px] font-bold text-amber-300 flex items-center gap-1">
+                        <span className="text-[10px] font-bold text-accent flex items-center gap-1">
                           ★ {book.rating} ({book.reviewsCount})
                         </span>
                       </div>
                     </div>
 
                     <div className="p-6 space-y-3">
-                      <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-rose-600">
+                      <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-accent">
                         {book.category}
                       </div>
-                      <h3 className="font-newsreader text-2xl font-bold text-slate-900 group-hover:text-amber-800 transition-colors leading-snug">
+                      <h3 className="font-newsreader text-2xl font-bold text-normal group-hover:text-accent transition-colors leading-snug">
                         {book.title}
                       </h3>
-                      <p className="text-[11px] text-slate-500 font-medium">By {book.author}</p>
-                      <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                      <p className="text-[11px] text-description font-medium">By {book.author}</p>
+                      <p className="text-xs text-description line-clamp-2 leading-relaxed">
                         {book.description}
                       </p>
 
                       <div className="pt-2 flex items-baseline gap-2">
-                        <span className="text-xl font-bold text-slate-900 font-newsreader">{book.price}</span>
-                        <span className="text-xs text-slate-400 line-through font-mono">{book.originalPrice}</span>
+                        <span className="text-xl font-bold text-normal font-newsreader">{book.price}</span>
+                        <span className="text-xs text-description/60 line-through font-mono">{book.originalPrice}</span>
                       </div>
                     </div>
                   </div>
@@ -579,13 +603,13 @@ const Courses = () => {
                   <div className="p-6 pt-0 flex gap-2.5">
                     <button
                       onClick={() => openBookModal(book)}
-                      className="flex-1 py-2.5 px-3 rounded-xl border border-slate-200 text-slate-700 font-inter text-xs font-bold uppercase tracking-wider hover:bg-slate-50 transition-colors cursor-pointer text-center"
+                      className="flex-1 py-2.5 px-3 rounded-none border border-border text-normal font-montserrat text-xs font-bold uppercase tracking-wider hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer text-center"
                     >
                       Preview
                     </button>
                     <button
                       onClick={() => openBookModal(book)}
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-accent text-slate-950 font-inter text-xs font-black uppercase tracking-wider hover:scale-[1.02] active:scale-98 transition-all shadow-xs cursor-pointer text-center"
+                      className="flex-1 py-2.5 px-3 rounded-none bg-accent text-white font-montserrat text-xs font-bold uppercase tracking-wider hover:scale-[1.02] active:scale-98 transition-all shadow-xs cursor-pointer text-center"
                     >
                       Get eBook
                     </button>
@@ -619,21 +643,21 @@ const Courses = () => {
                 />
               ))
             ) : (
-              <div className="col-span-full text-center py-20 text-slate-500 font-montserrat">{t('noCoursesAvailable')}</div>
+              <div className="col-span-full text-center py-20 text-description font-montserrat">{t('noCoursesAvailable')}</div>
             )}
           </div>
         )}
 
         {/* 4. Upcoming Events Section */}
-        <div className="events-section max-w-7xl mx-auto pt-24 border-t border-slate-200">
+        <div className="events-section max-w-7xl mx-auto pt-24 border-t border-border">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
             <div>
-              <h2 className="font-newsreader text-5xl md:text-6xl italic text-slate-900 mb-4">Upcoming Events</h2>
-              <p className="font-montserrat text-[11px] text-slate-500 uppercase tracking-[0.2em]">Curated experiences & intensive workshops.</p>
+              <h2 className="font-newsreader text-5xl md:text-6xl italic text-normal mb-4">Upcoming Events</h2>
+              <p className="font-montserrat text-[11px] text-description uppercase tracking-[0.2em]">Curated experiences & intensive workshops.</p>
             </div>
-            <div className="flex items-center gap-4 text-[10px] font-jetbrains text-slate-500">
-              <span className="text-accent">•</span> <span>{t('berlin')}</span>
-              <span className="text-accent">•</span> <span>{t('remotelyAvailable')}</span>
+            <div className="flex items-center gap-4 text-[10px] font-jetbrains text-description">
+              <span className="text-accent">•</span> <span>{t('berlin') || 'BERLIN'}</span>
+              <span className="text-accent">•</span> <span>{t('remotelyAvailable') || 'REMOTELY AVAILABLE'}</span>
             </div>
           </div>
 
@@ -657,10 +681,11 @@ const Courses = () => {
                 />
               ))
             ) : hasFetchedEvents ? (
-              <div className="col-span-full text-center py-20 text-slate-500 font-montserrat uppercase tracking-widest">No upcoming events at the moment.</div>
+              <div className="col-span-full text-center py-20 text-description font-montserrat uppercase tracking-widest">No upcoming events at the moment.</div>
             ) : null}
           </div>
         </div>
+
       </div>
 
       {/* 5. INTERACTIVE QUIZ MODAL (Test Series) */}

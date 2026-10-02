@@ -99,9 +99,8 @@ const AddReporter = lazy(() => import("./pages/Reporters/AddReporter"));
 const CreateCertificateTemplate = lazy(
   () => import("./pages/Certification/CreateCertificateTemplate")
 );
+
 const AppMenuSettings = lazy(() => import("./pages/settings/AppMenuSettings"));
-const FreeContentList = lazy(() => import("./pages/FreeContent/FreeContentList"));
-const AddEditFreeContent = lazy(() => import("./pages/FreeContent/AddEditFreeContent"));
 const TestSeriesList = lazy(() => import("./pages/TestSeries/TestSeriesList"));
 const AddEditTestSeries = lazy(() => import("./pages/TestSeries/AddEditTestSeries"));
 const EbookList = lazy(() => import("./pages/Ebooks/EbookList"));
@@ -296,10 +295,6 @@ export default function App() {
                 <Route path="/live-classes" element={<ZoomMeetings />} />
                 <Route path="/settings/app-menu" element={<AppMenuSettings />} />
 
-                {/* Free Content */}
-                <Route path="/free-content" element={<FreeContentList />} />
-                <Route path="/free-content/add" element={<AddEditFreeContent />} />
-                <Route path="/free-content/edit/:id" element={<AddEditFreeContent />} />
 
                 {/* Test Series */}
                 <Route path="/test-series" element={<TestSeriesList />} />

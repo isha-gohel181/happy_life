@@ -116,7 +116,7 @@ const MyResults = () => {
 
    if (selectedResult) {
       return (
-         <div className="min-h-screen bg-[#fbf9f4] relative selection:bg-amber-50/60 overflow-x-clip text-slate-900 flex flex-col">
+         <div className="min-h-screen bg-[#f8fafc] relative selection:bg-amber-50/60 overflow-x-clip text-slate-900 flex flex-col">
             <DashboardHeader />
             <main className="flex-grow flex flex-col p-6 pt-32 md:px-12 md:pb-12 md:pt-40 w-full max-w-7xl mx-auto space-y-8 animate-fade-in">
                <div className="flex items-center gap-4 border-b border-slate-200 pb-4">
@@ -135,7 +135,7 @@ const MyResults = () => {
                   </button>
                   <div>
                      <h2 className="text-2xl font-bold font-newsreader">{selectedResult.quiz?.quizTitle || 'Quiz Review'}</h2>
-                     <p className="text-sm text-slate-500">Score: <span className="font-bold text-[#D99B2A]">{Math.round(selectedResult.score || 0)} / {Math.round(selectedResult.totalMarks || 0)}</span> ({Math.round(selectedResult.percentage || 0)}%)</p>
+                     <p className="text-sm text-slate-500">Score: <span className="font-bold text-[#2171B5]">{Math.round(selectedResult.score || 0)} / {Math.round(selectedResult.totalMarks || 0)}</span> ({Math.round(selectedResult.percentage || 0)}%)</p>
                   </div>
                </div>
 
@@ -156,7 +156,7 @@ const MyResults = () => {
                                           setActiveReviewSectionIndex(idx)
                                           setActiveReviewQuestionId(null)
                                        }}
-                                       className={`px-4 py-2 text-sm font-semibold rounded-lg border transition-colors ${activeReviewSectionIndex === idx ? 'bg-[#D99B2A] text-white border-[#D99B2A]' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'}`}
+                                       className={`px-4 py-2 text-sm font-semibold rounded-lg border transition-colors ${activeReviewSectionIndex === idx ? 'bg-[#2171B5] text-white border-[#2171B5]' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'}`}
                                     >
                                        {section.sectionTitle || `Section ${idx + 1}`}
                                     </button>
@@ -214,7 +214,7 @@ const MyResults = () => {
                               <div className="p-6 border border-slate-200 rounded-2xl bg-white shadow-sm flex flex-col gap-6">
                                  <div className="flex justify-between items-start gap-4">
                                     <h3 className="font-bold text-xl text-slate-800 leading-snug">
-                                       <span className="text-[#D99B2A] mr-2">Q{globalIdx + 1}.</span> 
+                                       <span className="text-[#2171B5] mr-2">Q{globalIdx + 1}.</span> 
                                        {sanitizeDisplay(reviewQ.question)}
                                     </h3>
                                     {userAns ? (
@@ -260,8 +260,8 @@ const MyResults = () => {
                                  {reviewQ.explanation && (
                                     <div className="mt-4 rounded-xl overflow-hidden border border-amber-100 bg-amber-50/50">
                                        <div className="bg-amber-100/50 px-4 py-3 border-b border-amber-100 flex items-center gap-2">
-                                          <svg className="w-5 h-5 text-[#D99B2A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                          <span className="text-xs font-bold text-[#D99B2A] uppercase tracking-wider">Explanation</span>
+                                          <svg className="w-5 h-5 text-[#2171B5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                          <span className="text-xs font-bold text-[#2171B5] uppercase tracking-wider">Explanation</span>
                                        </div>
                                        <div className="p-5 text-slate-700 prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: reviewQ.explanation }} />
                                     </div>
@@ -278,13 +278,13 @@ const MyResults = () => {
    }
 
    return (
-      <div ref={containerRef} className="min-h-screen bg-[#fbf9f4] relative selection:bg-amber-50/60 overflow-x-clip text-slate-700">
+      <div ref={containerRef} className="min-h-screen bg-[#f8fafc] relative selection:bg-amber-50/60 overflow-x-clip text-slate-700">
          <DashboardHeader />
 
          <main className="relative pt-24 pb-20 z-10 w-full max-w-7xl mx-auto px-4 md:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 res-reveal">
                <div className="space-y-2">
-                  <p className="font-mono text-xs text-[#D99B2A] uppercase tracking-widest">{t('myActivity') || 'My Activity'}</p>
+                  <p className="font-mono text-xs text-[#2171B5] uppercase tracking-widest">{t('myActivity') || 'My Activity'}</p>
                   <h1 className="font-newsreader italic text-5xl md:text-6xl text-slate-900 font-extralight tracking-tight leading-none">
                      My Results
                   </h1>
@@ -292,7 +292,7 @@ const MyResults = () => {
                
                <div className="w-full md:w-72">
                   <div className="relative group">
-                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#D99B2A] transition-colors">
+                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#2171B5] transition-colors">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
                         </svg>
@@ -302,7 +302,7 @@ const MyResults = () => {
                         placeholder="Search quizzes..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-white border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#D99B2A] focus:shadow-sm transition-all"
+                        className="w-full bg-white border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2171B5] focus:shadow-sm transition-all"
                      />
                   </div>
                </div>
@@ -310,7 +310,7 @@ const MyResults = () => {
 
             {loading ? (
                <div className="py-20 flex justify-center res-reveal">
-                  <div className="w-8 h-8 border-2 border-[#D99B2A]/30 border-t-[#D99B2A] rounded-full animate-spin" />
+                  <div className="w-8 h-8 border-2 border-[#2171B5]/30 border-t-[#2171B5] rounded-full animate-spin" />
                </div>
             ) : filteredResults.length === 0 ? (
                <div className="py-20 text-center space-y-4 res-reveal">
@@ -331,10 +331,10 @@ const MyResults = () => {
             ) : (
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredResults.map((sub) => (
-                     <div key={sub._id} className="group relative bg-white border border-slate-200 hover:border-[#D99B2A]/50 hover:shadow-md rounded-2xl p-6 transition-all duration-300 flex flex-col res-reveal">
+                     <div key={sub._id} className="group relative bg-white border border-slate-200 hover:border-[#2171B5]/50 hover:shadow-md rounded-2xl p-6 transition-all duration-300 flex flex-col res-reveal">
                         <div className="flex justify-between items-start mb-4">
                            <div className="space-y-1">
-                              <h3 className="font-bold text-slate-800 text-lg line-clamp-1 group-hover:text-[#D99B2A] transition-colors">
+                              <h3 className="font-bold text-slate-800 text-lg line-clamp-1 group-hover:text-[#2171B5] transition-colors">
                                  {sub.quiz?.quizTitle || 'Quiz'}
                               </h3>
                               {sub.quiz?.course?.title && (
@@ -349,7 +349,7 @@ const MyResults = () => {
                         <div className="grid grid-cols-2 gap-4 my-6">
                            <div className="space-y-1">
                               <p className="text-[10px] text-slate-400 uppercase tracking-widest font-mono">Score</p>
-                              <p className="font-newsreader text-3xl font-bold text-[#D99B2A] italic">{Math.round(sub.score || 0)} / {Math.round(sub.totalMarks || 0)}</p>
+                              <p className="font-newsreader text-3xl font-bold text-[#2171B5] italic">{Math.round(sub.score || 0)} / {Math.round(sub.totalMarks || 0)}</p>
                            </div>
                            <div className="space-y-1">
                               <p className="text-[10px] text-slate-400 uppercase tracking-widest font-mono">Percentage</p>
@@ -364,7 +364,7 @@ const MyResults = () => {
                            </div>
                            <button 
                               onClick={() => setSelectedResult(sub)}
-                              className="px-5 py-2.5 bg-amber-50 hover:bg-[#D99B2A] text-[#D99B2A] hover:text-white border border-amber-100 hover:border-[#D99B2A] rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300"
+                              className="px-5 py-2.5 bg-amber-50 hover:bg-[#2171B5] text-[#2171B5] hover:text-white border border-amber-100 hover:border-[#2171B5] rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300"
                            >
                               Review
                            </button>

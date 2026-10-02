@@ -1,16 +1,42 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import RollingText from './RollingText'
 import authorizedFetch from '../utils/apiClient'
 import { useLanguage } from '../context/LanguageContext'
 
+const DEFAULT_SELECTIONS = [
+  {
+    id: 'solopreneur',
+    title: 'Solopreneur',
+    subtitle: 'Build Life On Your Terms',
+    image: 'https://api.edrilla.com/uploads/1768298907356-ChatGPT Image Jan 13, 2026, 03_35_08 PM.png',
+    type: 'all_courses'
+  },
+  {
+    id: 'digital_curator',
+    title: 'Digital Curator',
+    subtitle: 'Curate & Monetize Knowledge',
+    image: '/digital_curator_card_v1.png',
+    type: 'all_courses'
+  },
+  {
+    id: 'mvp_engineering',
+    title: 'MVP Engineering',
+    subtitle: 'Ship Fast & Scale Effortlessly',
+    image: '/courses/architecture.png',
+    type: 'all_courses'
+  },
+  {
+    id: 'motion_design',
+    title: 'Visual & Motion Design',
+    subtitle: 'Create Mesmerizing Interactions',
+    image: '/courses/motion.png',
+    type: 'all_courses'
+  }
+]
+
 const StackingBanners = () => {
-  const scrollContainerRef = useRef(null)
   const [featured, setFeatured] = useState([])
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(true)
   const navigate = useNavigate()
   const { t } = useLanguage()
 
@@ -41,7 +67,9 @@ const StackingBanners = () => {
         if (!res.ok) return
         const data = await res.json()
         const raw = data?.data?.banners || data?.data || data?.results || data || []
-        if (mounted) setFeatured(raw)
+        if (mounted && Array.isArray(raw) && raw.length > 0) {
+          setFeatured(raw)
+        }
       } catch (e) {
         console.error('Failed to load featured banners', e)
       }
@@ -50,46 +78,16 @@ const StackingBanners = () => {
     return () => { mounted = false }
   }, [])
 
-  const items = featured.slice(0, 6).map((c) => ({
-    id: c._id || c.id,
-    title: c.title,
-    description: stripHTML(c.description || ''),
-    image: getImageUrl(c.image),
-    type: c.type,
-    referenceId: c.referenceId,
-  }))
-
-  // Handle Horizontal Scroll Events & Progress
-  const checkScrollState = () => {
-    if (!scrollContainerRef.current) return
-    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
-    setCanScrollLeft(scrollLeft > 20)
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 20)
-
-    // Calculate active slide index
-    const cardWidth = clientWidth * 0.7
-    const index = Math.round(scrollLeft / cardWidth)
-    setActiveIndex(Math.min(Math.max(index, 0), items.length - 1))
-  }
-
-  const scrollToSlide = (direction) => {
-    if (!scrollContainerRef.current) return
-    const container = scrollContainerRef.current
-    const scrollAmount = container.clientWidth * 0.65
-    container.scrollBy({
-      left: direction === 'right' ? scrollAmount : -scrollAmount,
-      behavior: 'smooth',
-    })
-  }
-
-  const scrollToIndex = (idx) => {
-    if (!scrollContainerRef.current) return
-    const container = scrollContainerRef.current
-    const cards = container.children
-    if (cards[idx]) {
-      cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
-    }
-  }
+  const bannerItems = featured.length > 0 
+    ? featured.slice(0, 6).map((c) => ({
+        id: c._id || c.id,
+        title: c.title,
+        description: stripHTML(c.description || ''),
+        image: getImageUrl(c.image),
+        type: c.type,
+        referenceId: c.referenceId,
+      }))
+    : DEFAULT_SELECTIONS
 
   const handleCardClick = (item) => {
     if (item.type === 'course' && item.referenceId) {
@@ -101,173 +99,112 @@ const StackingBanners = () => {
     } else if (item.type === 'all_jobs') {
       navigate('/dashboard/job-posts')
     } else {
-      navigate('/')
+      navigate('/courses')
     }
   }
 
   return (
-    <section className="relative w-full py-16 md:py-24 bg-slate-50 overflow-hidden">
-      
-      {/* ── Top Header Bar (Full-Width Container) ── */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 mb-12 md:mb-16">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 border-b border-slate-200/80 pb-10">
-          
-          {/* Left Column: Heading & Subtitle */}
-          <div className="space-y-4 max-w-2xl">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-[2px] bg-amber-400" />
-              <span className="font-jetbrains text-xs font-bold text-amber-700 tracking-[0.4em] uppercase">
-                {t('selectedForYou')}
-              </span>
-            </div>
-
-            <h2 className="font-newsreader text-4xl md:text-6xl italic text-slate-900 leading-tight tracking-tight">
-              {t('selectionTitle')}
-            </h2>
-
-            <p className="font-jetbrains text-xs text-slate-600 font-medium tracking-[0.12em] leading-relaxed uppercase pt-1">
-              {t('selectionSub')}
-            </p>
-          </div>
-
-          {/* Right Column: Interactive Navigation Controls & CTA */}
-          <div className="flex items-center gap-6 shrink-0 self-start lg:self-end">
+    <section className="relative w-full py-12 md:py-24 overflow-visible">
+      <div className="flex flex-col md:flex-row gap-16 md:gap-24 px-4 md:px-20 max-w-[1600px] mx-auto">
+        
+        {/* ── Left Column: Sticky Title & Description ── */}
+        <div className="md:w-[45%] md:sticky md:top-28 md:h-fit z-30 pt-10 pb-6 md:py-20 self-start">
+          <div className="flex flex-col gap-12 md:gap-14 relative z-10">
             
-            {/* Slide Index Badge & Arrows */}
-            <div className="flex items-center gap-4 bg-white border border-slate-200 rounded-full px-5 py-2.5 shadow-sm">
-              <span className="font-jetbrains text-xs font-bold text-slate-700 tracking-wider">
-                0{activeIndex + 1} <span className="text-slate-300">/</span> 0{items.length || 1}
-              </span>
-              <div className="h-4 w-[1px] bg-slate-200" />
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => scrollToSlide('left')}
-                  disabled={!canScrollLeft}
-                  className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-accent hover:border-amber-400 hover:text-slate-950 disabled:opacity-30 disabled:pointer-events-none transition-all"
-                  aria-label="Previous Slide"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-                </button>
-                <button
-                  onClick={() => scrollToSlide('right')}
-                  disabled={!canScrollRight}
-                  className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-accent hover:border-amber-400 hover:text-slate-950 disabled:opacity-30 disabled:pointer-events-none transition-all"
-                  aria-label="Next Slide"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 18l6-6-6-6"/></svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Explore All Button */}
-            <button
-              onClick={() => navigate('/courses')}
-              className="px-8 py-4 rounded-full font-montserrat text-xs font-black tracking-[0.25em] bg-accent text-slate-950 hover:scale-105 active:scale-95 transition-all shadow-accent-soft shrink-0"
-            >
-              <RollingText text={t('exploreAll')} className="relative z-10" />
-            </button>
-          </div>
-
-        </div>
-      </div>
-
-      {/* ── Below Full-Width Banner Cards Slider ── */}
-      <div className="max-w-[100vw] overflow-hidden pl-6 md:pl-12 lg:pl-24 pr-6">
-        <div
-          ref={scrollContainerRef}
-          onScroll={checkScrollState}
-          className="flex gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-8 pt-2"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {items.map((banner, i) => (
-            <motion.div
-              key={banner.id}
-              onClick={() => handleCardClick(banner)}
-              whileHover={{ y: -6 }}
-              className={`snap-start shrink-0 w-[88vw] sm:w-[500px] md:w-[650px] lg:w-[740px] h-[50vh] md:h-[58vh] relative rounded-[2.5rem] overflow-hidden border transition-all duration-500 cursor-pointer group bg-white shadow-xl ${
-                activeIndex === i ? 'border-amber-400 ring-2 ring-amber-400/30 shadow-2xl' : 'border-slate-200/80 hover:border-slate-300'
-              }`}
-            >
-              {/* Top Category Badge */}
-              <div className="absolute top-6 left-6 z-20 px-4 py-2 bg-white/90 backdrop-blur-md rounded-full border border-slate-200/80 shadow-md flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                <span className="font-jetbrains text-[10px] font-bold tracking-widest text-slate-900 uppercase">
-                  {banner.type === 'job' || banner.type === 'all_jobs' ? t('careerSpotlight') : t('curatedModule')}
+            {/* Header / Subheading */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-8 h-[1px] bg-accent/40"></div>
+                <span className="font-jetbrains text-[10px] text-accent tracking-[0.5em] uppercase opacity-80">
+                  {t('selectedForYou') || 'Selected for You'}
                 </span>
               </div>
+              <h2 className="font-newsreader text-6xl md:text-8xl italic text-normal leading-[0.85] tracking-tighter">
+                The <br />
+                <span className="text-accent ml-8">Selection</span>
+              </h2>
+            </div>
 
-              {/* Top Slide Number Badge */}
-              <div className="absolute top-6 right-6 z-20 px-4 py-1.5 bg-slate-950/80 backdrop-blur-md rounded-full border border-amber-400/40 text-amber-400 font-jetbrains text-xs font-bold tracking-widest shadow-md">
-                0{i + 1}
+            {/* Description with Vertical Glowing Line Indicator */}
+            <div className="relative pl-8">
+              <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-accent/60 via-accent/10 to-transparent"></div>
+              <div className="absolute left-[-3px] top-0 w-[7px] h-[7px] rounded-full bg-accent animate-pulse shadow-[0_0_15px_rgba(33,113,181,0.8)]"></div>
+              <p className="font-jetbrains text-[11px] text-description tracking-[0.2em] leading-[2.2] uppercase max-w-sm">
+                {t('selectionSub') || 'A hand-picked collection of lessons built to help you grow faster. Learn the best strategies from our most popular courses.'}
+              </p>
+            </div>
+
+            {/* Explore All CTA Button with Rolling Shutter & Hover Lines */}
+            <div className="pt-4 md:pt-6 flex items-center gap-8 group/all">
+              <button 
+                onClick={() => navigate('/courses')}
+                className="px-12 py-6 rounded-none font-montserrat text-[12px] font-bold tracking-[0.3em] relative group/btn overflow-hidden transition-all hover:scale-105 active:scale-95 bg-accent text-white w-fit shadow-[0_10px_40px_rgba(33,113,181,0.25)]"
+              >
+                <RollingText text={t('exploreAll') || 'EXPLORE ALL'} className="relative z-10" />
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500"></div>
+              </button>
+
+              <div className="flex flex-col gap-1.5 opacity-30 group-hover/all:opacity-100 transition-opacity duration-700">
+                <div className="w-12 h-[1px] bg-accent group-hover/all:w-20 transition-all duration-700 ease-in-out"></div>
+                <div className="w-8 h-[1px] bg-accent group-hover/all:w-14 transition-all duration-700 delay-100 ease-in-out"></div>
               </div>
+            </div>
 
-              {/* Background Image with Zoom Effect */}
-              <div className="relative w-full h-full overflow-hidden">
-                <img
-                  src={banner.image}
-                  alt={banner.title}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                />
+          </div>
+        </div>
 
-                {/* Dark Gradient Overlay for optimal contrast */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent pointer-events-none" />
-              </div>
+        {/* ── Right Column: Sticky Stacking Cards Deck ── */}
+        <div className="md:w-[65%] relative">
+          {bannerItems.map((card, idx) => (
+            <div 
+              key={card.id || idx} 
+              className="h-[68vh] md:h-screen flex items-start justify-center md:items-center sticky top-0 pt-6 md:pt-0"
+            >
+              <div 
+                className="relative w-full md:w-[700px] h-[55vh] md:h-[65vh] mx-auto rounded-[2.5rem] overflow-hidden border border-border shadow-[0_30px_80px_-20px_rgba(15,23,42,0.15)] bg-card origin-top transition-transform duration-300"
+                style={{ 
+                  top: `calc(${idx * 16}px + 4vh)`,
+                  zIndex: idx + 1
+                }}
+              >
+                {/* Background Image Container */}
+                <div className="relative w-full h-full overflow-hidden group">
+                  <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
+                    <img 
+                      alt={card.title || "Module"} 
+                      className="w-full h-full object-cover object-center block" 
+                      src={card.image} 
+                    />
+                  </div>
 
-              {/* Bottom Details & CTA Overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 flex flex-col md:flex-row md:items-end justify-between gap-6 z-20">
-                <div className="space-y-2 max-w-lg">
-                  {banner.title && (
-                    <h3 className="font-newsreader italic text-2xl md:text-4xl text-white font-extralight tracking-tight leading-tight group-hover:text-amber-300 transition-colors">
-                      {banner.title}
-                    </h3>
-                  )}
-                  {banner.description && (
-                    <p className="font-jetbrains text-xs text-slate-300 font-medium line-clamp-2 leading-relaxed">
-                      {banner.description}
-                    </p>
-                  )}
+                  {/* Deep Gradient Overlay on Bottom */}
+                  <div className="absolute bottom-0 left-0 right-0 h-44 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent pointer-events-none"></div>
                 </div>
 
-                <button
-                  className="px-8 py-4 rounded-full font-montserrat text-xs font-black tracking-[0.25em] transition-all hover:scale-105 active:scale-95 bg-accent text-slate-950 w-fit shadow-accent-soft shrink-0"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleCardClick(banner)
-                  }}
-                >
-                  <RollingText
-                    text={
-                      banner.type === 'course' || banner.type === 'all_courses'
-                        ? t('startModule')
-                        : banner.type === 'job' || banner.type === 'all_jobs'
-                        ? t('viewJob')
-                        : t('learnMore')
-                    }
-                    className="relative z-10"
-                  />
-                </button>
+                {/* Bottom Action Button Inside Card */}
+                <div className="absolute bottom-6 left-6 pointer-events-auto z-20">
+                  <button 
+                    onClick={() => handleCardClick(card)}
+                    className="px-8 py-5 rounded-none font-montserrat text-[14px] font-bold tracking-[0.2em] relative group/btn overflow-hidden transition-all hover:scale-105 active:scale-95 bg-accent text-white w-fit shadow-md"
+                  >
+                    <RollingText 
+                      text={
+                        card.type === 'job' || card.type === 'all_jobs'
+                          ? (t('viewJob') || 'VIEW OPPORTUNITY')
+                          : (t('startModule') || 'START THE MODULE')
+                      } 
+                      className="relative z-10" 
+                    />
+                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500"></div>
+                  </button>
+                </div>
+
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
-      </div>
 
-      {/* ── Bottom Interactive Progress Bar ── */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 mt-6 flex items-center justify-center gap-3">
-        {items.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => scrollToIndex(idx)}
-            className={`h-2 rounded-full transition-all duration-500 ${
-              activeIndex === idx
-                ? 'w-10 bg-accent shadow-sm'
-                : 'w-2 bg-slate-300 hover:bg-slate-400'
-            }`}
-            aria-label={`Go to slide ${idx + 1}`}
-          />
-        ))}
       </div>
-
     </section>
   )
 }

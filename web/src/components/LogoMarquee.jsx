@@ -74,7 +74,7 @@ const LogoMarquee = () => {
   return (
     <section 
       ref={sectionRef} 
-      className="relative py-20 md:py-20 bg-dark z-10 select-none cursor-default overflow-hidden" 
+      className="relative py-16 md:py-24 bg-gradient-to-b from-[#f8fafc] via-[#edf5fc]/70 to-[#f8fafc] z-10 select-none cursor-default overflow-hidden" 
     >
       
       {/* The Tilt Container - Perspective shift animates via GSAP ScrollTrigger */}
@@ -94,7 +94,7 @@ const LogoMarquee = () => {
                 key={`r1-${index}`}
                 src={logo.path} 
                 alt={logo.name} 
-                className="pointer-events-auto h-10 md:h-16 lg:h-20 w-auto grayscale opacity-40 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-700 cursor-pointer"
+                className="pointer-events-auto h-9 md:h-14 lg:h-16 w-auto grayscale opacity-70 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-500 cursor-pointer object-contain"
               />
             ))}
           </div>
@@ -111,7 +111,7 @@ const LogoMarquee = () => {
                 key={`r2-${index}`}
                 src={logo.path} 
                 alt={logo.name} 
-                className="pointer-events-auto h-10 md:h-16 lg:h-20 w-auto grayscale opacity-40 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-700 cursor-pointer"
+                className="pointer-events-auto h-9 md:h-14 lg:h-16 w-auto grayscale opacity-70 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-500 cursor-pointer object-contain"
               />
             ))}
           </div>
@@ -120,8 +120,8 @@ const LogoMarquee = () => {
       </div>
 
       {/* Edge Gradient Masks to blend into background */}
-      <div className="absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-dark to-transparent z-20" />
-      <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-dark to-transparent z-20" />
+      <div className="absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-[#f8fafc] to-transparent z-20 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-[#f8fafc] to-transparent z-20 pointer-events-none" />
     </section>
   )
 }

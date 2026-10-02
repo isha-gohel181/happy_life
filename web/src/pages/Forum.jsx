@@ -227,7 +227,7 @@ const QuestionCard = ({ question }) => {
     }
 
     return (
-      <div className="forum-reveal bg-white border border-slate-200/80 hover:border-amber-400 p-6 md:p-8 mb-6 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 relative group">
+      <div className="forum-reveal bg-card border border-border hover:border-accent p-6 md:p-8 mb-6 rounded-none shadow-sm hover:shadow-md transition-all duration-300 relative group">
         <div className="flex flex-col gap-6">
           <div className="flex items-center gap-4">
             {question.profilePicture && question.profilePicture !== 'default-profile.png' ? (
@@ -241,30 +241,30 @@ const QuestionCard = ({ question }) => {
                     return `${baseUrl}/uploads/profiles/${pic}`;
                 })()} 
                 alt={question.author}
-                className="w-10 h-10 rounded-full object-cover border border-slate-200"
+                className="w-10 h-10 rounded-full object-cover border border-border"
                 onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
               />
             ) : null}
             {(!question.profilePicture || question.profilePicture === 'default-profile.png') && (
-              <div className="w-10 h-10 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-900 font-montserrat font-black text-sm">
+              <div className="w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-jetbrains font-bold text-sm">
                 {question.author?.charAt(0)?.toUpperCase()}
               </div>
             )}
             <div className="flex flex-col gap-0.5">
-              <span className="font-montserrat text-xs font-bold text-amber-800 tracking-wider uppercase">{question.authorRole} / {question.author}</span>
+              <span className="font-jetbrains text-xs font-bold text-accent tracking-wider uppercase">{question.authorRole} / {question.author}</span>
             </div>
           </div>
 
           <div className="flex flex-col gap-4">
             <div className="space-y-3">
-              <h2 className="font-newsreader italic text-2xl md:text-3xl leading-snug text-slate-900 font-bold group-hover:text-amber-600 transition-colors">
+              <h2 className="font-newsreader italic text-2xl md:text-3xl leading-snug text-normal font-bold group-hover:text-accent transition-colors">
                 {question.title}
               </h2>
               {/* Render All Tags */}
               {question.allTags && question.allTags.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {question.allTags.map((tag, idx) => (
-                    <span key={idx} className="px-3 py-0.5 bg-amber-100 border border-amber-300 text-amber-900 font-jetbrains text-[10px] font-black uppercase tracking-wider rounded-full">
+                    <span key={idx} className="px-3 py-0.5 bg-accent/10 border border-accent/20 text-accent font-jetbrains text-[10px] font-bold uppercase tracking-wider rounded-none">
                       {tag}
                     </span>
                   ))}
@@ -273,7 +273,7 @@ const QuestionCard = ({ question }) => {
             </div>
             
             {question.content && (
-              <p className="font-jetbrains text-xs leading-relaxed text-slate-600 font-medium max-w-4xl line-clamp-3">
+              <p className="font-jetbrains text-xs leading-relaxed text-description font-normal max-w-4xl line-clamp-3">
                 {question.content}
               </p>
             )}
@@ -289,7 +289,7 @@ const QuestionCard = ({ question }) => {
                   const fullUrl = path.startsWith('http') ? path : `https://api.edrilla.com/${path.startsWith('uploads/') ? path : `uploads/forum/${path}`}`;
                   
                   return (
-                    <div key={idx} className="attachment-item relative aspect-video bg-slate-100 border border-slate-200 rounded-xl overflow-hidden group/img shadow-sm">
+                    <div key={idx} className="attachment-item relative aspect-video bg-dark border border-border rounded-none overflow-hidden group/img shadow-sm">
                       <img 
                         src={fullUrl} 
                         alt={`Attachment ${idx}`}
@@ -301,7 +301,7 @@ const QuestionCard = ({ question }) => {
                       <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
                         <button 
                           onClick={() => setFullImageUrl(fullUrl)}
-                          className="p-3 bg-amber-400 text-slate-950 rounded-full shadow-md"
+                          className="p-3 bg-accent text-white rounded-none shadow-md"
                         >
                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
                         </button>
@@ -313,35 +313,41 @@ const QuestionCard = ({ question }) => {
             )}
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100">
-            <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-border">
+            <div className="flex items-center gap-8">
               {/* Like / Dislike Sentiment */}
-              <div className="flex items-center gap-3">
-                 <button 
-                     onClick={() => handleSentiment('like')}
-                     className={`w-9 h-9 flex items-center justify-center rounded-full transition-all border ${sentiment === 'like' ? 'bg-amber-400 border-amber-400 text-slate-950 shadow-sm' : 'border-slate-200 text-slate-600 hover:border-amber-400 hover:text-amber-700 bg-slate-50'}`}
-                 >
-                     <svg width="14" height="14" viewBox="0 0 24 24" fill={sentiment === 'like' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5"><path d="M7 11V19H17C17.55 19 18 18.55 18 18V9C18 8.45 17.55 8 17 8H12.67L13.12 4.41C13.19 3.84 12.79 3.32 12.22 3.25C12.15 3.24 12.07 3.24 12 3.24C11.55 3.24 11.13 3.42 10.82 3.73L7 7.56V11H7Z" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                 </button>
-                 <span className="font-montserrat text-xs font-bold text-slate-900">{formatCount(likesCount)}</span>
-                 
-                 <button 
-                     onClick={() => handleSentiment('dislike')}
-                     className={`w-9 h-9 flex items-center justify-center rounded-full transition-all border ${sentiment === 'dislike' ? 'bg-red-500 border-red-500 text-white' : 'border-slate-200 text-slate-600 hover:border-red-400 hover:text-red-600 bg-slate-50'}`}
-                 >
-                     <svg width="14" height="14" viewBox="0 0 24 24" fill={sentiment === 'dislike' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5" className="rotate-180"><path d="M7 11V19H17C17.55 19 18 18.55 18 18V9C18 8.45 17.55 8 17 8H12.67L13.12 4.41C13.19 3.84 12.79 3.32 12.22 3.25C12.15 3.24 12.07 3.24 12 3.24C11.55 3.24 11.13 3.42 10.82 3.73L7 7.56V11H7Z" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                 </button>
-                 <span className="font-montserrat text-xs font-bold text-slate-900">{formatCount(dislikesCount)}</span>
+              <div className="flex flex-col gap-1">
+                <span className="font-jetbrains text-[8px] text-description/60 uppercase tracking-widest font-bold">BUTTON</span>
+                <div className="flex items-center gap-3">
+                   <button 
+                       onClick={() => handleSentiment('like')}
+                       className={`w-8 h-8 flex items-center justify-center rounded-none transition-all border ${sentiment === 'like' ? 'bg-accent border-accent text-white shadow-sm' : 'border-border text-description hover:border-accent hover:text-accent bg-card'}`}
+                   >
+                       <svg width="14" height="14" viewBox="0 0 24 24" fill={sentiment === 'like' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5"><path d="M7 11V19H17C17.55 19 18 18.55 18 18V9C18 8.45 17.55 8 17 8H12.67L13.12 4.41C13.19 3.84 12.79 3.32 12.22 3.25C12.15 3.24 12.07 3.24 12 3.24C11.55 3.24 11.13 3.42 10.82 3.73L7 7.56V11H7Z" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                   </button>
+                   <span className="font-jetbrains text-xs font-bold text-normal">{formatCount(likesCount)}</span>
+                   
+                   <button 
+                       onClick={() => handleSentiment('dislike')}
+                       className={`w-8 h-8 flex items-center justify-center rounded-none transition-all border ${sentiment === 'dislike' ? 'bg-red-500 border-red-500 text-white' : 'border-border text-description hover:border-red-400 hover:text-red-600 bg-card'}`}
+                   >
+                       <svg width="14" height="14" viewBox="0 0 24 24" fill={sentiment === 'dislike' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5" className="rotate-180"><path d="M7 11V19H17C17.55 19 18 18.55 18 18V9C18 8.45 17.55 8 17 8H12.67L13.12 4.41C13.19 3.84 12.79 3.32 12.22 3.25C12.15 3.24 12.07 3.24 12 3.24C11.55 3.24 11.13 3.42 10.82 3.73L7 7.56V11H7Z" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                   </button>
+                   <span className="font-jetbrains text-xs font-bold text-normal">{formatCount(dislikesCount)}</span>
+                </div>
               </div>
 
               {/* Replies Toggle Counter */}
-              <button 
-                onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200/70 border border-slate-200 rounded-full font-montserrat text-xs font-bold text-slate-700 transition-all"
-              >
-                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-amber-600"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                 <span>{repliesCount} REPLIES</span>
-              </button>
+              <div className="flex flex-col gap-1">
+                <span className="font-jetbrains text-[8px] text-description/60 uppercase tracking-widest font-bold">BUTTON</span>
+                <button 
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-card hover:bg-dark border border-border rounded-none font-jetbrains text-xs font-bold text-normal transition-all"
+                >
+                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-accent"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                   <span>{repliesCount} REPLIES</span>
+                </button>
+              </div>
             </div>
             <div className="flex items-center gap-6">
               <span className="hidden md:inline text-description font-jetbrains text-lg tracking-[0.5em]">...</span>
@@ -361,7 +367,7 @@ const QuestionCard = ({ question }) => {
           className="overflow-hidden" 
           style={{ height: 0, opacity: 0 }}
         >
-          <div className="mt-12 pt-12 border-t border-white/10">
+          <div className="mt-12 pt-12 border-t border-border">
             <h3 className="font-montserrat text-[14px] font-bold tracking-[0.3em] uppercase text-normal mb-10">
               DISCOURSE ON THIS TOPIC
             </h3>
@@ -382,12 +388,12 @@ const QuestionCard = ({ question }) => {
                             return `${baseUrl}/uploads/profiles/${pic}`;
                         })()} 
                         alt={reply.author}
-                        className="flex-shrink-0 w-8 h-8 rounded-full object-cover border border-white/10"
+                        className="flex-shrink-0 w-8 h-8 rounded-full object-cover border border-border"
                         onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
                       />
                     ) : null}
                     {(!reply.profilePicture || reply.profilePicture === 'default-profile.png') && (
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center font-jetbrains text-[9px] text-description/80">
+                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-dark border border-border flex items-center justify-center font-jetbrains text-[9px] text-description">
                         {reply.role || '?'}
                       </div>
                     )}
@@ -412,7 +418,7 @@ const QuestionCard = ({ question }) => {
 
                   {/* Nested Replies */}
                   {reply.replies && reply.replies.length > 0 && (
-                    <div className="flex flex-col ml-8 pl-8 border-l border-white/5 gap-12 mt-2">
+                    <div className="flex flex-col ml-8 pl-8 border-l border-border gap-12 mt-2">
                       {reply.replies.map((nested) => (
                         <div key={nested.id} className="discussion-reveal flex gap-4 group">
                           {nested.profilePicture && nested.profilePicture !== 'default-profile.png' ? (
@@ -426,12 +432,12 @@ const QuestionCard = ({ question }) => {
                                   return `${baseUrl}/uploads/profiles/${pic}`;
                               })()} 
                               alt={nested.author}
-                              className="flex-shrink-0 w-8 h-8 rounded-full object-cover border border-white/10"
+                              className="flex-shrink-0 w-8 h-8 rounded-full object-cover border border-border"
                               onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
                             />
                           ) : null}
                           {(!nested.profilePicture || nested.profilePicture === 'default-profile.png') && (
-                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center font-jetbrains text-[9px] text-description/80">
+                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-dark border border-border flex items-center justify-center font-jetbrains text-[9px] text-description">
                               {nested.role}
                             </div>
                           )}
@@ -445,7 +451,7 @@ const QuestionCard = ({ question }) => {
                             </p>
                             <button 
                                 onClick={() => handleReplyClick(nested.author, reply.id)}
-                                className="self-start font-jetbrains text-[9px] font-bold text-accent tracking-[0.2em) uppercase hover:opacity-70 transition-opacity"
+                                className="self-start font-jetbrains text-[9px] font-bold text-accent tracking-[0.2em] uppercase hover:opacity-70 transition-opacity"
                             >
                                 REPLY TO {nested.author.split(' ')[0]}
                             </button>
@@ -459,13 +465,13 @@ const QuestionCard = ({ question }) => {
             </div>
 
             {/* Post Reply Form */}
-            <div ref={replyFormRef} className="discussion-reveal mt-20 bg-white/[0.01] border border-white/5 p-8 flex flex-col gap-8 transition-all">
+            <div ref={replyFormRef} className="discussion-reveal mt-20 bg-dark/50 border border-border p-8 flex flex-col gap-8 transition-all rounded-none">
               <div className="flex items-center justify-between">
                 <h4 className="font-montserrat text-[14px] font-bold tracking-[0.3em] uppercase text-normal">{t('postReply')}</h4>
                 {replyingTo && (
-                  <div className="flex items-center gap-3 px-4 py-2 bg-accent/10 border border-accent/20 rounded-full">
+                  <div className="flex items-center gap-3 px-4 py-2 bg-accent/10 border border-accent/20 rounded-none">
                     <span className="font-jetbrains text-[9px] text-accent tracking-widest uppercase">REPLYING TO @{replyingTo.name}</span>
-                    <button onClick={() => setReplyingTo(null)} className="text-accent hover:text-white transition-colors">
+                    <button onClick={() => setReplyingTo(null)} className="text-accent hover:text-normal transition-colors">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
                     </button>
                   </div>
@@ -477,7 +483,7 @@ const QuestionCard = ({ question }) => {
                 placeholder={replyingTo ? `Write your response to ${replyingTo.name}...` : "Share your perspective..."}
                 className="w-full bg-transparent border-none outline-none font-newsreader italic text-xl text-normal placeholder:text-description min-h-[120px] resize-none"
               />
-              <div className="pt-6 border-t border-white/5 flex items-center justify-between">
+              <div className="pt-6 border-t border-border flex items-center justify-between">
                   <div className="relative">
                       <button 
                         onClick={() => setShowEmoji(!showEmoji)}
@@ -507,7 +513,7 @@ const QuestionCard = ({ question }) => {
 
                   <button 
                     onClick={handlePublish}
-                    className="px-8 py-4 bg-accent text-slate-950 font-black font-jetbrains text-[9px] tracking-[0.3em] uppercase hover:brightness-105 transition-all"
+                    className="px-8 py-4 bg-accent text-white font-bold font-jetbrains text-[9px] tracking-[0.3em] uppercase hover:brightness-105 transition-all rounded-none"
                   >
                     PUBLISH
                   </button>
@@ -520,7 +526,7 @@ const QuestionCard = ({ question }) => {
   }
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-dark pt-44 pb-28 px-4 md:px-12 lg:px-20 overflow-x-clip">
+    <div ref={containerRef} className="min-h-screen bg-dark pt-44 pb-28 px-4 md:px-12 lg:px-20 overflow-x-clip text-normal">
       
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
@@ -532,10 +538,10 @@ const QuestionCard = ({ question }) => {
              <div className="lg:hidden mb-12">
                 <button 
                     onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
-                    className="w-full flex items-center justify-between p-7 border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-all group"
+                    className="w-full flex items-center justify-between p-7 border border-border bg-card hover:bg-dark transition-all group rounded-none"
                 >
                     <div className="flex items-center gap-4">
-                        <div className="w-8 h-8 flex items-center justify-center border border-white/10 rounded-full group-hover:border-accent group-hover:text-accent transition-all">
+                        <div className="w-8 h-8 flex items-center justify-center border border-border rounded-none group-hover:border-accent group-hover:text-accent transition-all">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 6h16M4 12h16m-7 6h7" strokeLinecap="round" strokeLinejoin="round"/></svg>
                         </div>
                         <span className="font-montserrat text-[14px] font-bold text-accent tracking-[0.3em] uppercase">FILTERS & STATS</span>
@@ -545,14 +551,14 @@ const QuestionCard = ({ question }) => {
                     </div>
                 </button>
 
-                <div ref={mobileFilterRef} className="overflow-hidden h-0 opacity-0 bg-white/[0.01] border-x border-b border-white/5">
+                <div ref={mobileFilterRef} className="overflow-hidden h-0 opacity-0 bg-card border-x border-b border-border rounded-none">
                     <div className="p-8 flex flex-col gap-14">
                         {/* Tags */}
                         <div className="flex flex-col gap-6">
-                            <h4 className="font-jetbrains text-[9px] font-bold text-description/80 tracking-[0.3em] uppercase underline underline-offset-8 decoration-accent/30">{t('popularTags')}</h4>
+                            <h4 className="font-jetbrains text-[9px] font-bold text-description tracking-[0.3em] uppercase underline underline-offset-8 decoration-accent/30">{t('popularTags')}</h4>
                             <div className="flex flex-wrap gap-2">
                                 {tags.map((tag) => (
-                                    <button key={tag} className="px-4 py-2 border border-white/10 font-jetbrains text-[8px] text-description hover:text-accent hover:border-accent transition-all uppercase tracking-widest">
+                                    <button key={tag} className="px-4 py-2 border border-border font-jetbrains text-[8px] text-description hover:text-accent hover:border-accent transition-all uppercase tracking-widest rounded-none">
                                         {tag}
                                     </button>
                                 ))}
@@ -561,10 +567,10 @@ const QuestionCard = ({ question }) => {
 
                         {/* Stats */}
                         <div className="flex flex-col gap-6">
-                            <h4 className="font-jetbrains text-[9px] font-bold text-description/80 tracking-[0.3em] uppercase underline underline-offset-8 decoration-accent/30">{t('forumStats')}</h4>
-                            <div className="grid grid-cols-1 gap-1 border-t border-white/5">
+                            <h4 className="font-jetbrains text-[9px] font-bold text-description tracking-[0.3em] uppercase underline underline-offset-8 decoration-accent/30">{t('forumStats')}</h4>
+                            <div className="grid grid-cols-1 gap-1 border-t border-border">
                                 {stats.map((stat) => (
-                                    <div key={stat.label} className="flex items-center justify-between py-4 border-b border-white/5">
+                                    <div key={stat.label} className="flex items-center justify-between py-4 border-b border-border">
                                         <span className="font-jetbrains text-[9px] text-description uppercase">{stat.label}</span>
                                         <span className="font-jetbrains text-lg font-bold text-normal">{stat.value}</span>
                                     </div>
@@ -574,10 +580,10 @@ const QuestionCard = ({ question }) => {
 
                         {/* Discourse */}
                         <div className="flex flex-col gap-6">
-                            <h4 className="font-jetbrains text-[9px] font-bold text-description/80 tracking-[0.3em] uppercase underline underline-offset-8 decoration-accent/30">{t('popularDiscourse')}</h4>
+                            <h4 className="font-jetbrains text-[9px] font-bold text-description tracking-[0.3em] uppercase underline underline-offset-8 decoration-accent/30">{t('popularDiscourse')}</h4>
                             <div className="flex flex-wrap gap-2">
                                 {discourseTags.map((tag) => (
-                                    <button key={tag} className="px-4 py-2 border border-white/5 font-jetbrains text-[8px] text-description hover:text-normal transition-all uppercase tracking-widest">
+                                    <button key={tag} className="px-4 py-2 border border-border font-jetbrains text-[8px] text-description hover:text-normal transition-all uppercase tracking-widest rounded-none">
                                         {tag}
                                     </button>
                                 ))}
@@ -589,9 +595,9 @@ const QuestionCard = ({ question }) => {
 
              <div className="flex flex-col gap-6">
                 {questions.length === 0 && !loading && (
-                  <div className="flex flex-col items-center justify-center py-20 text-center opacity-60 border border-white/5 bg-white/[0.02] rounded-xl">
-                    <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center mb-6">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/40"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  <div className="flex flex-col items-center justify-center py-20 text-center border border-border bg-card rounded-none">
+                    <div className="w-16 h-16 rounded-full border border-border flex items-center justify-center mb-6">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-description"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                     </div>
                     <h3 className="font-newsreader italic text-3xl text-normal mb-2">No Discussions Yet</h3>
                     <p className="font-jetbrains text-[9px] text-description uppercase tracking-widest">Be the first to start a new topic.</p>
@@ -620,13 +626,26 @@ const QuestionCard = ({ question }) => {
                 <div className="sidebar-reveal mb-12">
                    <button 
                      onClick={() => setIsModalOpen(true)}
-                     className="w-full bg-accent text-slate-950 p-8 font-jetbrains text-[11px] font-black uppercase tracking-[0.4em] hover:scale-[1.05] active:scale-95 transition-all shadow-accent-soft flex flex-col items-center gap-4 group rounded-xl"
+                     className="w-full bg-accent text-white p-8 md:p-10 font-jetbrains text-[11px] font-black uppercase tracking-[0.4em] hover:scale-[1.02] active:scale-95 transition-all shadow-accent-soft flex flex-col items-center justify-center text-center gap-4 group rounded-none border border-accent cursor-pointer"
                    >
-                      <div className="w-12 h-12 rounded-full bg-slate-950 text-amber-400 border border-amber-400/40 flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-amber-900 group-hover:text-amber-200 transition-all duration-300">
-                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 5v14M5 12h14"/></svg>
+                      <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-300">
+                         <svg 
+                           width="26" 
+                           height="26" 
+                           viewBox="0 0 24 24" 
+                           fill="none" 
+                           stroke="#2171B5" 
+                           strokeWidth="3.5" 
+                           strokeLinecap="round" 
+                           strokeLinejoin="round" 
+                           style={{ stroke: '#2171B5', color: '#2171B5' }}
+                         >
+                           <line x1="12" y1="5" x2="12" y2="19" style={{ stroke: '#2171B5' }} />
+                           <line x1="5" y1="12" x2="19" y2="12" style={{ stroke: '#2171B5' }} />
+                         </svg>
                       </div>
-                      {t('startNewTopic')}
-                      <span className="text-[8px] font-normal tracking-[0.2em] opacity-60 normal-case italic text-center">{t('contributeCollective')}</span>
+                      <span className="text-white font-black tracking-[0.35em] text-[12px]">{t('startNewTopic')}</span>
+                      <span className="text-[9px] font-normal tracking-[0.15em] text-white/90 normal-case italic text-center">{t('contributeCollective')}</span>
                    </button>
                 </div>
 
@@ -635,7 +654,7 @@ const QuestionCard = ({ question }) => {
                 <h4 className="font-montserrat text-[14px] font-bold text-accent tracking-[0.3em] uppercase underline underline-offset-8 decoration-accent/30 mb-2">{t('popularTags')}</h4>
                 <div className="flex flex-wrap gap-3">
                     {tags.map((tag) => (
-                      <button key={tag} className="px-5 py-3 border border-white/10 font-jetbrains text-[9px] text-description hover:text-accent hover:border-accent transition-all uppercase tracking-widest">
+                      <button key={tag} className="px-5 py-3 border border-border bg-card font-jetbrains text-[9px] text-description hover:text-accent hover:border-accent transition-all uppercase tracking-widest rounded-none">
                         {tag}
                       </button>
                     ))}
@@ -645,9 +664,9 @@ const QuestionCard = ({ question }) => {
               {/* Widget: Stats */}
               <div className="sidebar-reveal flex flex-col mb-12 gap-2">
                 <h4 className="font-montserrat text-[14px] font-bold text-accent tracking-[0.3em] uppercase underline underline-offset-8 decoration-accent/30 mb-6">{t('forumStats')}</h4>
-                <div className="flex flex-col border-t border-white/5">
+                <div className="flex flex-col border-t border-border">
                     {stats.map((stat) => (
-                      <div key={stat.label} className="flex items-center justify-between py-5 border-b border-white/5 group hover:bg-white/[0.01] transition-colors px-2">
+                      <div key={stat.label} className="flex items-center justify-between py-5 border-b border-border group hover:bg-dark transition-colors px-2">
                         <span className="font-montserrat text-[14px] text-description group-hover:text-normal transition-colors uppercase tracking-widest">{stat.label}</span>
                         <span className="font-jetbrains text-lg font-bold text-normal">{stat.value}</span>
                       </div>
@@ -660,7 +679,7 @@ const QuestionCard = ({ question }) => {
                 <h4 className="font-montserrat text-[14px] font-bold text-accent tracking-[0.3em] uppercase opacity-50 mb-6 underline underline-offset-8 decoration-accent/10">{t('popularDiscourse')}</h4>
                 <div className="flex flex-wrap gap-3">
                     {discourseTags.map((tag) => (
-                      <button key={tag} className="px-5 py-3 border border-white/5 font-jetbrains text-[9px] text-description hover:text-normal transition-all uppercase tracking-widest">
+                      <button key={tag} className="px-5 py-3 border border-border bg-card font-jetbrains text-[9px] text-description hover:text-normal transition-all uppercase tracking-widest rounded-none">
                         {tag}
                       </button>
                     ))}

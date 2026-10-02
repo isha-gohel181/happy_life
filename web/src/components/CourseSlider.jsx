@@ -1,144 +1,59 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchCourses } from '../redux/slices/courseSlice'
 import sanitizeDisplay from '../utils/textSanitize'
-import { useLanguage } from '../context/LanguageContext'
+import RollingText from './RollingText'
 
-const SwimlaneRow = ({ category, courses, navigate }) => {
-  const rowRef = useRef(null)
-  const [showLeftArrow, setShowLeftArrow] = useState(false)
-  const [showRightArrow, setShowRightArrow] = useState(true)
-  const { t } = useLanguage()
-
-  const displayCategory = (category && category.toUpperCase() === 'ALL COURSES')
-    ? t('allCourses')
-    : category
-
-  const handleScroll = () => {
-    if (!rowRef.current) return
-    const { scrollLeft, scrollWidth, clientWidth } = rowRef.current
-    setShowLeftArrow(scrollLeft > 0)
-    setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10)
-  }
-
-  const scrollByAmount = (direction) => {
-    if (!rowRef.current) return
-    const { clientWidth } = rowRef.current
-    const scrollAmount = direction === 'left' ? -clientWidth + 100 : clientWidth - 100
-    rowRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' })
-  }
-
-  return (
-    <div className="relative max-w-7xl mx-auto w-full py-6 group/row">
-      {/* Category Header Bar */}
-      <div className="px-6 md:px-12 mb-6 flex items-center gap-4">
-        <h2 className="font-inter text-2xl md:text-3xl font-black text-slate-900 tracking-tight uppercase">{displayCategory}</h2>
-        <div className="h-[2px] flex-grow max-w-[200px] bg-slate-200" />
-      </div>
-
-      <div className="relative">
-        {/* Left Fade & Button */}
-        <div className={`absolute top-0 left-0 h-full w-24 bg-transparent z-10 flex items-center justify-start px-4 transition-opacity duration-300 pointer-events-none ${showLeftArrow ? 'opacity-100' : 'opacity-0'}`}>
-          <button
-            onClick={() => scrollByAmount('left')}
-            className="w-12 h-12 rounded-full bg-white border border-slate-200 shadow-lg flex items-center justify-center pointer-events-auto hover:bg-accent hover:border-amber-400 transition-all group/btn -translate-x-full group-hover/row:translate-x-0"
-            aria-label="Scroll left"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-slate-800 group-hover/btn:text-slate-950 group-hover/btn:-translate-x-0.5 transition-transform">
-              <path d="M15 19l-7-7 7-7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </div>
-
-        {/* Scrollable Track */}
-        <div
-          ref={rowRef}
-          onScroll={handleScroll}
-          className="flex items-stretch gap-8 overflow-x-auto snap-x snap-mandatory scrollbar-none px-6 md:px-12 pb-10 pt-4 scroll-smooth"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {courses.map((course, i) => (
-            <div
-              key={i}
-              className="snap-start relative flex-shrink-0 w-[340px] sm:w-[400px] md:w-[480px] cursor-pointer group"
-              onClick={() => navigate(`/course-detail/${course._id || course.id}`)}
-            >
-              {/* Subtle Ambient Hover Glow */}
-              <div className="card-border absolute -inset-0.5 rounded-[1.75rem] bg-gradient-to-br from-amber-400/40 to-amber-200/20 opacity-0 blur-sm pointer-events-none transition-opacity duration-500 group-hover:opacity-100" />
-
-              {/* Main Light Mode Card */}
-              <div className="relative h-full bg-white border border-slate-200/80 p-4 rounded-[1.5rem] flex flex-col gap-4 overflow-hidden shadow-md transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-xl group-hover:border-amber-300">
-
-                {/* Image Container (Horizontal Aspect Ratio - Increased Height & Width) */}
-                <div className="relative aspect-[16/9.5] rounded-[1.25rem] overflow-hidden bg-slate-100 border border-slate-100">
-                  <img
-                    src={(() => {
-                      const imgPath = course.thumbnail || course.horizontalCarouselImage || course.verticalCarouselImage;
-                      if (!imgPath) return "/banner.png";
-                      const rawBase = import.meta.env.VITE_IMAGE_URL || import.meta.env.VITE_BASE_URL || import.meta.env.VITE_API_BASE || 'https://api.edrilla.com';
-                      const baseUrl = rawBase.replace(/\/api\/v1\/?$/, '');
-                      return `${baseUrl}${imgPath.startsWith('/') ? '' : '/'}${imgPath}`;
-                    })()}
-                    alt={sanitizeDisplay(course.title)}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  {/* Subtle, Soft Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent opacity-40 transition-opacity duration-500" />
-                </div>
-
-                {/* Text Content */}
-                <div className="flex flex-col flex-grow gap-2.5 px-2 pb-2">
-                  <div className="flex items-center gap-2 justify-between">
-                    <span className="font-jetbrains text-[10px] tracking-widest font-bold uppercase bg-amber-100/80 text-amber-900 px-3 py-1 rounded-full border border-amber-300/60 truncate max-w-[180px]">
-                      {course.category?.name || course.category || course.tag || 'COURSE'}
-                    </span>
-                    <div className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-accent group-hover:border-amber-400 transition-colors shadow-sm">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                        <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-700 group-hover:text-slate-950 transition-colors" />
-                      </svg>
-                    </div>
-                  </div>
-                  <h3 className="font-inter text-xl md:text-2xl text-slate-900 font-bold tracking-tight leading-snug group-hover:text-amber-600 transition-colors mt-1 line-clamp-2">
-                    {sanitizeDisplay(course.title)}
-                  </h3>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Right Fade & Button */}
-        <div className={`absolute top-0 right-0 h-full w-24 bg-transparent z-10 flex items-center justify-end px-4 transition-opacity duration-300 pointer-events-none ${showRightArrow ? 'opacity-100' : 'opacity-0'}`}>
-          <button
-            onClick={() => scrollByAmount('right')}
-            className="w-12 h-12 rounded-full bg-white border border-slate-200 shadow-lg flex items-center justify-center pointer-events-auto hover:bg-accent hover:border-amber-400 transition-all group/btn translate-x-full group-hover/row:translate-x-0"
-            aria-label="Scroll right"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-slate-800 group-hover/btn:text-slate-950 group-hover/btn:translate-x-0.5 transition-transform">
-              <path d="M9 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
+const fallbackCourses = [
+  { id: '1', title: 'Become An AI Builder In 30 Days.', tag: 'AI & TECH', thumbnail: '/courses/curator.png' },
+  { id: '2', title: 'MVP Engineering Masterclass', tag: 'ENGINEERING', thumbnail: '/courses/motion.png' },
+  { id: '3', title: 'Learn How To Communicate', tag: 'COMMUNICATION', thumbnail: '/courses/workshop.png' },
+  { id: '4', title: 'Branding Masterclass', tag: 'BRANDING', thumbnail: '/courses/architecture.png' },
+  { id: '5', title: 'The Art Of Content Creation', tag: 'CONTENT', thumbnail: '/courses/narrative.png' },
+  { id: '6', title: 'SEO Masterclass & Growth', tag: 'MARKETING', thumbnail: '/courses/pricing.png' },
+  { id: '7', title: 'Google Ads Mastery', tag: 'ADVERTISING', thumbnail: '/courses/typography.png' },
+  { id: '8', title: 'Facebook Ads Domination', tag: 'PAID ADS', thumbnail: '/digital_curator_card_v1.png' },
+  { id: '9', title: 'Website Made Easy', tag: 'WEB DESIGN', thumbnail: '/gig_tech.png' },
+  { id: '10', title: 'Solopreneur Blueprint', tag: 'BUSINESS', thumbnail: '/gig_vis.png' },
+  { id: '11', title: 'Vibe Marketing Engine', tag: 'GROWTH', thumbnail: '/gig_motion.png' }
+]
 
 const CourseSlider = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { courses: apiCourses } = useSelector((state) => state.courses)
 
+  const sectionRef = useRef(null)
+  const trackRef = useRef(null)
+  const cardsRef = useRef([])
+  const bordersRef = useRef([])
+
+  const animRef = useRef(null)
+  const posRef = useRef(0)
+  const isHoveredRef = useRef(false)
+  const isDraggingRef = useRef(false)
+  const dragStartXRef = useRef(0)
+  const dragStartPosRef = useRef(0)
+  const hasMovedRef = useRef(false)
+
   // Use API courses or fallback data
-  const baseCourses = apiCourses && apiCourses.length > 0 ? apiCourses : [
-    { id: 1, title: 'The Digital Curator', tag: 'CURATION' },
-    { id: 2, title: 'Network Strategy', tag: 'STRATEGY' },
-    { id: 3, title: 'Architectural Design', tag: 'DESIGN' },
-    { id: 4, title: 'Motion Mastery', tag: 'ANIMATION' },
-    { id: 5, title: 'Brand Identity', tag: 'BRANDING' },
-    { id: 6, title: 'Network Strategy', tag: 'STRATEGY' },
-  ]
+  const baseCourses = useMemo(() => {
+    if (apiCourses && apiCourses.length > 0) {
+      return apiCourses
+    }
+    return fallbackCourses
+  }, [apiCourses])
+
+  // Multiply items to create infinite marquee buffer
+  const items = useMemo(() => {
+    let combined = [...baseCourses]
+    while (combined.length < 16) {
+      combined = [...combined, ...baseCourses]
+    }
+    // Duplicate 3x for seamless infinite wraparound
+    return [...combined, ...combined, ...combined]
+  }, [baseCourses])
 
   useEffect(() => {
     if (!apiCourses || apiCourses.length === 0) {
@@ -146,26 +61,220 @@ const CourseSlider = () => {
     }
   }, [dispatch, apiCourses])
 
-  // Group courses by category
-  const categoriesMap = baseCourses.reduce((acc, course) => {
-    const cat = course.category?.name || course.category || course.tag || 'ALL COURSES'
-    if (!acc[cat]) acc[cat] = []
-    acc[cat].push(course)
-    return acc
-  }, {})
+  // Continuous Marquee & Center-Proximity Scaling Engine
+  useEffect(() => {
+    let lastTime = performance.now()
+    const autoSpeed = 48 // pixels per second
 
-  // Duplicate for smooth demo scroll if < 6 items
-  Object.keys(categoriesMap).forEach(key => {
-    if (categoriesMap[key].length < 6) {
-      categoriesMap[key] = [...categoriesMap[key], ...categoriesMap[key], ...categoriesMap[key]]
+    const updateSlider = (now) => {
+      const delta = (now - lastTime) / 1000
+      lastTime = now
+
+      if (!isDraggingRef.current && trackRef.current && sectionRef.current) {
+        const speed = isHoveredRef.current ? autoSpeed * 0.25 : autoSpeed
+        posRef.current -= speed * delta
+
+        // Compute single set width (1/3 of total track width)
+        const totalWidth = trackRef.current.scrollWidth
+        const setWidth = totalWidth / 3
+
+        if (setWidth > 0) {
+          if (posRef.current <= -setWidth * 2) {
+            posRef.current += setWidth
+          } else if (posRef.current > -setWidth) {
+            posRef.current -= setWidth
+          }
+        }
+      }
+
+      // Apply track translation
+      if (trackRef.current) {
+        trackRef.current.style.transform = `translate3d(${posRef.current}px, 0px, 0px)`
+      }
+
+      // Apply real-time proximity scaling, opacity, and active border to all cards
+      if (sectionRef.current) {
+        const sectionRect = sectionRef.current.getBoundingClientRect()
+        const centerX = sectionRect.left + sectionRect.width / 2
+
+        cardsRef.current.forEach((cardEl, idx) => {
+          if (!cardEl) return
+          const cardRect = cardEl.getBoundingClientRect()
+          const cardCenterX = cardRect.left + cardRect.width / 2
+          const dist = Math.abs(cardCenterX - centerX)
+
+          // Proximity calculation with smooth falloff
+          const maxRadius = 360
+          const t = Math.min(1, dist / maxRadius)
+
+          // Center: 1.15 scale down to 0.85 scale
+          const scale = 1.15 - 0.30 * Math.pow(t, 1.2)
+          // Center: 1.0 opacity down to 0.50 opacity
+          const opacity = 1.0 - 0.50 * Math.pow(t, 0.9)
+          // Center: border opacity 1 within 75px radius
+          const borderOpacity = dist < 75 ? Math.max(0, 1 - dist / 75) : 0
+
+          cardEl.style.transform = `scale(${scale.toFixed(3)}, ${scale.toFixed(3)})`
+          cardEl.style.opacity = opacity.toFixed(3)
+
+          const borderEl = bordersRef.current[idx]
+          if (borderEl) {
+            borderEl.style.opacity = borderOpacity.toFixed(3)
+          }
+        })
+      }
+
+      animRef.current = requestAnimationFrame(updateSlider)
     }
-  })
+
+    // Set initial middle offset
+    if (trackRef.current) {
+      const setWidth = trackRef.current.scrollWidth / 3
+      if (setWidth > 0) {
+        posRef.current = -setWidth
+      }
+    }
+
+    animRef.current = requestAnimationFrame(updateSlider)
+
+    return () => {
+      if (animRef.current) cancelAnimationFrame(animRef.current)
+    }
+  }, [items])
+
+  // Mouse / Touch Dragging Handlers
+  const handleMouseDown = (e) => {
+    isDraggingRef.current = true
+    hasMovedRef.current = false
+    dragStartXRef.current = e.clientX
+    dragStartPosRef.current = posRef.current
+  }
+
+  const handleMouseMove = (e) => {
+    if (!isDraggingRef.current) return
+    const dx = e.clientX - dragStartXRef.current
+    if (Math.abs(dx) > 4) {
+      hasMovedRef.current = true
+    }
+    posRef.current = dragStartPosRef.current + dx
+  }
+
+  const handleMouseUp = () => {
+    isDraggingRef.current = false
+  }
+
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 1) {
+      isDraggingRef.current = true
+      hasMovedRef.current = false
+      dragStartXRef.current = e.touches[0].clientX
+      dragStartPosRef.current = posRef.current
+    }
+  }
+
+  const handleTouchMove = (e) => {
+    if (!isDraggingRef.current || e.touches.length !== 1) return
+    const dx = e.touches[0].clientX - dragStartXRef.current
+    if (Math.abs(dx) > 4) {
+      hasMovedRef.current = true
+    }
+    posRef.current = dragStartPosRef.current + dx
+  }
+
+  const handleTouchEnd = () => {
+    isDraggingRef.current = false
+  }
+
+  const handleCardClick = (course) => {
+    if (hasMovedRef.current) return
+    navigate(`/course-detail/${course._id || course.id}`)
+  }
+
+  const getImageUrl = (course) => {
+    const imgPath = course.thumbnail || course.coverImage || course.horizontalCarouselImage || course.verticalCarouselImage
+    if (!imgPath || imgPath === '/herocard.png') return '/courses/curator.png'
+    if (imgPath.startsWith('http://') || imgPath.startsWith('https://') || imgPath.startsWith('data:') || imgPath.startsWith('/courses/') || imgPath.startsWith('/gig_') || imgPath.startsWith('/digital_')) {
+      return imgPath
+    }
+    const rawBase = import.meta.env.VITE_IMAGE_URL || import.meta.env.VITE_BASE_URL || import.meta.env.VITE_API_BASE || 'https://api.edrilla.com'
+    const baseUrl = rawBase.replace(/\/api\/v1\/?$/, '')
+    return `${baseUrl}${imgPath.startsWith('/') ? '' : '/'}${imgPath}`
+  }
 
   return (
-    <section className="relative w-full py-12 bg-slate-50 overflow-hidden select-none">
-      <div className="flex flex-col gap-6 relative z-20">
-        {Object.entries(categoriesMap).map(([category, courses], idx) => (
-          <SwimlaneRow key={idx} category={category} courses={courses} navigate={navigate} />
+    <section
+      ref={sectionRef}
+      className="relative w-full py-8 md:py-14 pb-16 md:pb-24 overflow-hidden select-none bg-gradient-to-b from-[#f4f8fc] via-[#ebf4fa]/60 to-[#f8fafc]"
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={() => {
+        handleMouseUp()
+        isHoveredRef.current = false
+      }}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Edge Gradient Masks for Smooth Fade */}
+      <div className="absolute top-0 left-0 z-20 w-[14vw] md:w-[18vw] h-full bg-gradient-to-r from-[#f4f8fc] to-transparent pointer-events-none" />
+      <div className="absolute top-0 right-0 z-20 w-[14vw] md:w-[18vw] h-full bg-gradient-to-l from-[#f4f8fc] to-transparent pointer-events-none" />
+
+      {/* Marquee Track with ample padding so cards are fully displayed */}
+      <div
+        ref={trackRef}
+        className="flex items-center gap-7 md:gap-9 lg:gap-11 will-change-transform cursor-grab active:cursor-grabbing py-6"
+      >
+        {items.map((course, idx) => (
+          <div
+            key={`${course._id || course.id}-${idx}`}
+            ref={(el) => (cardsRef.current[idx] = el)}
+            onClick={() => handleCardClick(course)}
+            onMouseEnter={() => (isHoveredRef.current = true)}
+            onMouseLeave={() => (isHoveredRef.current = false)}
+            className="slider-card relative flex-shrink-0 w-[185px] md:w-[200px] cursor-pointer group"
+            style={{
+              opacity: 0.5,
+              transform: 'scale(0.85, 0.85)',
+            }}
+          >
+            {/* Glowing Blue Border for Center Card */}
+            <div
+              ref={(el) => (bordersRef.current[idx] = el)}
+              className="card-border absolute -inset-[2px] rounded-lg border-2 border-accent shadow-accent-large opacity-0 pointer-events-none transition-opacity duration-300"
+              style={{ opacity: 0 }}
+            />
+
+            {/* Inner Card Container */}
+            <div className="relative border border-slate-200/90 p-2.5 flex flex-col gap-2 overflow-hidden transition-colors duration-500 group-hover:border-accent/50 bg-white rounded-md shadow-md">
+              {/* Aspect Ratio 4:5 Image */}
+              <div className="relative aspect-[4/5] overflow-hidden bg-slate-100 rounded-sm">
+                <img
+                  alt={sanitizeDisplay(course.title)}
+                  className="w-full h-full object-cover opacity-95 transition-transform duration-700 group-hover:scale-105"
+                  src={getImageUrl(course)}
+                  loading="lazy"
+                />
+              </div>
+
+              {/* Course Meta Info */}
+              <div className="flex flex-col gap-1.5 px-1 pb-1">
+                <div className="flex items-center gap-2 text-accent justify-between border-b border-slate-100 pb-1.5">
+                  <RollingText
+                    text={course.category?.name || course.category || course.tag || 'COURSE'}
+                    className="font-montserrat text-[8px] tracking-[0.22em] font-bold uppercase leading-none h-3.5 truncate max-w-[130px]"
+                  />
+                  <div className="pointer-events-none text-accent">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                </div>
+
+                <h3 className="font-newsreader text-sm text-slate-900 font-normal tracking-tight leading-[1.2] line-clamp-2 min-h-[2.4em]">
+                  {sanitizeDisplay(course.title)}
+                </h3>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
     </section>

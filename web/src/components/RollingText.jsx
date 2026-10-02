@@ -31,7 +31,7 @@ const RollingText = ({ text = "", className = "", stagger = 0.02 }) => {
     const handleMouseLeave = () => tl.reverse()
 
     // Attach to the closest parent interactive element if possible, or itself
-    const target = containerRef.current.closest('button, a, .rolling-target') || containerRef.current
+    const target = containerRef.current.closest('button, a, .rolling-target, .slider-card, .group') || containerRef.current
     
     target.addEventListener('mouseenter', handleMouseEnter)
     target.addEventListener('mouseleave', handleMouseLeave)

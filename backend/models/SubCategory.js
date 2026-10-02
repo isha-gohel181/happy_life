@@ -13,7 +13,6 @@ const subCategorySchema = new mongoose.Schema({
   isDeleted: { type: Boolean, default: false }
 }, { timestamps: true });
 
-// Index for efficient querying by slug
-subCategorySchema.index({ slug: 1 });
+// Index for efficient querying by slug is already created by unique: true on slug
 
 export default mongoose.model('SubCategory', subCategorySchema);

@@ -36,7 +36,7 @@ void main() {
 class GlowPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = const Color(0xFFD99B2A)..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
+    final paint = Paint()..color = const Color(0xFF2171B5)..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
     canvas.drawCircle(Offset(size.width/2, size.height/2), 24, paint);
   }
   @override

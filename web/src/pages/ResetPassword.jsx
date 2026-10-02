@@ -63,7 +63,7 @@ const ResetPassword = () => {
     <div className="reset-page">
       <div className="reset-page__panel">
         <Link to="/" className="reset-page__logo flex items-center gap-2.5">
-          <img src="/logo/osa_logo.png" alt="OS Academy Logo" className="h-10 w-auto object-contain rounded-lg" />
+          <img src="/logo/osa_logo.png" alt="Happy Life Logo" className="h-11 w-auto object-contain" />
         </Link>
 
         <p className="reset-page__eyebrow">{t('resetPasswordTitle')}</p>

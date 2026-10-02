@@ -53,11 +53,7 @@ const navItems: NavItem[] = [
     name: "Course Feedbacks",
     path: "/course-feedbacks",
   },
-  {
-    icon: <PageIcon />,
-    name: "Free Content",
-    path: "/free-content",
-  },
+
   {
     icon: <PageIcon />,
     name: "Test Series",
@@ -573,21 +569,21 @@ const AppSidebar: React.FC = () => {
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <img
-                className="dark:hidden h-11 object-contain rounded-lg"
+                className="dark:hidden h-11 object-contain"
                 src="/images/logo/osa_logo.png"
-                alt="OS Academy Logo"
+                alt="Happy Life Logo"
               />
               <img
-                className="hidden dark:block h-11 object-contain rounded-lg"
+                className="hidden dark:block h-11 object-contain"
                 src="/images/logo/osa_logo.png"
-                alt="OS Academy Logo"
+                alt="Happy Life Logo"
               />
             </>
           ) : (
             <img
-              className="h-10 w-10 object-contain rounded-full"
+              className="h-10 w-auto max-w-[40px] object-contain"
               src="/images/logo/osa_logo.png"
-              alt="OS Academy Logo"
+              alt="Happy Life Logo"
             />
           )}
         </Link>

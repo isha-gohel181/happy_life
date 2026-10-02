@@ -219,16 +219,16 @@
   gap: 0.8rem;
   font-size: 0.65rem;
   letter-spacing: 0.2em;
-  color: #D99B2A;
+  color: #2171B5;
   font-weight: 800;
 }
 
 .status-dot {
   width: 8px;
   height: 8px;
-  background-color: #D99B2A;
+  background-color: #2171B5;
   border-radius: 50%;
-  box-shadow: 0 0 10px rgba(217, 155, 42, 0.6);
+  box-shadow: 0 0 10px rgba(33, 113, 181, 0.6);
   animation: pulse 2s infinite;
 }
 
@@ -297,7 +297,7 @@
 .stat-value {
   font-size: 3rem;
   font-weight: 800;
-  color: #D99B2A;
+  color: #2171B5;
   margin-bottom: 0.3rem;
   font-family: var(--font-newsreader);
 }
@@ -477,7 +477,7 @@
 
 .forgot-modal__eyebrow {
   margin: 0 0 0.35rem;
-  color: #D99B2A;
+  color: #2171B5;
   font-size: 0.65rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -563,7 +563,7 @@
 
 .forgot-modal__input:focus {
   outline: none;
-  border-color: #D99B2A;
+  border-color: #2171B5;
 }
 
 .forgot-modal__input::placeholder {
@@ -602,13 +602,13 @@
 }
 
 .forgot-modal__primary {
-  background: #D99B2A;
+  background: #2171B5;
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(217, 155, 42, 0.25);
+  box-shadow: 0 4px 12px rgba(33, 113, 181, 0.25);
 }
 
 .forgot-modal__primary:hover {
-  background: #c2841f;
+  background: #1b5c94;
 }
 
 .forgot-modal__secondary:disabled,

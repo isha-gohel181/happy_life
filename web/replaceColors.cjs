@@ -25,16 +25,13 @@ let count = 0;
 files.forEach(file => {
     let content = fs.readFileSync(file, 'utf8');
     
-    // Replace hex
+    // Replace hex and rgba variants of the orange/amber theme to blue #2171B5
     let newContent = content
-        .replace(/#b1e346/gi, '#8B5CF6')
-        // Replace rgb/rgba variants
-        .replace(/163,\s*230,\s*53/g, '139, 92, 246')
-        .replace(/177,\s*227,\s*70/g, '139, 92, 246')
-        // Replace bg-[#b1e346] classes with bg-accent or exact hex
-        .replace(/bg-\[#b1e346\]/gi, 'bg-accent')
-        .replace(/text-\[#b1e346\]/gi, 'text-accent')
-        .replace(/border-\[#b1e346\]/gi, 'border-accent');
+        .replace(/#D99B2A/gi, '#2171B5')
+        .replace(/217,\s*155,\s*42/g, '33, 113, 181')
+        .replace(/#c2841f/gi, '#1b5c94')
+        .replace(/#f3b94a/gi, '#4b9ee5')
+        .replace(/#fbf9f4/gi, '#f8fafc');
     
     if (content !== newContent) {
         fs.writeFileSync(file, newContent, 'utf8');
@@ -42,4 +39,4 @@ files.forEach(file => {
         count++;
     }
 });
-console.log(`Successfully updated colors in ${count} files.`);
+console.log(`Successfully updated theme colors in ${count} files.`);

@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   -webkit-user-select: none;
@@ -10,7 +11,9 @@ html, body {
 }
 
 /* Enable selection in forms for usability */
-input, textarea, [contenteditable="true"] {
+input,
+textarea,
+[contenteditable="true"] {
   -webkit-user-select: text;
   -moz-user-select: text;
   -ms-user-select: text;
@@ -23,6 +26,7 @@ input, textarea, [contenteditable="true"] {
   body * {
     visibility: hidden !important;
   }
+
   body::after {
     content: "Security Policy: Printing is strictly prohibited for this protected content.";
     visibility: visible !important;
@@ -40,52 +44,60 @@ input, textarea, [contenteditable="true"] {
 
 @theme {
   --font-inter: "Inter", sans-serif;
-  --font-montserrat: "Inter", sans-serif; /* Overriding for global update */
-  --font-newsreader: "Inter", sans-serif;
-  --font-Montserrat: "Inter", sans-serif;
-  --font-anton: "Inter", sans-serif;
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-newsreader: "Newsreader", serif;
+  --font-Montserrat: "Montserrat", sans-serif;
+  --font-anton: "Anton", sans-serif;
+  --font-jetbrains: "JetBrains Mono", monospace;
   --font-signature: "Mrs Saint Delafield", cursive;
 
-  /* OS Academy Gold Amber Palette (#D99B2A) */
-  --color-accent: #D99B2A; /* Primary Golden Amber */
-  --color-accent-secondary: #f3b94a; /* Warm Gold */
-  --color-dark: #fbf9f4; /* Warm premium light bg */
-  --color-normal: #0F172A; /* Slate 900 High Contrast Text */
-  --color-description: #475569; /* Slate 600 Body Description Text */
-  --color-border: rgba(217, 155, 42, 0.12); /* Subtle gold border */
-  --color-card: #FFFFFF; /* Pure White Elevated Card */
-  --color-card-border: rgba(217, 155, 42, 0.08); /* Subtle gold card edge */
+  /* Ocean Blue Palette (#2171B5) & Crisp Light Theme */
+  --color-accent: #2171B5;
+  /* Primary Ocean Blue */
+  --color-accent-secondary: #4b9ee5;
+  /* Bright Sky Blue */
+  --color-dark: #f8fafc;
+  /* Crisp Light Background */
+  --color-normal: #0F172A;
+  /* Slate 900 High Contrast Text */
+  --color-description: #475569;
+  /* Slate 600 Body Text */
+  --color-border: rgba(33, 113, 181, 0.12);
+  /* Subtle blue border */
+  --color-card: #FFFFFF;
+  /* Pure White Card */
+  --color-card-border: rgba(33, 113, 181, 0.08);
 
-  --shadow-accent-large: 0 10px 30px -10px rgba(217, 155, 42, 0.4);
-  --shadow-accent-soft: 0 4px 20px -2px rgba(217, 155, 42, 0.3);
+  --shadow-accent-large: 0 10px 30px -5px rgba(33, 113, 181, 0.45), 0 0 20px rgba(33, 113, 181, 0.25);
+  --shadow-accent-soft: 0 4px 20px -2px rgba(33, 113, 181, 0.3);
 
   /* Override color palettes dynamically */
-  --color-amber-50: #fdfaf3;
-  --color-amber-100: #fbf4e4;
-  --color-amber-200: #edd395;
-  --color-amber-300: #e4bd64;
-  --color-amber-400: #D99B2A;
-  --color-amber-500: #c2841f;
-  --color-amber-600: #9e6717;
-  --color-amber-700: #7d4f13;
-  --color-amber-800: #5a380d;
-  --color-amber-900: #362106;
+  --color-amber-50: #f0f7fd;
+  --color-amber-100: #e0effa;
+  --color-amber-200: #badcf6;
+  --color-amber-300: #8dc4f0;
+  --color-amber-400: #2171B5;
+  --color-amber-500: #1b5c94;
+  --color-amber-600: #164974;
+  --color-amber-700: #133d60;
+  --color-amber-800: #11324e;
+  --color-amber-900: #0b2034;
 
-  --color-yellow-50: #fdfaf3;
-  --color-yellow-100: #fbf4e4;
-  --color-yellow-200: #edd395;
-  --color-yellow-300: #e4bd64;
-  --color-yellow-400: #D99B2A;
-  --color-yellow-500: #c2841f;
-  --color-yellow-600: #9e6717;
-  --color-yellow-700: #7d4f13;
-  --color-yellow-800: #5a380d;
-  --color-yellow-900: #362106;
+  --color-yellow-50: #f0f7fd;
+  --color-yellow-100: #e0effa;
+  --color-yellow-200: #badcf6;
+  --color-yellow-300: #8dc4f0;
+  --color-yellow-400: #2171B5;
+  --color-yellow-500: #1b5c94;
+  --color-yellow-600: #164974;
+  --color-yellow-700: #133d60;
+  --color-yellow-800: #11324e;
+  --color-yellow-900: #0b2034;
 
-  --color-slate-50: #fbf9f4;
-  --color-slate-100: #f6f1e5;
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
 
-  --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
+  --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 4px 6px -2px rgba(15, 23, 42, 0.04);
 
   --blur-custom: 48.3px;
   --blur-glass: 12px;
@@ -135,6 +147,7 @@ input, textarea, [contenteditable="true"] {
 @utility scrollbar-hide {
   -ms-overflow-style: none !important;
   scrollbar-width: none !important;
+
   &::-webkit-scrollbar {
     display: none !important;
   }
@@ -151,7 +164,7 @@ input, textarea, [contenteditable="true"] {
 
 .scrollbar-thin {
   scrollbar-width: thin !important;
-  scrollbar-color: rgba(255,255,255,0.15) transparent !important;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent !important;
 }
 
 .scrollbar-thin::-webkit-scrollbar {
@@ -164,12 +177,12 @@ input, textarea, [contenteditable="true"] {
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.15) !important;
+  background: rgba(255, 255, 255, 0.15) !important;
   border-radius: 0 !important;
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.25) !important;
+  background: rgba(255, 255, 255, 0.25) !important;
 }
 
 @utility ease-memo {
@@ -183,8 +196,8 @@ html.lenis body {
 }
 
 
-button{
-  text-align:center!important;
+button {
+  text-align: center !important;
   cursor: pointer;
 }
 
@@ -287,10 +300,12 @@ button{
   scrollbar-width: thin;
   scrollbar-color: var(--color-accent) transparent;
 }
+
 .scrollbar-hide {
   -ms-overflow-style: none !important;
   scrollbar-width: none !important;
 }
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none !important;
   width: 0 !important;
@@ -298,8 +313,13 @@ button{
 }
 
 @keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .animate-spin-slow {
@@ -311,10 +331,23 @@ button{
 }
 
 @keyframes scan {
-  0% { top: 0%; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
 }
 
 @utility animate-scan {
@@ -327,11 +360,25 @@ button{
 
 
 @keyframes float-slow {
-  0% { transform: translate(5%, 5%); }
-  25% { transform: translate(75%, 20%); }
-  50% { transform: translate(20%, 75%); }
-  75% { transform: translate(65%, 45%); }
-  100% { transform: translate(5%, 5%); }
+  0% {
+    transform: translate(5%, 5%);
+  }
+
+  25% {
+    transform: translate(75%, 20%);
+  }
+
+  50% {
+    transform: translate(20%, 75%);
+  }
+
+  75% {
+    transform: translate(65%, 45%);
+  }
+
+  100% {
+    transform: translate(5%, 5%);
+  }
 }
 
 @utility animate-float-slow {
@@ -347,7 +394,8 @@ button{
   @apply leading-[1.8] text-description tracking-wide mb-6;
 }
 
-.news-content-html h3, .news-content-html h2 {
+.news-content-html h3,
+.news-content-html h2 {
   @apply font-newsreader italic text-3xl text-normal mt-12 mb-6;
 }
 
@@ -355,7 +403,8 @@ button{
   @apply border-white/5 my-12;
 }
 
-.news-content-html ul, .news-content-html ol {
+.news-content-html ul,
+.news-content-html ol {
   @apply flex flex-col gap-4 mb-8 pl-6;
 }
 
@@ -375,7 +424,8 @@ button{
   @apply w-full border-collapse border border-white/5 bg-white/[0.01];
 }
 
-.news-content-html th, .news-content-html td {
+.news-content-html th,
+.news-content-html td {
   @apply border border-white/5 p-4 text-[10px] uppercase tracking-wider text-left;
 }
 
@@ -387,25 +437,25 @@ button{
   @apply border-l-2 border-accent/30 bg-accent/5 p-8 italic text-lg text-accent/80 my-10;
 }
 
-/* Custom contrast helper overrides for the deep blue theme */
-.bg-accent, 
+/* Custom contrast helper overrides for the Ocean Blue theme */
+.bg-accent,
 .bg-amber-400,
 .bg-yellow-400,
-.hover\:bg-accent:hover, 
-.hover\:bg-amber-400:hover, 
+.hover\:bg-accent:hover,
+.hover\:bg-amber-400:hover,
 .hover\:bg-yellow-400:hover,
-.group:hover .group-hover\:bg-accent, 
+.group:hover .group-hover\:bg-accent,
 .group:hover .group-hover\:bg-amber-400,
 .group:hover .group-hover\:bg-yellow-400 {
   color: #ffffff !important;
 }
 
 /* Ensure text children inside deep blue buttons/components also inherit or display as white */
-.bg-accent *, 
-.bg-amber-400 *, 
+.bg-accent *,
+.bg-amber-400 *,
 .bg-yellow-400 *,
-.hover\:bg-accent:hover *, 
-.hover\:bg-amber-400:hover *, 
+.hover\:bg-accent:hover *,
+.hover\:bg-amber-400:hover *,
 .hover\:bg-yellow-400:hover *,
 .group:hover .group-hover\:bg-accent *,
 .group:hover .group-hover\:bg-amber-400 * {
@@ -422,7 +472,9 @@ button{
   color: #ffffff !important;
 }
 
-/* Specific button and input focus outlines to use #D99B2A */
-input:focus, textarea:focus, select:focus {
-  border-color: #D99B2A !important;
+/* Specific button and input focus outlines to use accent */
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-accent) !important;
 }
