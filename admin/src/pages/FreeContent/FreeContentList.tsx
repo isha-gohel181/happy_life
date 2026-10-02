@@ -43,7 +43,7 @@ export default function FreeContentList() {
   return (
     <>
       <PageMeta
-        title="Free Content | OS Academy"
+        title="Free Content | Happy Life"
         description="Manage Free Content."
       />
       <PageBreadcrumb pageTitle="Free Content" />

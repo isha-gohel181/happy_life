@@ -322,10 +322,10 @@ const Contact = () => {
                                 <h3 className="font-newsreader text-xl italic text-amber-800 font-bold mb-3">{t('socialMedia')}</h3>
                                 <div className="flex flex-col gap-2">
                                     <div className="font-jetbrains text-xs text-slate-600">
-                                        YouTube – <a href="https://youtube.com/@askosacademy?si=HGd1aN1pBqCPGw1T" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">OS Academy</a>
+                                        YouTube – <a href="https://youtube.com/@askosacademy?si=HGd1aN1pBqCPGw1T" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">Happy Life</a>
                                     </div>
                                     <div className="font-jetbrains text-xs text-slate-600">
-                                        Instagram – <a href="https://t.me/os_academy" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">@osacademy</a>
+                                        Instagram – <a href="https://t.me/os_academy" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">@happylife</a>
                                     </div>
                                     <div className="font-jetbrains text-xs text-slate-600">
                                         WhatsApp – <a href="https://wa.me/message/7BSA76CHILZDK1" target="_blank" rel="noopener noreferrer" className="text-amber-800 font-bold hover:underline transition-all">WhatsApp</a>

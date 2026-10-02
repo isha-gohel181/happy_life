@@ -128,7 +128,7 @@ export default function AddEditFreeContent() {
   return (
     <>
       <PageMeta
-        title={`${isEdit ? "Edit" : "Add"} Free Content | OS Academy`}
+        title={`${isEdit ? "Edit" : "Add"} Free Content | Happy Life`}
         description="Manage Free Content."
       />
       <PageBreadcrumb pageTitle={`${isEdit ? "Edit" : "Add"} Free Content`} />

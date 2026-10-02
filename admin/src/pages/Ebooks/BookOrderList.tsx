@@ -61,7 +61,7 @@ export default function BookOrderList() {
 
   return (
     <div>
-      <PageMeta title="Book Orders | OS Academy" description="Manage physical book orders" />
+      <PageMeta title="Book Orders | Happy Life" description="Manage physical book orders" />
       <PageBreadcrumb pageTitle="Book Orders" />
       
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-800">

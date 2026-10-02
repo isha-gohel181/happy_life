@@ -117,7 +117,7 @@ export default function AddEditTestSeries() {
 
   return (
     <>
-      <PageMeta title={`${isEdit ? 'Edit' : 'Add'} Test Series | OS Academy`} description="Manage Test Series" />
+      <PageMeta title={`${isEdit ? 'Edit' : 'Add'} Test Series | Happy Life`} description="Manage Test Series" />
       <PageBreadcrumb pageTitle={`${isEdit ? 'Edit' : 'Add'} Test Series`} />
       
       <div className="bg-white rounded-2xl border border-gray-200 p-6 dark:bg-gray-900 dark:border-gray-800">
