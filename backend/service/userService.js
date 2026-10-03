@@ -12,7 +12,7 @@ class UserService {
   // Async Password comparison
   async comparePassword(inputPassword, hashedPassword) {
     try {
-      console?.log("inputPassword:", inputPassword);
+      // console?.log("inputPassword:", inputPassword);
       console?.log("hashedPassword:", hashedPassword);
       const isMatch = await bcrypt.compare(inputPassword, hashedPassword);
       if (isMatch) {
