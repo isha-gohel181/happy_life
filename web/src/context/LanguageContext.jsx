@@ -101,7 +101,7 @@ const translations = {
 
     // Purchases & Ledger
     archiveLedger: 'ARCHIVE & LEDGER',
-    purchasesLedgerSub: 'Persistent record of intellectual acquisitions and institutional investments across the Edrilla network.',
+    purchasesLedgerSub: 'Persistent record of course enrollments, consultation packages, and transaction receipts across Happy Life.',
     moduleArchive: 'MODULE ARCHIVE',
     acquisition: 'ACQUISITION',
     amount: 'AMOUNT',
@@ -238,10 +238,10 @@ const translations = {
     confirmLogoutMessage: 'You are about to terminate your active session. You will be returned to the main portal shortly.',
     logOutNowBtn: 'LOG OUT NOW',
     welcomeBackTitle: 'Welcome back',
-    loginSubtitle: 'ENTER YOUR CREDENTIALS TO ACCESS THE VANGUARD.',
+    loginSubtitle: 'ENTER YOUR CREDENTIALS TO ACCESS YOUR ACCOUNT.',
     continueWithGoogle: 'CONTINUE WITH GOOGLE',
     joinTheCircleTitle: 'Join the circle',
-    signupSubtitle: 'COMMENCE YOUR PATH TO MASTERY.',
+    signupSubtitle: 'COMMENCE YOUR PATH TO ENERGY ALIGNMENT.',
     joinWithGoogle: 'JOIN WITH GOOGLE',
     sendOtpBtn: 'SEND OTP',
     resendOtpBtn: 'RESEND OTP',
@@ -634,7 +634,7 @@ const translations = {
 
     // Purchases & Ledger
     archiveLedger: 'संग्रह और बहीखाता',
-    purchasesLedgerSub: 'Edrilla नेटवर्क पर बौद्धिक अधिग्रहण और संस्थागत निवेश का स्थायी रिकॉर्ड।',
+    purchasesLedgerSub: 'हैप्पी लाइफ पर आपके कोर्स नामांकन, परामर्श पैकेज और रसीदों का स्थायी रिकॉर्ड।',
     moduleArchive: 'मॉड्यूल संग्रह',
     acquisition: 'अधिग्रहण तिथि',
     amount: 'राशि',
@@ -771,10 +771,10 @@ const translations = {
     confirmLogoutMessage: 'आप अपना सक्रिय सत्र समाप्त करने वाले हैं। आपको जल्द ही मुख्य पोर्टल पर वापस भेज दिया जाएगा।',
     logOutNowBtn: 'अभी लॉगआउट करें',
     welcomeBackTitle: 'वापसी पर स्वागत है',
-    loginSubtitle: 'अपने खाते में प्रवेश करने के लिए क्रेडेंशियल दर्ज करें।',
+    loginSubtitle: 'अपने खाते में प्रवेश करने के लिए विवरण दर्ज करें।',
     continueWithGoogle: 'गूगल के साथ आगे बढ़ें',
     joinTheCircleTitle: 'समुदाय से जुड़ें',
-    signupSubtitle: 'महारत की अपनी यात्रा शुरू करें।',
+    signupSubtitle: 'सुख, शांति और समृद्धि की अपनी यात्रा शुरू करें।',
     joinWithGoogle: 'गूगल के साथ जुड़ें',
     sendOtpBtn: 'ओटीपी भेजें',
     resendOtpBtn: 'पुनः ओटीपी भेजें',

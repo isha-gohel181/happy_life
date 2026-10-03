@@ -158,7 +158,7 @@ const Signup = () => {
                 id="signup-name"
                 type="text"
                 className="signup-input"
-                placeholder="Aurelius Smith"
+                placeholder="John Doe"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -173,7 +173,7 @@ const Signup = () => {
                 id="signup-phone"
                 type="tel"
                 className="signup-input"
-                placeholder="+1 234 567 8900"
+                placeholder="+91 98765 43210"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 autoComplete="tel"
@@ -187,7 +187,7 @@ const Signup = () => {
                 id="signup-email"
                 type="email"
                 className="signup-input"
-                placeholder="scholar@edrilla.com"
+                placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -308,7 +308,7 @@ const Signup = () => {
         </div>
 
         <div className="signup-footer">
-          © 2024 EDRILLA V2.0. ALL RIGHTS RESERVED.
+          © {new Date().getFullYear()} HAPPY LIFE. ALL RIGHTS RESERVED.
         </div>
       </div>
 
@@ -316,34 +316,34 @@ const Signup = () => {
       <div className="signup-right">
         <div className="system-status">
           <div className="status-dot"></div>
-          ENROLLMENT ACTIVE
+          ASTRO-VASTU PORTAL
         </div>
 
         <div className="bg-text-wrap">
-          <div className="bg-text">Build.</div>
-          <div className="bg-text">Build.</div>
-          <div className="bg-text">Build.</div>
+          <div className="bg-text">Align.</div>
+          <div className="bg-text">Prosper.</div>
+          <div className="bg-text">Harmonize.</div>
         </div>
 
         <div className="testimonial-card">
           <p className="testimonial-quote">
-            "Joining Edrilla isn't just about learning; it's about entering an ecosystem designed for those who refuse to settle for the ordinary."
+            "Happy Life Astro offers simple, doable Vedic remedies without superstition. It completely harmonized our energy and unlocked career success."
           </p>
         </div>
 
         <div className="stats-wrap">
           <div className="stat-item">
-            <span className="stat-value">84k+</span>
-            <span className="stat-label">{t('studentsEnrolled')}</span>
+            <span className="stat-value">25k+</span>
+            <span className="stat-label">{t('activeLearners')}</span>
           </div>
           <div className="stat-item">
-            <span className="stat-value">Elite</span>
-            <span className="stat-label">{t('accessTier')}</span>
+            <span className="stat-value">98.2%</span>
+            <span className="stat-label">{t('completionRate')}</span>
           </div>
         </div>
 
         <p className="right-description">
-          Unlock your potential within a community that values deep work and tactical precision.
+          Unlock your life's true potential with personalized Kundli insights, space harmonization, and positive daily energy.
         </p>
 
         <div className="nav-arrows">

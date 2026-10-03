@@ -274,7 +274,7 @@ const Contact = () => {
                                 <div className="flex justify-between items-center opacity-40">
                                     <span className="font-jetbrains text-[8px] tracking-[0.4em] uppercase text-slate-500">Coordinates</span>
                                     <div className="h-[1px] w-16 bg-slate-300" />
-                                    <span className="font-jetbrains text-[8px] tracking-[0.1em] uppercase text-slate-500">Edrilla HQ</span>
+                                    <span className="font-jetbrains text-[8px] tracking-[0.1em] uppercase text-slate-500">Happy Life HQ</span>
                                 </div>
 
                                 <div className="space-y-6">

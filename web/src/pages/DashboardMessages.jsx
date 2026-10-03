@@ -20,7 +20,7 @@ const DashboardMessages = () => {
     const [volumes, setVolumes] = useState(new Array(30).fill(2));
     const [messages, setMessages] = useState({
         support: [
-            { id: 1, text: "👋 Welcome to Edrilla! How can we help you today?", sender: "Support Agent", time: "10:30 AM", isSent: false },
+            { id: 1, text: "👋 Welcome to Happy Life! How can we help you today?", sender: "Support Agent", time: "10:30 AM", isSent: false },
             { id: 2, text: "I'm having some trouble with the course module.", sender: "You", time: "10:32 AM", isSent: true },
             { id: 3, text: "Sure, could you send a screenshot of the issue?", sender: "Support Agent", time: "10:35 AM", isSent: false }
         ]

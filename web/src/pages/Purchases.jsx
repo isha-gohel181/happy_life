@@ -64,7 +64,7 @@ const Purchases = () => {
                </h1>
             </div>
             <p className="max-w-md font-jetbrains text-xs text-slate-600 font-medium leading-relaxed uppercase tracking-[0.15em] text-left md:text-right">
-               {t('purchasesLedgerSub') || 'Persistent record of intellectual acquisitions and institutional investments across the Edrilla network.'}
+               {t('purchasesLedgerSub') || 'Persistent record of course enrollments, consultation packages, and transaction receipts across Happy Life.'}
             </p>
           </div>
 

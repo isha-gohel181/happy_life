@@ -151,7 +151,7 @@ const Login = () => {
                 id="login-email"
                 type="email"
                 className="login-input"
-                placeholder="scholar@edrilla.com"
+                placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -219,7 +219,7 @@ const Login = () => {
         </div>
 
         <div className="login-footer">
-          © 2024 EDRILLA V2.0. ALL RIGHTS RESERVED.
+          © {new Date().getFullYear()} HAPPY LIFE. ALL RIGHTS RESERVED.
         </div>
       </div>
 
@@ -227,18 +227,18 @@ const Login = () => {
       <div className="login-right">
         <div className="system-status">
           <div className="status-dot"></div>
-          SYSTEM OPERATIONAL
+          ASTRO-VASTU PORTAL
         </div>
 
         <div className="bg-text-wrap">
-          <div className="bg-text">Learn.</div>
-          <div className="bg-text">Learn.</div>
-          <div className="bg-text">Learn.</div>
+          <div className="bg-text">Align.</div>
+          <div className="bg-text">Prosper.</div>
+          <div className="bg-text">Harmonize.</div>
         </div>
 
         <div className="testimonial-card">
           <p className="testimonial-quote">
-            "The precision of Edrilla's curriculum isn't just educational—it's transformative. It's the standard for those who reject the average."
+            "The practical guidance and logical Astro-Vastu remedies by Dr. Yogesh Sharma transformed our environment and brought profound clarity to our life."
           </p>
         </div>
 
@@ -254,7 +254,7 @@ const Login = () => {
         </div>
 
         <p className="right-description">
-          Join an elite network of practitioners bridging the gap between theory and mastery.
+          Connect with authentic Vedic wisdom and personalized Astro-Vastu remedies for lasting peace and prosperity.
         </p>
 
         <div className="nav-arrows">
@@ -300,7 +300,7 @@ const Login = () => {
                 id="forgot-email"
                 type="email"
                 className="forgot-modal__input"
-                placeholder="scholar@edrilla.com"
+                placeholder="you@example.com"
                 value={forgotEmail}
                 onChange={(event) => setForgotEmail(event.target.value)}
                 autoComplete="email"
