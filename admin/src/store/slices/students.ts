@@ -71,7 +71,7 @@ interface StudentState {
   };
 }
 
-const API_BASE_URL = import.meta.env.VITE_BASE_URL || "https://api.edrilla.com";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_BASE_URL || "https://happy-life-sx03.onrender.com";
 
 export const fetchAllStudents = createAsyncThunk<
   { students: Student[]; pagination: StudentState["pagination"] },

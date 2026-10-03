@@ -155,7 +155,7 @@ const TestimonialsPage: React.FC = () => {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [videoPreview, setVideoPreview] = useState<string | null>(null);
 
-    const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://api.edrilla.com';
+    const BASE_URL = import.meta.env.VITE_IMAGE_URL || import.meta.env.VITE_BASE_URL || 'https://happy-life-sx03.onrender.com';
     const getMediaUrl = (path: string) => {
         if (!path) return '';
         if (path.startsWith('http')) return path;

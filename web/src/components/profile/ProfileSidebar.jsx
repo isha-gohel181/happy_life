@@ -47,7 +47,7 @@ const ProfileSidebar = ({ compact = false }) => {
             {/* Avatar Protocol */}
             {user?.profilePicture ? (
                <img 
-                  src={user.profilePicture.startsWith('http') ? user.profilePicture : `https://api.edrilla.com/uploads/${user.profilePicture}`} 
+                  src={user.profilePicture.startsWith('http') ? user.profilePicture : `https://happy-life-sx03.onrender.com/uploads/${user.profilePicture}`} 
                   alt={user.fullName} 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                />

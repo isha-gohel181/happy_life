@@ -196,7 +196,7 @@ const CourseSlider = () => {
     if (imgPath.startsWith('http://') || imgPath.startsWith('https://') || imgPath.startsWith('data:') || imgPath.startsWith('/courses/') || imgPath.startsWith('/gig_') || imgPath.startsWith('/digital_')) {
       return imgPath
     }
-    const rawBase = import.meta.env.VITE_IMAGE_URL || import.meta.env.VITE_BASE_URL || import.meta.env.VITE_API_BASE || 'https://api.edrilla.com'
+    const rawBase = import.meta.env.VITE_IMAGE_URL || import.meta.env.VITE_BASE_URL || import.meta.env.VITE_API_BASE || 'https://happy-life-sx03.onrender.com'
     const baseUrl = rawBase.replace(/\/api\/v1\/?$/, '')
     return `${baseUrl}${imgPath.startsWith('/') ? '' : '/'}${imgPath}`
   }

@@ -42,7 +42,7 @@ import Editor from "../../components/Editor";
 import LandingPageSections from "./LandingPageSections";
 import AddReview from "./AddReview";
 
-const baseUrl = import.meta.env.VITE_BASE_URL || "https://api.edrilla.com/";
+const baseUrl = import.meta.env.VITE_IMAGE_URL || import.meta.env.VITE_BASE_URL || "https://happy-life-sx03.onrender.com/";
 
 // Success Popup Component (unchanged)
 const SuccessPopup = ({

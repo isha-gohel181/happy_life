@@ -49,7 +49,7 @@ const EditJob: React.FC = () => {
   });
   // Base URL for images
   const IMAGE_BASE_URL =
-    import.meta.env.VITE_BASE_URL || "https://api.edrilla.com/";
+    import.meta.env.VITE_IMAGE_URL || import.meta.env.VITE_BASE_URL || "https://happy-life-sx03.onrender.com/";
 
   const [formData, setFormData] = useState<JobFormData>({
     title: "",

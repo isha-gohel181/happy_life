@@ -21,6 +21,6 @@ export default defineConfig({
   server: {
     host: true,
     port: 5174,
-    allowedHosts: ["admin.edrilla.com"],
+    allowedHosts: true,
   },
 });

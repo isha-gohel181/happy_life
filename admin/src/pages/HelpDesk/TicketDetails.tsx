@@ -63,7 +63,7 @@ const TicketDetails: React.FC<{ isEditMode: boolean }> = ({ isEditMode }) => {
     type: "",
   });
   const ImageUrl =
-    import.meta.env.VITE_IMAGE_URL || "https://api.edrilla.com/uploads/";
+    import.meta.env.VITE_IMAGE_URL || "https://happy-life-sx03.onrender.com/uploads/";
 
   useEffect(() => {
     if (ticketId && !ticket) {

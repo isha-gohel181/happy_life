@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://api.edrilla.com';
+const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://happy-life-sx03.onrender.com';
 
 export const fetchMyThreads = createAsyncThunk(
   'forum/fetchMyThreads',
@@ -174,7 +174,7 @@ export const createThread = createAsyncThunk(
         attachments.forEach(file => formData.append('attachments', file));
       }
 
-      const response = await fetch(`https://api.edrilla.com/forum/create`, {
+      const response = await fetch(`https://happy-life-sx03.onrender.com/forum/create`, {
         method: 'POST',
         headers,
         body: formData

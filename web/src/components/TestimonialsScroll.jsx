@@ -41,7 +41,7 @@ const TestimonialsScroll = ({ reviews = [] }) => {
     return validReviews.map(r => {
       let avatar = null;
       if (r.image) {
-        const rawBase = import.meta.env.VITE_IMAGE_URL || import.meta.env.VITE_BASE_URL || import.meta.env.VITE_API_BASE || 'https://api.edrilla.com';
+        const rawBase = import.meta.env.VITE_IMAGE_URL || import.meta.env.VITE_BASE_URL || import.meta.env.VITE_API_BASE || 'https://happy-life-sx03.onrender.com';
         const baseUrl = rawBase.replace(/\/api\/v1\/?$/, '');
         avatar = `${baseUrl}${r.image.startsWith('/') ? '' : '/'}${r.image}`;
       }

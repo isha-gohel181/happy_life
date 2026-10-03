@@ -112,7 +112,7 @@ const ProfileSkills = () => {
                      <div className="flex gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
                         {doc.Doc && (
                            <a 
-                              href={`https://api.edrilla.com/uploads/${doc.Doc}`} 
+                              href={`https://happy-life-sx03.onrender.com/uploads/${doc.Doc}`} 
                               target="_blank" 
                               rel="noreferrer"
                               className="text-accent hover:text-white transition-colors"

@@ -173,7 +173,7 @@ const DashboardPersonality = () => {
         category: c.categoryId?.name?.toUpperCase() || "SKILL",
         title: c.title,
         description: c.description,
-        image: c.thumbnail ? (c.thumbnail.startsWith('http') ? c.thumbnail : `https://api.edrilla.com/${c.thumbnail}`) : "/news_placeholder.png"
+        image: c.thumbnail ? (c.thumbnail.startsWith('http') ? c.thumbnail : `https://happy-life-sx03.onrender.com/${c.thumbnail}`) : "/news_placeholder.png"
     })) || resultData.recommendedCourses
   }
 

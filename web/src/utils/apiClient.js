@@ -1,5 +1,5 @@
-// const rawBase = import.meta.env.VITE_BASE_URL || 'https://api.edrilla.com';
-const rawBase = import.meta.env.VITE_BASE_URL || 'https://api.edrilla.com';
+// const rawBase = import.meta.env.VITE_BASE_URL || 'https://happy-life-sx03.onrender.com';
+const rawBase = import.meta.env.VITE_BASE_URL || 'https://happy-life-sx03.onrender.com';
 const BASE = rawBase.includes('/api/v1') ? rawBase : `${rawBase}`;
 
 export async function authorizedFetch(path, opts = {}) {

@@ -53,7 +53,8 @@ export default function AddEditTestSeries() {
           isActive: ts.isActive,
         });
         if (ts.coverImage) {
-          setCoverImagePreview(`${import.meta.env.VITE_IMAGE_URL || 'http://localhost:5000'}${ts.coverImage}`);
+          const imgBase = (import.meta.env.VITE_IMAGE_URL || import.meta.env.VITE_BASE_URL || 'https://happy-life-sx03.onrender.com').replace(/\/+$/, '');
+          setCoverImagePreview(ts.coverImage.startsWith('http') ? ts.coverImage : `${imgBase}${ts.coverImage.startsWith('/') ? '' : '/'}${ts.coverImage}`);
         }
         // If it has sections, wrap it in a mock object that matches what Quiz component expects
         if (ts.sections && ts.sections.length > 0) {

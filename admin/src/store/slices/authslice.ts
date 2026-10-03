@@ -13,7 +13,11 @@ import type {
 } from "../../types/auth";
 
 // API base URL
-const API_BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000/";
+const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL ||
+  import.meta.env.VITE_BASE_URL ||
+  "https://happy-life-sx03.onrender.com"
+).replace(/\/+$/, "");
 
 // Helper function to handle API errors
 const handleApiError = (error: unknown): string => {
@@ -132,7 +136,7 @@ export const logout = createAsyncThunk<void, void, { rejectValue: string }>(
         localStorage.getItem("accessToken") || localStorage.getItem("token");
 
       if (token) {
-        await fetch(`${API_BASE_URL}api/v1/logout`, {
+        await fetch(`${API_BASE_URL}/logout`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -300,7 +304,7 @@ export const forgotPassword = createAsyncThunk<
   { rejectValue: string }
 >("auth/forgotPassword", async (email, { rejectWithValue }) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+    const response = await fetch(`${API_BASE_URL}/forgot-password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -326,7 +330,7 @@ export const resetPassword = createAsyncThunk<
   { rejectValue: string }
 >("auth/resetPassword", async ({ token, password }, { rejectWithValue }) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+    const response = await fetch(`${API_BASE_URL}/reset-password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

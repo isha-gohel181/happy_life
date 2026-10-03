@@ -42,7 +42,8 @@ export default function AddEditEbook() {
           isActive: data.ebook.isActive,
         });
         if (data.ebook.coverImage) {
-          setCoverImagePreview(`${import.meta.env.VITE_IMAGE_URL || 'http://localhost:5000'}${data.ebook.coverImage}`);
+          const imgBase = (import.meta.env.VITE_IMAGE_URL || import.meta.env.VITE_BASE_URL || 'https://happy-life-sx03.onrender.com').replace(/\/+$/, '');
+          setCoverImagePreview(data.ebook.coverImage.startsWith('http') ? data.ebook.coverImage : `${imgBase}${data.ebook.coverImage.startsWith('/') ? '' : '/'}${data.ebook.coverImage}`);
         }
       }
     } catch (error) {

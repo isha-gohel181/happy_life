@@ -133,7 +133,7 @@ export default function CourseFeedbacks() {
                     <td className="px-6 py-4">
                       {fb.attachment ? (
                         <a
-                          href={fb.attachment.startsWith('http') ? fb.attachment : `http://localhost:5000/${fb.attachment}`}
+                          href={fb.attachment.startsWith('http') ? fb.attachment : `${(import.meta.env.VITE_IMAGE_URL || import.meta.env.VITE_BASE_URL || 'https://happy-life-sx03.onrender.com').replace(/\/+$/, '')}/${fb.attachment.replace(/^\/+/, '')}`}
                           target="_blank"
                           rel="noreferrer"
                           className="text-brand-500 hover:underline"

@@ -90,7 +90,7 @@ const CertificatePricingSection = ({ course }) => {
                 <div className="absolute -inset-4 bg-amber-400/10 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
                 <div className="relative border-8 border-slate-200 bg-white p-2 shadow-2xl overflow-hidden rounded-xl">
                    <img
-                      src={course?.certificateImage ? `https://api.edrilla.com/${course.certificateImage}` : certificateImg}
+                      src={course?.certificateImage ? `https://happy-life-sx03.onrender.com/${course.certificateImage}` : certificateImg}
                       alt="Vanguard Architect Certificate"
                       className="w-full h-auto transition-all duration-1000"
                    />

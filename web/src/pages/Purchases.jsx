@@ -153,7 +153,7 @@ const Purchases = () => {
                         <div className="col-span-2 flex justify-end gap-3 transition-all duration-500">
                            {item.certificate ? (
                               <a 
-                                href={`https://api.edrilla.com/${item.certificate.certificate_url}`} 
+                                href={`https://happy-life-sx03.onrender.com/${item.certificate.certificate_url}`} 
                                 target="_blank" 
                                 rel="noreferrer"
                                 className="font-jetbrains text-xs font-bold text-amber-700 hover:text-slate-950 uppercase tracking-wider transition-colors bg-amber-100 px-3 py-1.5 rounded-full border border-amber-300/60"

@@ -24,18 +24,16 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // CORS config — dynamic origin to support credentials (wildcard '*' is
 // incompatible with credentials:true per the browser spec)
 const ALLOWED_ORIGINS = [
+  "https://happy-life-nu.vercel.app",
+  "https://happy-life-admin.vercel.app",
+  "https://happy-life-sx03.onrender.com",
+  process.env.FRONTEND_URL,
+  process.env.ADMIN_URL,
   "http://localhost:5173",
   "http://localhost:3000",
   "http://localhost:5174",
-  "https://edrilla.com",
-  "https://www.edrilla.com",
-  "https://admin.edrilla.com",
-  "https://api.edrilla.com",
-  "http://edrila.nexprism.in",
-  "https://edrila.nexprism.in",
-  "https://lapaas.com",
-  "https://www.lapaas.com",
-];
+  "http://localhost:5000",
+].filter(Boolean);
 
 const corsOptions = {
   origin: (origin, callback) => {

@@ -210,7 +210,7 @@ const CuratedCatalog = () => {
                 category: item.category?.name || item.category || 'COURSE',
                 description: item.shortDescription || item.description,
                 price: item.salePrice ? `₹${item.salePrice}` : item.price ? `₹${item.price}` : 'FREE',
-                image: item.thumbnail ? `https://api.edrilla.com/${item.thumbnail}` : '/herocard.png',
+                image: item.thumbnail ? `https://happy-life-sx03.onrender.com/${item.thumbnail}` : '/herocard.png',
                 isNew: true,
               }} 
             />

@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-  signup, updateProfile, login, getUserById, blockUser, changeUserPassword, forgotPassword, resetPassword, getMyProfile, deleteDocument, getUserDashboard, deleteUser, getOverviewDashboard, deleteEducation, createUserByAdmin, logoutAllSessions, updateFcmToken, sendTestNotification, banOrShadowBanUser, unbanUser,   listDeviceApprovalRequests,
+  signup, updateProfile, login, logout, getUserById, blockUser, changeUserPassword, forgotPassword, resetPassword, getMyProfile, deleteDocument, getUserDashboard, deleteUser, getOverviewDashboard, deleteEducation, createUserByAdmin, logoutAllSessions, updateFcmToken, sendTestNotification, banOrShadowBanUser, unbanUser,   listDeviceApprovalRequests,
   manageDeviceRequest, checkDeviceApprovalStatus, requestDeviceApproval,
   searchUsers, sendOtpviaemail, verifyOtpviaemail, googleLogin, updateUserRole
 } from '../controllers/userController.js';
@@ -82,6 +82,7 @@ userRouter.post('/verify-otp', verifyOtp);
 userRouter.delete('/:id', accessTokenAutoRefresh, passport.authenticate('jwt', { session: false }), isUserBanned, deleteUser);
 userRouter.get('/overview', accessTokenAutoRefresh, passport.authenticate('jwt', { session: false }), isAdmin, isUserBanned, getOverviewDashboard);
 
+userRouter.post('/logout', logout);
 userRouter.post('/logout-all-sessions',
   accessTokenAutoRefresh,
   passport.authenticate("jwt", { session: false }),

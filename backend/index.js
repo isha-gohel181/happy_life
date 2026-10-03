@@ -33,15 +33,16 @@ const io = new Server(server, {
       if (origin.endsWith('.vercel.app') || origin.endsWith('.onrender.com')) return callback(null, true);
       
       const allowedOrigins = [
-        "https://edrilla.com",
-        "https://www.edrilla.com",
-        "https://admin.edrilla.com",
-        "https://api.edrilla.com",
-        "http://edrila.nexprism.in",
-        "https://edrila.nexprism.in",
-        "https://lapaas.com",
-        "https://www.lapaas.com"
-      ];
+        "https://happy-life-nu.vercel.app",
+        "https://happy-life-admin.vercel.app",
+        "https://happy-life-sx03.onrender.com",
+        process.env.FRONTEND_URL,
+        process.env.ADMIN_URL,
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://localhost:5174",
+        "http://localhost:5000",
+      ].filter(Boolean);
       
       if (allowedOrigins.includes(origin)) return callback(null, true);
       callback(new Error('Origin not allowed by CORS'));
