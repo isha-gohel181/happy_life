@@ -2,6 +2,7 @@ import videoLessonRepository from '../repository/videoLessonRepository.js';
 import videoCypherService from './platforms/videoCypherService.js';
 import VdoCipherService from './VdoCipherService.js';
 import youtubeService from './platforms/youtubeService.js';
+import vimeoService from './platforms/vimeoService.js';
 import mongoose from 'mongoose';
 import VideoLesson from '../models/video.js';
 import fs from "fs";
@@ -50,6 +51,10 @@ class VideoLessonService {
             uploadResult = await this.handleYouTubeUpload(data, videoLesson._id);
             break;
 
+          case 'vimeo':
+            uploadResult = await this.handleVimeoUpload(data, videoLesson._id);
+            break;
+
           case 'external_link':
             uploadResult = await this.handleExternalLink(data, videoLesson._id);
             break;
@@ -60,6 +65,10 @@ class VideoLessonService {
 
         const updatedVideoLesson = await videoLessonRepository.updateById(videoLesson._id, {
           secureUrl: uploadResult.secureUrl,
+          embedUrl: uploadResult.embedUrl || '',
+          originalUrl: uploadResult.originalUrl || data.vimeoUrl || data.youtubeUrl || '',
+          vimeoUrl: data.vimeoUrl || '',
+          youtubeUrl: data.youtubeUrl || '',
           videoId: uploadResult.videoId,
           thumbnail: uploadResult.thumbnail || '',
           status: 'ready',
@@ -195,8 +204,6 @@ async handleVideoCypherUpload(videoFilePath, data, videoLessonId) {
         throw new Error('YouTube URL is required');
       }
 
-      //console.log('handleYouTubeUpload data:', data);
-
       const urlPattern = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
       if (!urlPattern.test(data.youtubeUrl)) {
         throw new Error('Invalid YouTube URL format');
@@ -208,47 +215,58 @@ async handleVideoCypherUpload(videoFilePath, data, videoLessonId) {
         description: data.description,
         videoLessonId,
       });
-      //console.log('urlResult:', urlResult);
 
       if (!urlResult || typeof urlResult !== 'object') {
         throw new Error('Failed to process YouTube URL: No result returned');
       }
 
-      // const requiredFields = ['videoId', 'youtubeUrl', 'thumbnail', 'watchUrl'];
-      // const missingFields = requiredFields.filter((field) => !urlResult[field]);
-      // if (missingFields.length > 0) {
-      //   throw new Error(`Failed to process YouTube URL: Missing fields - ${missingFields.join(', ')}`);
-      // }
+      return {
+        videoId: urlResult.videoId,
+        secureUrl: urlResult.watchUrl,
+        embedUrl: urlResult.embedUrl,
+        originalUrl: data.youtubeUrl,
+        thumbnail: urlResult.thumbnail,
+        platform: 'youtube',
+      };
+    } catch (error) {
+      console.error(`Error in handleYouTubeUpload: ${error.message}`, error);
+      throw error;
+    }
+  }
 
-      const videoLesson = new VideoLesson({
-        lessonId: videoLessonId,
+  async handleVimeoUpload(data, videoLessonId) {
+    try {
+      const vimeoUrl = data.vimeoUrl || data.secureUrl || data.url;
+      if (!vimeoUrl) {
+        throw new Error('Vimeo URL is required');
+      }
+
+      if (!vimeoService.validateVimeoUrl(vimeoUrl)) {
+        throw new Error('Invalid Vimeo URL format');
+      }
+
+      const urlResult = await vimeoService.processVimeoUrl({
+        url: vimeoUrl,
         title: data.title,
         description: data.description,
-        sourcePlatform: 'youtube',
-        videoId: urlResult.videoId,
-        secureUrl: urlResult.embedUrl,
-        embedUrl: urlResult.embedUrl,
-        originalUrl: data.embedUrl,
-        thumbnail: urlResult.thumbnail,
-        uploadedBy: data.uploadedBy || null,
-        status: 'ready',
-        isPublic: data.isPublic || false,
+        videoLessonId,
       });
 
-      //console.log('videoLesson:', videoLesson);
-
-      await videoLesson.save();
+      if (!urlResult || typeof urlResult !== 'object') {
+        throw new Error('Failed to process Vimeo URL: No result returned');
+      }
 
       return {
         videoId: urlResult.videoId,
         secureUrl: urlResult.watchUrl,
         embedUrl: urlResult.embedUrl,
+        originalUrl: vimeoUrl,
         thumbnail: urlResult.thumbnail,
-        platform: 'youtube',
-        videoLessonId: videoLesson._id,
+        duration: urlResult.duration,
+        platform: 'vimeo',
       };
     } catch (error) {
-      console.error(`Error in handleYouTubeUpload: ${error.message}`, error);
+      console.error(`Error in handleVimeoUpload: ${error.message}`, error);
       throw error;
     }
   }
@@ -332,7 +350,7 @@ async handleVideoCypherUpload(videoFilePath, data, videoLessonId) {
 
   async getVideoLessonsByPlatform(platform) {
     try {
-      const validPlatforms = ['videocypher', 'youtube', 'external_link'];
+      const validPlatforms = ['videocypher', 'youtube', 'vimeo', 'external_link'];
 
       if (!validPlatforms.includes(platform)) {
         throw new Error('Invalid source platform');
@@ -357,8 +375,58 @@ async handleVideoCypherUpload(videoFilePath, data, videoLessonId) {
     const videoLesson = await videoLessonRepository.findById(id);
     if (!videoLesson) throw new Error("Video lesson not found");
 
+    const targetPlatform = updateData.sourcePlatform || videoLesson.sourcePlatform;
+
+    // Handle Vimeo video updates
+    if (targetPlatform === "vimeo" && (updateData.vimeoUrl || updateData.sourcePlatform === "vimeo" || updateData.secureUrl)) {
+      const vimeoUrl = updateData.vimeoUrl || updateData.secureUrl || updateData.originalUrl;
+      if (vimeoUrl) {
+        if (!vimeoService.validateVimeoUrl(vimeoUrl)) {
+          throw new Error('Invalid Vimeo URL format');
+        }
+        const urlResult = await vimeoService.processVimeoUrl({
+          url: vimeoUrl,
+          title: updateData.title || videoLesson.title,
+          description: updateData.description || videoLesson.description,
+          videoLessonId: videoLesson.lessonId,
+        });
+
+        updateData.secureUrl = urlResult.watchUrl;
+        updateData.embedUrl = urlResult.embedUrl;
+        updateData.originalUrl = vimeoUrl;
+        updateData.vimeoUrl = vimeoUrl;
+        updateData.videoId = urlResult.videoId;
+        if (urlResult.thumbnail) updateData.thumbnail = urlResult.thumbnail;
+        if (urlResult.duration) updateData.duration = urlResult.duration;
+        updateData.status = "ready";
+        updateData.sourcePlatform = "vimeo";
+      }
+    }
+    // Handle YouTube video updates
+    else if (targetPlatform === "youtube" && (updateData.youtubeUrl || updateData.sourcePlatform === "youtube" || updateData.secureUrl)) {
+      const youtubeUrl = updateData.youtubeUrl || updateData.secureUrl || updateData.originalUrl;
+      if (youtubeUrl) {
+        const urlResult = await youtubeService.processYouTubeUrl({
+          url: youtubeUrl,
+          title: updateData.title || videoLesson.title,
+          description: updateData.description || videoLesson.description,
+          videoLessonId: videoLesson.lessonId,
+        });
+
+        if (urlResult) {
+          updateData.secureUrl = urlResult.watchUrl;
+          updateData.embedUrl = urlResult.embedUrl;
+          updateData.originalUrl = youtubeUrl;
+          updateData.youtubeUrl = youtubeUrl;
+          updateData.videoId = urlResult.videoId;
+          if (urlResult.thumbnail) updateData.thumbnail = urlResult.thumbnail;
+          updateData.status = "ready";
+          updateData.sourcePlatform = "youtube";
+        }
+      }
+    }
     // Handle VdoCipher video updates
-    if (videoLesson.sourcePlatform === "videocypher") {
+    else if (targetPlatform === "videocypher") {
       // Check if updating with existing video ID
       if (updateData.uploadMethod === 'existing_video_id' && updateData.videoId) {
         //console.log(`🔗 Updating with existing VdoCipher video: ${updateData.videoId}`);
@@ -372,6 +440,7 @@ async handleVideoCypherUpload(videoFilePath, data, videoLessonId) {
         });
 
         updateData.secureUrl = linkedVideoData.secureUrl;
+        updateData.embedUrl = linkedVideoData.embedUrl;
         updateData.videoId = linkedVideoData.videoId;
         updateData.thumbnail = linkedVideoData.thumbnail;
         updateData.status = linkedVideoData.status;

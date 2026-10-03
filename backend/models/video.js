@@ -26,9 +26,6 @@ const videoLessonSchema = new Schema(
     // Platform-specific video identifier
     videoId: {
       type: String,
-      required: function() {
-        return [  'vimeo'].includes(this.sourcePlatform);
-      }
     },
     // Main video URL (watch URL for YouTube, embed URL for others)
     secureUrl: {
@@ -39,10 +36,15 @@ const videoLessonSchema = new Schema(
       type: String
      
     },
-    // Original URL provided by user (for YouTube links)
+    // Original URL provided by user (for YouTube/Vimeo links)
     originalUrl: {
       type: String,
-
+    },
+    youtubeUrl: {
+      type: String,
+    },
+    vimeoUrl: {
+      type: String,
     },
     thumbnail: {
       type: String,
@@ -199,11 +201,11 @@ videoLessonSchema.methods.getEmbedHtml = function(options = {}) {
   const { width = 560, height = 315, autoplay = false } = options;
   let embedUrl = this.embedUrl;
   
-  if (this.sourcePlatform === 'youtube' && autoplay) {
-    embedUrl += '?autoplay=1';
+  if ((this.sourcePlatform === 'youtube' || this.sourcePlatform === 'vimeo') && autoplay) {
+    embedUrl += (embedUrl.includes('?') ? '&' : '?') + 'autoplay=1';
   }
   
-  return `<iframe width="${width}" height="${height}" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
+  return `<iframe width="${width}" height="${height}" src="${embedUrl}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen></iframe>`;
 };
 
 export default mongoose.model('VideoLesson', videoLessonSchema);

@@ -41,9 +41,40 @@ type VideoLessonProps = {
   onSaveSuccess?: (data: any) => void;
 };
 
+const VimeoIcon: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M22.396 7.164c-.093 2.026-1.507 4.8-4.245 8.32C15.323 19.161 12.927 21 10.97 21c-1.214 0-2.24-1.12-3.079-3.359-.56-2.053-1.119-4.106-1.68-6.159-.622-2.24-1.29-3.36-2.004-3.36-.156 0-.7.328-1.634.981L1.447 7.76c1.183-1.04 2.348-2.08 3.498-3.12 1.588-1.37 2.756-2.099 3.504-2.19 1.868-.216 3.018.995 3.454 3.633.468 2.83.794 4.593.98 5.289.56 2.38 1.166 3.57 1.82 3.57.5 0 1.246-.778 2.243-2.334.996-1.556 1.525-2.738 1.588-3.546.124-1.306-.374-1.96-1.5-1.96-.53 0-1.074.124-1.634.373 1.09-3.577 3.176-5.308 6.257-5.195 2.274.093 3.348 1.54 3.224 4.34z" />
+  </svg>
+);
+
 const sourcePlatforms = [
-  { value: "videocypher", label: "VdoCipher", icon: MonitorPlay },
-  { value: "youtube", label: "YouTube", icon: Play },
+  {
+    value: "videocypher",
+    label: "VdoCipher",
+    subtitle: "DRM Stream & Upload",
+    icon: MonitorPlay,
+    activeBorder: "border-blue-500 bg-blue-50/70 ring-2 ring-blue-500/20 shadow-sm",
+    iconColor: "text-blue-600",
+    checkColor: "text-blue-600",
+  },
+  {
+    value: "youtube",
+    label: "YouTube",
+    subtitle: "Public / Unlisted Link",
+    icon: Play,
+    activeBorder: "border-red-500 bg-red-50/70 ring-2 ring-red-500/20 shadow-sm",
+    iconColor: "text-red-600",
+    checkColor: "text-red-600",
+  },
+  {
+    value: "vimeo",
+    label: "Vimeo",
+    subtitle: "Standard & Privacy Hash",
+    icon: VimeoIcon,
+    activeBorder: "border-sky-500 bg-sky-50/70 ring-2 ring-sky-500/20 shadow-sm",
+    iconColor: "text-sky-500",
+    checkColor: "text-sky-500",
+  },
 ];
 
 // Enhanced popup component with better animations
@@ -200,6 +231,7 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
     embedUrl: "",
     originalUrl: "",
     youtubeUrl: "",
+    vimeoUrl: "",
     vdocipherVideoId: "", // Added for existing VdoCipher videos
     uploadMethod: "file", // Added to track upload method: "file" or "videoId"
     thumbnail: "",
@@ -301,7 +333,8 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
         secureUrl: videoData.secureUrl || "",
         embedUrl: videoData.secureUrl || "", // Use secureUrl for embed
         originalUrl: videoData.secureUrl || "",
-        youtubeUrl: videoData.youtubeUrl || "",
+        youtubeUrl: videoData.youtubeUrl || (videoData.sourcePlatform === "youtube" ? (videoData.originalUrl || videoData.secureUrl || "") : ""),
+        vimeoUrl: videoData.vimeoUrl || (videoData.sourcePlatform === "vimeo" ? (videoData.originalUrl || videoData.secureUrl || videoData.embedUrl || "") : ""),
         vdocipherVideoId: videoData.videoId || "", // Set for existing video ID mode
         uploadMethod: videoData.uploadMethod === "existing_video_id" ? "videoId" : "file",
         thumbnail: videoData.thumbnail || "",
@@ -337,7 +370,8 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
         secureUrl: data.secureUrl || "",
         embedUrl: data.embedUrl || data.secureUrl || "",
         originalUrl: data.originalUrl || data.secureUrl || "",
-        youtubeUrl: data.youtubeUrl || "",
+        youtubeUrl: data.youtubeUrl || (data.sourcePlatform === "youtube" ? (data.originalUrl || data.secureUrl || "") : ""),
+        vimeoUrl: data.vimeoUrl || (data.sourcePlatform === "vimeo" ? (data.originalUrl || data.secureUrl || data.embedUrl || "") : ""),
         vdocipherVideoId: data.videoId || "",
         uploadMethod: data.uploadMethod === "existing_video_id" ? "videoId" : "file",
         thumbnail: data.thumbnail || "",
@@ -378,6 +412,15 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
     return youtubeRegex.test(url);
   };
 
+  const isValidVimeoUrl = (url: string): boolean => {
+    if (!url || typeof url !== "string") return false;
+    const clean = url.trim();
+    const vimeoRegex =
+      /^(https?:\/\/)?(www\.|player\.)?vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/[^\/]+\/videos\/|album\/(?:\d+\/)?video\/|video\/|manage\/videos\/)?(\d+)(?:\/([a-zA-Z0-9]+))?(\?.*)?$/i;
+    const directIdRegex = /^\d+(?:\/[a-zA-Z0-9]+)?$/;
+    return vimeoRegex.test(clean) || directIdRegex.test(clean);
+  };
+
   const handleSave = async () => {
     if (!form.title.trim()) {
       setPopup({
@@ -397,7 +440,7 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
       return;
     }
 
-    // Enhanced validation for VdoCipher and YouTube
+    // Enhanced validation for VdoCipher, YouTube, and Vimeo
     if (form.sourcePlatform === "youtube") {
       if (!form.youtubeUrl.trim()) {
         setPopup({
@@ -411,6 +454,23 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
         setPopup({
           isVisible: true,
           message: "Please enter a valid YouTube URL.",
+          type: "error",
+        });
+        return;
+      }
+    } else if (form.sourcePlatform === "vimeo") {
+      if (!form.vimeoUrl.trim()) {
+        setPopup({
+          isVisible: true,
+          message: "Please enter a Vimeo URL.",
+          type: "error",
+        });
+        return;
+      }
+      if (!isValidVimeoUrl(form.vimeoUrl)) {
+        setPopup({
+          isVisible: true,
+          message: "Please enter a valid Vimeo URL.",
           type: "error",
         });
         return;
@@ -552,6 +612,7 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
             uploadMethod: form.uploadMethod === "videoId" ? "existing_video_id" : "file",
             filePath: finalPath,
             youtubeUrl: form.sourcePlatform === "youtube" ? form.youtubeUrl : undefined,
+            vimeoUrl: form.sourcePlatform === "vimeo" ? form.vimeoUrl : undefined,
             // Include VdoCipher specific fields if updating VdoCipher video
             ...(form.sourcePlatform === "videocypher" && {
               quality: form.quality,
@@ -583,6 +644,7 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
             filePath: finalPath,
             uploadMethod: form.uploadMethod === "videoId" ? "existing_video_id" : "file",
             youtubeUrl: form.sourcePlatform === "youtube" ? form.youtubeUrl : undefined,
+            vimeoUrl: form.sourcePlatform === "vimeo" ? form.vimeoUrl : undefined,
             // Include VdoCipher specific fields if uploading to VdoCipher
             ...(form.sourcePlatform === "videocypher" && {
               quality: form.quality || "auto",
@@ -598,12 +660,13 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
       
       console.log("Video operation response:", response);
       
-      // For YouTube, show immediate success without progress
-      if (form.sourcePlatform === "youtube") {
+      // For YouTube and Vimeo, show immediate success without progress
+      if (form.sourcePlatform === "youtube" || form.sourcePlatform === "vimeo") {
+        const platformName = form.sourcePlatform === "youtube" ? "YouTube" : "Vimeo";
         if (response.payload?.success) {
           setPopup({
             isVisible: true,
-            message: "YouTube video linked successfully! 🎬 Your video is now available for streaming.",
+            message: `${platformName} video linked successfully! 🎬 Your video is now available for streaming.`,
             type: "success",
           });
           // Close after a short delay to show success message
@@ -613,8 +676,8 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
         } else {
           setPopup({
             isVisible: true,
-            message: `Failed to ${isEditMode ? "update" : "link"} YouTube video: ${
-              response.payload?.message || "Unknown error"
+            message: `Failed to ${isEditMode ? "update" : "link"} ${platformName} video: ${
+              response.payload?.message || response.payload?.error || "Unknown error"
             }`,
             type: "error",
           });
@@ -714,9 +777,9 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
   const renderSourceInput = () => {
     if (form.sourcePlatform === "youtube") {
       return (
-        <div className="space-y-3">
-          <label className="block text-sm font-semibold text-gray-700">
-            YouTube URL *
+        <div className="space-y-2.5">
+          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700">
+            YouTube URL <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <input
@@ -724,24 +787,68 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
               name="youtubeUrl"
               value={form.youtubeUrl}
               onChange={handleChange}
-              className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200"
-              placeholder="https://www.youtube.com/watch?v=..."
+              className="w-full pl-11 pr-4 py-2.5 text-sm border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200"
+              placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/..."
               required
             />
-            <Play className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-red-500" />
+            <Play className="absolute left-3.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-red-500 fill-current" />
           </div>
           {form.youtubeUrl && !isValidYouTubeUrl(form.youtubeUrl) && (
-            <div className="flex items-center gap-2 text-red-600 text-sm">
-              <AlertCircle className="w-4 h-4" />
-              Please enter a valid YouTube URL
+            <div className="flex items-center gap-1.5 text-red-600 text-xs">
+              <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+              <span>Please enter a valid YouTube video URL</span>
             </div>
           )}
           {form.youtubeUrl && isValidYouTubeUrl(form.youtubeUrl) && (
-            <div className="flex items-center gap-2 text-green-600 text-sm">
-              <CheckCircle2 className="w-4 h-4" />
-              Valid YouTube URL detected
+            <div className="flex items-center gap-1.5 text-green-600 text-xs">
+              <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0" />
+              <span>Valid YouTube URL detected</span>
             </div>
           )}
+          <div className="bg-red-50/80 border border-red-200/80 rounded-xl p-3">
+            <p className="text-xs text-red-800">
+              💡 Supports standard YouTube watch URLs and short links (e.g., <code>https://youtu.be/abc123xyz</code>).
+            </p>
+          </div>
+        </div>
+      );
+    } else if (form.sourcePlatform === "vimeo") {
+      return (
+        <div className="space-y-2.5">
+          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700">
+            Vimeo URL or ID <span className="text-red-500">*</span>
+          </label>
+          <div className="relative">
+            <input
+              type="url"
+              name="vimeoUrl"
+              value={form.vimeoUrl}
+              onChange={handleChange}
+              className="w-full pl-11 pr-4 py-2.5 text-sm border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all duration-200"
+              placeholder="https://vimeo.com/123456789 or https://vimeo.com/123456789/abcdef..."
+              required
+            />
+            <div className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-sky-500">
+              <VimeoIcon className="w-4 h-4" />
+            </div>
+          </div>
+          {form.vimeoUrl && !isValidVimeoUrl(form.vimeoUrl) && (
+            <div className="flex items-center gap-1.5 text-red-600 text-xs">
+              <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+              <span>Please enter a valid Vimeo video URL or ID</span>
+            </div>
+          )}
+          {form.vimeoUrl && isValidVimeoUrl(form.vimeoUrl) && (
+            <div className="flex items-center gap-1.5 text-green-600 text-xs">
+              <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0" />
+              <span>Valid Vimeo URL detected</span>
+            </div>
+          )}
+          <div className="bg-sky-50/80 border border-sky-200/80 rounded-xl p-3">
+            <p className="text-xs text-sky-800">
+              💡 Supports public links (<code>vimeo.com/123456789</code>), unlisted videos with privacy hash (<code>vimeo.com/123456789/abcdef</code>), and player links.
+            </p>
+          </div>
         </div>
       );
     } else if (form.sourcePlatform === "videocypher") {
@@ -922,80 +1029,80 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
 
   return (
     <>
-      <div className="bg-white lg:w-[800px] rounded-2xl max-w-4xl w-full mx-auto shadow-2xl max-h-[700px] overflow-scroll">
+      <div className="bg-white rounded-2xl w-full flex flex-col max-h-[85vh] overflow-hidden shadow-2xl border border-gray-100">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-                <FileVideo className="w-6 h-6 text-black" />
-              </div>
-              <div>
-                <h2 className="text-xl font-bold">
-                  {isEditMode ? "Edit Video Lesson" : "Upload Video Lesson"}
-                </h2>
-                <p className="text-blue-100 text-sm">
-                  {isEditMode ? "Update your video content" : "Add a new video to your lesson"}
-                </p>
-              </div>
+        <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-6 py-5 text-white flex justify-between items-center flex-shrink-0">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 bg-white/15 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20 shadow-sm">
+              <FileVideo className="w-5 h-5 text-white" />
             </div>
-            <button
-              onClick={handleClose}
-              className="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center hover:bg-opacity-30 transition-all"
-            >
-              <X className="w-5 h-5 text-black" />
-            </button>
+            <div>
+              <h2 className="text-lg font-bold text-white tracking-tight">
+                {isEditMode ? "Edit Video Lesson" : "Upload Video Lesson"}
+              </h2>
+              <p className="text-blue-100 text-xs font-normal">
+                {isEditMode ? "Update your video lesson details" : "Add a video to your lesson module"}
+              </p>
+            </div>
           </div>
+          <button
+            onClick={handleClose}
+            className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all"
+            aria-label="Close"
+          >
+            <X className="w-4 h-4 text-white" />
+          </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6 pb-36">
+        <div className="p-6 space-y-5 overflow-y-auto flex-1">
           {/* Title */}
-          <div className="space-y-2">
-            <label className="block text-sm font-semibold text-gray-700">
-              Video Title *
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700">
+              Video Title <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               name="title"
               value={form.title}
               onChange={handleChange}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              className="w-full px-4 py-2.5 text-sm border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
               placeholder="Enter an engaging title for your video"
               required
             />
           </div>
           
           {/* Description */}
-          <div className="space-y-2">
-            <label className="block text-sm font-semibold text-gray-700">
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700">
               Description
             </label>
             <textarea
               name="description"
               value={form.description}
               onChange={handleChange}
-              rows={4}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-none"
+              rows={3}
+              className="w-full px-4 py-2.5 text-sm border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-none"
               placeholder="Describe what students will learn from this video..."
             />
           </div>
           
           {/* Source Platform */}
-          <div className="space-y-3">
-            <label className="block text-sm font-semibold text-gray-700">
-              Source Platform *
+          <div className="space-y-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700">
+              Source Platform <span className="text-red-500">*</span>
             </label>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {sourcePlatforms.map((platform) => {
                 const Icon = platform.icon;
+                const isSelected = form.sourcePlatform === platform.value;
                 return (
                   <div
                     key={platform.value}
-                    className={`relative border-2 rounded-xl p-4 cursor-pointer transition-all ${
-                      form.sourcePlatform === platform.value
-                        ? "border-blue-500 bg-blue-50"
-                        : "border-gray-200 hover:border-gray-300"
+                    className={`relative border-2 rounded-xl p-3.5 cursor-pointer transition-all duration-200 ${
+                      isSelected
+                        ? platform.activeBorder
+                        : "border-gray-200 hover:border-gray-300 hover:bg-gray-50/50 bg-white"
                     }`}
                     onClick={() => setForm(prev => ({ ...prev, sourcePlatform: platform.value }))}
                   >
@@ -1003,27 +1110,28 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
                       type="radio"
                       name="sourcePlatform"
                       value={platform.value}
-                      checked={form.sourcePlatform === platform.value}
+                      checked={isSelected}
                       onChange={handleChange}
                       className="sr-only"
                     />
                     <div className="flex items-center gap-3">
-                      <Icon className={`w-6 h-6 ${
-                        form.sourcePlatform === platform.value 
-                          ? "text-blue-600" 
-                          : "text-gray-400"
-                      }`} />
-                      <span className={`font-medium ${
-                        form.sourcePlatform === platform.value 
-                          ? "text-blue-900" 
-                          : "text-gray-700"
-                      }`}>
-                        {platform.label}
-                      </span>
+                      <div className={`p-2 rounded-lg ${isSelected ? "bg-white shadow-xs" : "bg-gray-100"}`}>
+                        <Icon className={`w-5 h-5 ${platform.iconColor}`} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <span className={`block font-semibold text-sm leading-snug ${
+                          isSelected ? "text-gray-900" : "text-gray-700"
+                        }`}>
+                          {platform.label}
+                        </span>
+                        <span className="block text-[11px] text-gray-500 truncate">
+                          {platform.subtitle}
+                        </span>
+                      </div>
                     </div>
-                    {form.sourcePlatform === platform.value && (
-                      <div className="absolute top-2 right-2">
-                        <CheckCircle2 className="w-5 h-5 text-blue-600" />
+                    {isSelected && (
+                      <div className="absolute top-2.5 right-2.5">
+                        <CheckCircle2 className={`w-4 h-4 ${platform.checkColor}`} />
                       </div>
                     )}
                   </div>
@@ -1031,18 +1139,16 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
               })}
             </div>
             {isEditMode && (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                <div className="flex items-center gap-2 text-amber-800 text-sm">
-                  <AlertCircle className="w-4 h-4" />
-                  <span>Changing platform will replace the current video</span>
-                </div>
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-2.5 flex items-center gap-2 text-amber-800 text-xs">
+                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                <span>Changing platform will replace the current video stream source</span>
               </div>
             )}
           </div>
 
           {/* Platform-specific inputs */}
           {form.sourcePlatform && (
-            <div className="bg-gray-50 border border-gray-200 rounded-xl p-5">
+            <div className="bg-gray-50/80 border border-gray-200/80 rounded-xl p-4.5">
               {renderSourceInput()}
             </div>
           )}
@@ -1052,42 +1158,44 @@ const VideoLesson: React.FC<VideoLessonProps> = ({
         </div>
         
         {/* Footer */}
-        <div className="bg-gray-50 px-6 py-4 flex flex-col sm:flex-row items-start fixed bottom-0 w-full justify-between items-center">
-          <div className="text-sm text-gray-600">
-            * Required fields
+        <div className="bg-gray-50 border-t border-gray-200 px-6 py-4 flex flex-row items-center justify-between flex-shrink-0 rounded-b-2xl">
+          <div className="text-xs text-gray-500">
+            <span className="text-red-500">*</span> Required fields
           </div>
-          <div className="flex gap-3">
+          <div className="flex items-center gap-3">
             <button
               onClick={handleClose}
-              className="px-6 py-2 rounded-xl font-semibold text-gray-700 border-2 border-gray-300 hover:bg-gray-100 transition-all duration-200"
+              type="button"
+              className="px-5 py-2 text-sm rounded-xl font-semibold text-gray-700 border-2 border-gray-300 hover:bg-gray-100 transition-all duration-200"
               disabled={loading}
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
+              type="button"
               disabled={loading || uploadProgress.isVisible}
-              className={`px-6 py-2 rounded-xl font-semibold flex items-center gap-2 transition-all duration-200 ${
+              className={`px-6 py-2 text-sm rounded-xl font-semibold flex items-center gap-2 transition-all duration-200 ${
                 loading || uploadProgress.isVisible
                   ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                  : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl"
+                  : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg active:scale-98"
               }`}
             >
               {loading || uploadProgress.isVisible ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin" />
                   {isEditMode ? "Updating..." : "Processing..."}
                 </>
               ) : (
                 <>
-                  {form.sourcePlatform === "youtube" ? (
-                    <Play className="w-5 h-5" />
+                  {form.sourcePlatform === "youtube" || form.sourcePlatform === "vimeo" ? (
+                    <Play className="w-4 h-4 fill-current" />
                   ) : (
-                    <UploadCloud className="w-5 h-5" />
+                    <UploadCloud className="w-4 h-4" />
                   )}
                   {isEditMode
                     ? "Update Video"
-                    : form.sourcePlatform === "youtube"
+                    : form.sourcePlatform === "youtube" || form.sourcePlatform === "vimeo"
                     ? "Link Video"
                     : "Upload Video"}
                 </>

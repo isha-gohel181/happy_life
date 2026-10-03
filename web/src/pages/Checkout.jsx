@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { gsap } from 'gsap'
 import { fetchSettings, validateCoupon, clearCoupon, fetchAllCoupons } from '../redux/slices/configSlice'
+import { fetchCourseDetail } from '../redux/slices/courseSlice'
 import { buyNow } from '../redux/slices/enrollmentSlice'
-import bannerImg from '../assets/images/banner.png'
 import CheckoutBreakdown from '../components/CheckoutBreakdown'
 import { useLanguage } from '../context/LanguageContext'
 
@@ -20,8 +20,15 @@ const Checkout = () => {
    const urlAcc = searchParams.get('acc')
    const urlAmount = searchParams.get('amount')
 
+   const { currentCourse } = useSelector(state => state.courses)
    const selectedPlan = location.state?.plan || (urlPlanId ? { id: urlPlanId, title: 'Selected Plan', price: urlAmount ? Number(urlAmount) : 3499 } : { id: '1year', title: '1 Year', price: 3499 })
-   const course = location.state?.course || (urlCourseId ? { id: urlCourseId, _id: urlCourseId, title: 'Course Purchase' } : {})
+   
+   const course = (location.state?.course && location.state?.course.title)
+      ? location.state.course
+      : (currentCourse && (currentCourse._id === urlCourseId || currentCourse.id === urlCourseId)
+         ? currentCourse
+         : (location.state?.course || (urlCourseId ? { id: urlCourseId, _id: urlCourseId, title: 'Astrology Masterclass' } : {})))
+
    const accParam = urlAcc || location.state?.acc || ''
 
    const { settings, coupons, couponData, couponError, couponLoading } = useSelector(state => state.config)
@@ -33,7 +40,7 @@ const Checkout = () => {
    const [formData, setFormData] = useState(() => {
       let savedUser = null;
       try {
-         const lsUser = localStorage.getItem('user') || localStorage.getItem('userInfo');
+         const lsUser = localStorage.getItem('user') || localStorage.getItem('userInfo') || localStorage.getItem('edrilla_user');
          if (lsUser) {
             savedUser = JSON.parse(lsUser);
          }
@@ -51,7 +58,7 @@ const Checkout = () => {
       };
    });
 
-   // If user is logged in via Redux, prefill any empty fields (don't overwrite user-typed values)
+   // If user is logged in via Redux, prefill any empty fields
    useEffect(() => {
       if (!authUser) return;
       setFormData(prev => ({
@@ -63,7 +70,7 @@ const Checkout = () => {
          gst: prev.gst || (authUser.company && authUser.company.gstNumber) || prev.gst || ''
       }))
    }, [authUser])
-   const [displayTotal, setDisplayTotal] = useState(0)
+
    const [isVerified, setIsVerified] = useState(false)
    const [showOTPModal, setShowOTPModal] = useState(false)
    const [otp, setOtp] = useState('')
@@ -72,8 +79,6 @@ const Checkout = () => {
    const [otpMessage, setOtpMessage] = useState('')
    const [showSuccessModal, setShowSuccessModal] = useState(false)
    const checkoutRef = useRef(null)
-   const leftWingRef = useRef(null)
-   const rightWingRef = useRef(null)
    const scanLineRef = useRef(null)
 
    const basePrice = selectedPlan.price
@@ -82,7 +87,7 @@ const Checkout = () => {
    const discountedBase = Math.max(0, basePrice - discount)
    const gstAmount = discountedBase * gstRate
    const total = discountedBase + gstAmount
-   const formatCurrency = (v) => `₹${Number(v || 0).toFixed(2)}`
+   const displayTotal = total.toFixed(2)
 
    useEffect(() => {
       window.scrollTo(0, 0)
@@ -90,27 +95,14 @@ const Checkout = () => {
       dispatch(fetchAllCoupons())
       dispatch(clearCoupon())
 
-      const ctx = gsap.context(() => {
-         // Entrance and loop animations remain the same...
-         const tl = gsap.timeline()
-         tl.from(leftWingRef.current, { xPercent: -100, duration: 1.5, ease: 'expo.inOut' })
-            .from(rightWingRef.current, { xPercent: 100, duration: 1.5, ease: 'expo.inOut' }, '-=1.5')
-            .from('.protocol-reveal', { y: 30, opacity: 0, duration: 1, stagger: 0.1, ease: 'power3.out' }, '-=0.5')
+      if (urlCourseId && (!course?.title || course.title === 'Astrology Masterclass' || course.title === 'Course Purchase')) {
+         dispatch(fetchCourseDetail(urlCourseId))
+      }
 
+      if (scanLineRef.current) {
          gsap.to(scanLineRef.current, { top: '100%', duration: 3, repeat: -1, ease: 'none' })
-
-         const countObj = { val: 0 }
-         gsap.to(countObj, {
-            val: total,
-            duration: 2,
-            delay: 1,
-            ease: 'power3.out',
-            onUpdate: () => setDisplayTotal(countObj.val.toFixed(2))
-         })
-      }, checkoutRef)
-
-      return () => ctx.revert()
-   }, [total, dispatch])
+      }
+   }, [dispatch, urlCourseId])
 
    // Load Razorpay script dynamically
    const loadRazorpayScript = () => new Promise((resolve, reject) => {
@@ -126,12 +118,11 @@ const Checkout = () => {
       try {
          await loadRazorpayScript()
       } catch (e) {
-         // eslint-disable-next-line no-console
          console.error('Razorpay SDK load error', e)
          alert('Payment SDK failed to load')
          return
       }
-      // Validate / create order on backend before opening Razorpay
+
       try {
          const payload = {
             courseId: course._id || course.id || '',
@@ -160,7 +151,6 @@ const Checkout = () => {
             return
          }
 
-         // Use returned razorpay details if present
          const razor = chkData?.razorpay || {}
          const rKey = razor.key || settings?.RAZORPAY_KEY_ID || settings?.settings?.RAZORPAY_KEY_ID
          const order = razor.order || {}
@@ -168,17 +158,15 @@ const Checkout = () => {
 
          const options = {
             key: rKey,
-            amount: rAmount, // amount in paise expected
+            amount: rAmount,
             currency: razor.currency || 'INR',
-            name: selectedPlan.title || 'Bankers Grade',
+            name: 'Happy Life Astro',
             description: course.title || 'Course Purchase',
             order_id: order.id,
             handler: async function (response) {
-               // eslint-disable-next-line no-console
                console.log('Razorpay success', response)
 
                try {
-                  // Dispatch buyNow to finalize enrollment on backend
                   const buyPayload = {
                      courseId: course._id || course.id || '',
                      paymentId: response.razorpay_payment_id,
@@ -195,13 +183,10 @@ const Checkout = () => {
 
                   if (accParam) buyPayload.acc = accParam;
 
-                  const resultAction = await dispatch(buyNow(buyPayload)).unwrap()
-
-                  // On success (201 is handled by thunk success)
+                  await dispatch(buyNow(buyPayload)).unwrap()
                   setShowSuccessModal(true)
 
                } catch (error) {
-                  // eslint-disable-next-line no-console
                   console.error('Finalization failed', error)
                   alert(error || 'Payment succeeded but enrollment failed. Please contact support.')
                }
@@ -215,13 +200,12 @@ const Checkout = () => {
                courseId: course._id || '',
                planId: selectedPlan.id || ''
             },
-            theme: { color: '#8B5CF6' }
+            theme: { color: '#2171B5' }
          }
 
          const rzp = new window.Razorpay(options)
          rzp.open()
       } catch (err) {
-         // eslint-disable-next-line no-console
          console.error('Order check failed', err)
          alert(err?.message || 'Order creation failed')
       }
@@ -231,7 +215,6 @@ const Checkout = () => {
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
 
-      // Auto-validate if it's the coupon dropdown
       if (name === 'coupon' && value) {
          dispatch(validateCoupon(value));
       } else if (name === 'coupon' && !value) {
@@ -245,7 +228,6 @@ const Checkout = () => {
       }
    }
 
-   // Keep track of verified status from auth or localStorage
    useEffect(() => {
       const localUser = (() => {
          try {
@@ -274,10 +256,8 @@ const Checkout = () => {
          })
          const data = await res.json()
          if (!res.ok) throw new Error(data?.message || 'Failed to send OTP')
-         // If backend reports the email is already verified, mark verified and don't open modal
          if (data?.is_verify) {
             setIsVerified(true)
-            // Ignore backend message when already verified to avoid showing "OTP sent" text
             setOtpMessage('Already verified')
             setShowOTPModal(false)
          } else {
@@ -306,9 +286,7 @@ const Checkout = () => {
          })
          const data = await res.json()
          if (!res.ok) throw new Error(data?.message || 'OTP verification failed')
-         // Mark verified locally — backend may return updated user object
          setIsVerified(true)
-         // If backend returned updated user, persist it
          if (data?.data?.user) {
             try { localStorage.setItem('edrilla_user', JSON.stringify(data.data.user)) } catch { }
          }
@@ -322,219 +300,279 @@ const Checkout = () => {
       }
    }
 
+   // Dynamic course thumbnail / banner resolution
+   const courseImageSrc = course?.thumbnail
+      ? (course.thumbnail.startsWith('http') ? course.thumbnail : `${BASE_API}/${course.thumbnail.replace(/^\//, '')}`)
+      : course?.image
+      ? (course.image.startsWith('http') ? course.image : `${BASE_API}/${course.image.replace(/^\//, '')}`)
+      : course?.banner
+      ? (course.banner.startsWith('http') ? course.banner : `${BASE_API}/${course.banner.replace(/^\//, '')}`)
+      : null;
+
    return (
-      <div ref={checkoutRef} className="min-h-screen bg-dark flex flex-col lg:flex-row relative selection:bg-accent/40 selection:text-white">
+      <div ref={checkoutRef} className="min-h-screen bg-slate-50 flex flex-col lg:flex-row relative">
 
          {/* GLOBAL BACK BUTTON */}
          <button
             onClick={() => navigate(-1)}
-            className="fixed top-4 left-4 sm:top-10 sm:left-10 z-50 flex items-center gap-3 group px-4 py-2 bg-dark/40 backdrop-blur-md border border-white/10 hover:border-accent transition-all duration-500"
+            className="fixed top-4 left-4 sm:top-8 sm:left-8 z-50 flex items-center gap-2 px-4 py-2 bg-slate-900/90 hover:bg-slate-900 text-white backdrop-blur-md border border-white/20 hover:border-blue-400 transition-all duration-300 rounded-none shadow-lg cursor-pointer"
          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-accent stroke-accent group-hover:-translate-x-1 transition-transform">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" className="stroke-white">
                <path d="M19 12H5M12 19l-7-7 7-7" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <span className="font-jetbrains text-[9px] text-normal/60 group-hover:text-accent tracking-[0.3em] font-black uppercase">Return to Archive</span>
+            <span className="text-xs font-semibold uppercase tracking-wider">Back</span>
          </button>
-         <div ref={leftWingRef} className="lg:w-[45%] h-[65vh] min-h-[520px] lg:h-screen lg:sticky top-0 bg-black overflow-hidden relative border-r border-white/5">
 
-            {/* Course Banner Wrap */}
-            <div className="absolute inset-0 opacity-100 group">
-               <img src={bannerImg} alt="Course Banner" className="w-full h-full object-cover scale-110 animate-pulse-slow" />
-               <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent" />
-               <div className="absolute inset-0 bg-gradient-to-b from-dark/20 via-transparent to-dark" />
+         {/* -------------------- LEFT WING: DYNAMIC COURSE POSTER -------------------- */}
+         <div className="lg:w-[42%] h-[60vh] min-h-[480px] lg:h-screen lg:sticky top-0 bg-slate-950 overflow-hidden relative border-r border-slate-800">
+
+            {/* Background / Course Poster */}
+            <div className="absolute inset-0 group">
+               {courseImageSrc ? (
+                  <img
+                     src={courseImageSrc}
+                     alt={course?.title || 'Course Poster'}
+                     className="w-full h-full object-cover scale-105 transition-transform duration-700 group-hover:scale-110"
+                     onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                     }}
+                  />
+               ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-indigo-950 via-slate-900 to-black opacity-95" />
+               )}
+               {/* Gradients */}
+               <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/75 to-black/50" />
+               <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/95" />
             </div>
 
-            {/* Cinematic Scanning Overlay */}
-            <div ref={scanLineRef} className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-accent to-transparent z-10 opacity-40 shadow-[0_0_15px_rgba(139, 92, 246,0.5)]" />
-            <div className="absolute inset-0 pointer-events-none z-10 p-6 sm:p-12 flex flex-col justify-between">
+            {/* Scanning Overlay */}
+            <div ref={scanLineRef} className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-400 to-transparent z-10 opacity-50 shadow-[0_0_15px_rgba(33,113,181,0.6)]" />
+            
+            <div className="absolute inset-0 pointer-events-none z-10 p-6 sm:p-10 flex flex-col justify-between">
 
-               {/* Top Identity Block */}
-               <div className="space-y-4 sm:space-y-6">
-                  <div className="flex gap-4 items-center opacity-40">
-                     <span className="font-jetbrains text-[8px] tracking-[0.5em] uppercase font-black">System Identity</span>
-                     <div className="h-[1px] w-24 bg-white/20" />
-                     <span className="font-jetbrains text-[8px] tracking-[0.3em] uppercase">VGD-0044-ACTV</span>
+               {/* Top Ide ntity Block */}
+               <div className="space-y-4 pt-14 sm:pt-16">
+                  <div className="flex gap-2.5 items-center">
+                     <span className="px-3 py-1 bg-blue-500/20 border border-blue-400/30 text-blue-300 rounded-none text-[10px] font-bold tracking-wider uppercase backdrop-blur-sm">
+                        {course?.category?.name || 'Vedic Astrology'}
+                     </span>
+                     <span className="text-slate-400 text-xs">•</span>
+                     <span className="text-slate-300 text-xs font-medium tracking-wide">
+                        {course?.level?.[0] || 'Masterclass'}
+                     </span>
                   </div>
-                  {authUser?.company?.name && (
-                     <div className="mt-2">
-                        <span className="font-jetbrains text-[10px] text-normal/60 uppercase tracking-[0.2em]">{authUser.company.name}</span>
-                     </div>
-                  )}
 
-                  <h2 className="font-newsreader italic text-[clamp(2.5rem,5vw,4.5rem)] text-normal leading-tight font-extralight tracking-tighter">
-                     MVP <br /> Engineering.
+                  <h2 className="font-newsreader italic text-3xl sm:text-4xl lg:text-5xl text-white leading-tight font-light drop-shadow-md">
+                     {course?.title || 'Astrology Masterclass & Certification'}
                   </h2>
 
-                  <div className="inline-flex items-center gap-3 bg-accent/5 border border-accent/20 px-6 py-2">
-                     <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-                     <span className="font-jetbrains text-[9px] text-accent tracking-[0.2em] font-black uppercase">PROTOCOL ACTIVE</span>
+                  {course?.subtitle && (
+                     <p className="text-xs text-slate-300/80 font-normal leading-relaxed line-clamp-2 max-w-md">
+                        {course.subtitle}
+                     </p>
+                  )}
+
+                  <div className="inline-flex items-center gap-2 bg-emerald-500/15 border border-emerald-400/30 px-3 py-1 rounded-none backdrop-blur-md">
+                     <div className="w-2 h-2 bg-emerald-400 rounded-none animate-pulse" />
+                     <span className="text-[10px] text-emerald-300 tracking-wider font-semibold uppercase">Happy Life Astro Certified</span>
                   </div>
                </div>
 
                {/* Bottom Total Block */}
-               <div className="space-y-6 sm:space-y-10">
-                  <div className="space-y-4">
-                     <p className="font-montserrat text-[14px] text-description uppercase tracking-[0.5em] font-black">Activation Total</p>
-                     <div className="flex items-baseline gap-4">
-                        <span className="font-newsreader italic text-[clamp(3rem,8vw,7rem)] text-accent tracking-tighter leading-none drop-shadow-[0_0_20px_rgba(139, 92, 246,0.3)]">
+               <div className="space-y-4 pb-2">
+                  <div>
+                     <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Total Enrollment Fee</p>
+                     <div className="flex items-baseline gap-2 mt-1">
+                        <span className="font-newsreader italic text-4xl sm:text-5xl text-blue-400 tracking-tight leading-none drop-shadow-lg">
                            ₹{displayTotal}
                         </span>
-                        <span className="font-jetbrains text-xs text-accent/40 mb-4">INR</span>
+                        <span className="text-xs text-blue-300/70 font-semibold uppercase">INR (Incl. GST)</span>
                      </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12 max-w-sm pt-6 sm:pt-8 border-t border-white/10">
-                     <div className="hidden sm:block">
-                        <CheckoutBreakdown
-                           compact
-                           basePrice={basePrice}
-                           discount={discount}
-                           gstRate={gstRate}
-                           couponData={couponData}
-                           className="mt-8"
-                        />
-                     </div>
-                     <div className="sm:col-span-1">
-                        <p className="font-jetbrains text-[7px] text-description/80 uppercase tracking-[0.3em] mb-3">Access Tier</p>
-                        <p className="font-jetbrains text-[9px] text-normal uppercase tracking-widest leading-none font-black">{selectedPlan.title} PERSISTENCE</p>
-                     </div>
+                  <div className="pt-3 border-t border-white/10">
+                     <CheckoutBreakdown
+                        compact
+                        basePrice={basePrice}
+                        discount={discount}
+                        gstRate={gstRate}
+                        couponData={couponData}
+                     />
                   </div>
                </div>
-
-               {/* Corner Brackets */}
-               <div className="absolute top-4 left-4 sm:top-8 sm:left-8 w-6 h-6 border-l border-t border-white/20" />
-               <div className="absolute top-4 right-4 sm:top-8 sm:right-8 w-6 h-6 border-r border-t border-white/20" />
-               <div className="absolute bottom-4 left-4 sm:bottom-8 sm:left-8 w-6 h-6 border-l border-b border-white/20" />
-               <div className="absolute bottom-4 right-4 sm:bottom-8 sm:right-8 w-6 h-6 border-r border-b border-white/20" />
             </div>
          </div>
 
-         {/* -------------------- RIGHT WING: SCROLLABLE FORM -------------------- */}
-         <div ref={rightWingRef} className="lg:flex-1 bg-dark pt-8 md:pt-14 px-6">
-            {/* <div ref={rightWingRef} className="lg:flex-1 bg-dark pt-32 lg:pt-52 pb-32 px-6 md:px-20 lg:px-24"> */}
-            <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 items-start scroll-mt-24">
-               <div className="lg:col-span-2 space-y-12 lg:space-y-24">
+         {/* -------------------- RIGHT WING: SQUARE CARD-BASED FORM -------------------- */}
+         <div className="lg:flex-1 bg-slate-50 pt-8 md:pt-12 px-4 sm:px-8 lg:px-12 pb-24">
+            <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+               
+               {/* Form Area */}
+               <div className="lg:col-span-2 space-y-6">
 
-                  {/* Protocol Head */}
-                  <div className="space-y-4 protocol-reveal">
-                     <h1 className="font-newsreader italic text-6xl text-normal font-extralight tracking-tighter">Activation Form.</h1>
-                     <div className="w-16 h-[1px] bg-accent" />
+                  {/* Header Title */}
+                  <div className="mb-2">
+                     <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                        Course Enrollment
+                     </h1>
+                     <p className="text-sm text-slate-500 mt-1">
+                        {course?.title ? `Enrolling in ${course.title}` : 'Fill in your details to get instant access.'}
+                     </p>
                   </div>
 
-                  <form className="space-y-10 lg:space-y-16">
+                  <form className="space-y-6">
 
-                     {/* 01: IDENTITY IDENTIFIER */}
-                     <div className="space-y-10 protocol-reveal">
-                        <div className="flex items-center gap-6 group">
-                           <span className="font-montserrat text-[14px] text-accent font-black border border-accent/30 w-10 h-10 flex items-center justify-center rounded-full group-hover:bg-accent group-hover:text-dark transition-all duration-500">01</span>
-                           <h3 className="font-newsreader italic text-3xl text-normal">Carrier Identity</h3>
+                     {/* 01: STUDENT INFORMATION CARD (SQUARE) */}
+                     <div className="bg-white border border-slate-300 shadow-sm rounded-none p-6 sm:p-7 space-y-5 transition-all hover:border-slate-400">
+                        <div className="flex items-center gap-3 pb-3 border-b border-slate-200">
+                           <span className="bg-blue-50 text-blue-700 border border-blue-300 text-xs font-bold w-7 h-7 rounded-none flex items-center justify-center">
+                              01
+                           </span>
+                           <div>
+                              <h3 className="font-bold text-base text-slate-900">Student Details</h3>
+                              <p className="text-xs text-slate-500">Your account and certificate information</p>
+                           </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                           <div className="space-y-3">
-                              <label className="font-jetbrains text-[9px] text-normal/40 uppercase tracking-[0.4em] mb-2 font-black">Full Legal Identity</label>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+                           {/* Full Name */}
+                           <div className="space-y-1.5">
+                              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                                 Full Name <span className="text-red-500">*</span>
+                              </label>
                               <input
-                                 type="text" name="fullName" placeholder={t('enterName')}
+                                 type="text"
+                                 name="fullName"
+                                 placeholder="e.g. Rahul Sharma"
                                  value={formData.fullName}
-                                 className="w-full bg-white/[0.03] border border-white/10 p-7 font-jetbrains text-xs text-normal focus:border-accent focus:bg-white/[0.05] transition-all outline-none focus:ring-1 focus:ring-accent/40"
                                  onChange={handleChange}
+                                 className="w-full bg-slate-50 border border-slate-300 hover:border-slate-400 focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-600 text-slate-900 text-sm px-4 py-2.5 rounded-none transition-all outline-none font-medium placeholder:text-slate-400"
+                                 required
                               />
-                              <div className="mt-3 flex items-center gap-3">
-                                 {isVerified ? (
-                                    <span className="text-green-400 font-jetbrains text-xs uppercase tracking-wider">Verified</span>
-                                 ) : (
-                                    <button
-                                       type="button"
-                                       onClick={sendOtp}
-                                       disabled={sendingOtp || !formData.email}
-                                       className={`px-4 py-2 text-sm font-jetbrains border rounded ${sendingOtp || !formData.email ? 'opacity-50 cursor-not-allowed' : 'bg-accent text-dark'}`}
-                                    >
-                                       {sendingOtp ? 'Sending...' : 'Verify Email'}
-                                    </button>
-                                 )}
-                                 {otpMessage && <span className="text-[11px] text-normal/70">{otpMessage}</span>}
-                              </div>
-
-
-
-
-
-
                            </div>
-                           <div className="space-y-3">
-                              <label className="font-jetbrains text-[9px] text-normal/40 uppercase tracking-[0.4em] font-black">Digital Dispatch (Email)</label>
+
+                           {/* Email */}
+                           <div className="space-y-1.5">
+                              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                                 Email Address <span className="text-red-500">*</span>
+                              </label>
                               <input
-                                 type="email" name="email" placeholder="EMAIL@PROTOCOL.ARCH"
+                                 type="email"
+                                 name="email"
+                                 placeholder="student@example.com"
                                  value={formData.email}
                                  disabled={isVerified}
-                                 className={`w-full bg-white/[0.03] border border-white/10 p-7 font-jetbrains text-xs text-normal focus:border-accent focus:bg-white/[0.05] transition-all outline-none focus:ring-1 focus:ring-accent/40 ${isVerified ? 'opacity-50 cursor-not-allowed' : ''}`}
                                  onChange={handleChange}
+                                 className={`w-full bg-slate-50 border border-slate-300 hover:border-slate-400 focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-600 text-slate-900 text-sm px-4 py-2.5 rounded-none transition-all outline-none font-medium placeholder:text-slate-400 ${
+                                    isVerified ? 'bg-slate-100 text-slate-500 cursor-not-allowed' : ''
+                                 }`}
+                                 required
                               />
                            </div>
+                        </div>
+
+                        {/* Email Verification Status / Action */}
+                        <div className="pt-1 flex items-center justify-between">
+                           {isVerified ? (
+                              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 border border-green-300 rounded-none text-green-700 text-xs font-semibold">
+                                 <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                 </svg>
+                                 <span>Email Verified</span>
+                              </div>
+                           ) : (
+                              <button
+                                 type="button"
+                                 onClick={sendOtp}
+                                 disabled={sendingOtp || !formData.email}
+                                 className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-none transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                 {sendingOtp ? 'Sending OTP...' : 'Verify Email'}
+                              </button>
+                           )}
+                           {otpMessage && <span className="text-xs text-slate-500 font-medium">{otpMessage}</span>}
                         </div>
                      </div>
 
-                     {/* 02: COMMS & ENTITY */}
-                     <div className="space-y-10 protocol-reveal">
-                        <div className="flex items-center gap-6 group">
-                           <span className="font-montserrat text-[14px] text-accent font-black border border-accent/30 w-10 h-10 flex items-center justify-center rounded-full group-hover:bg-accent group-hover:text-dark transition-all duration-500">02</span>
-                           <h3 className="font-newsreader italic text-3xl text-normal">Comms & Business</h3>
+                     {/* 02: CONTACT & ORGANIZATION CARD (SQUARE) */}
+                     <div className="bg-white border border-slate-300 shadow-sm rounded-none p-6 sm:p-7 space-y-5 transition-all hover:border-slate-400">
+                        <div className="flex items-center gap-3 pb-3 border-b border-slate-200">
+                           <span className="bg-blue-50 text-blue-700 border border-blue-300 text-xs font-bold w-7 h-7 rounded-none flex items-center justify-center">
+                              02
+                           </span>
+                           <div>
+                              <h3 className="font-bold text-base text-slate-900">Contact & Organization</h3>
+                              <p className="text-xs text-slate-500">For notifications and invoices</p>
+                           </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                           <div className="space-y-3">
-                              <label className="font-jetbrains text-[9px] text-normal/40 uppercase tracking-[0.4em] font-black">Signal Connection (Phone)</label>
-                              <div className="flex">
-                                 <div className="bg-accent/10 border border-white/10 border-r-0 p-7 font-jetbrains text-xs text-accent">+91</div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+                           {/* Phone */}
+                           <div className="space-y-1.5">
+                              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                                 Phone Number <span className="text-red-500">*</span>
+                              </label>
+                              <div className="flex rounded-none overflow-hidden border border-slate-300 hover:border-slate-400 focus-within:border-blue-600 transition-all">
+                                 <span className="bg-slate-100 text-slate-700 text-xs font-semibold px-3.5 flex items-center border-r border-slate-300">
+                                    +91
+                                 </span>
                                  <input
-                                    type="tel" name="phone" placeholder={t('phoneNumber')}
+                                    type="tel"
+                                    name="phone"
+                                    placeholder="98765 43210"
                                     value={formData.phone}
-                                    className="flex-1 bg-white/[0.03] border border-white/10 p-7 font-jetbrains text-xs text-normal focus:border-accent outline-none transition-all"
                                     onChange={handleChange}
+                                    className="flex-1 bg-slate-50 focus:bg-white text-slate-900 text-sm px-3.5 py-2.5 outline-none font-medium placeholder:text-slate-400 rounded-none"
+                                    required
                                  />
                               </div>
                            </div>
-                           <div className="space-y-3">
-                              <label className="font-jetbrains text-[9px] text-normal/40 uppercase tracking-[0.4em] font-black">Commercial Agency</label>
+
+                           {/* Organization / Company */}
+                           <div className="space-y-1.5">
+                              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                                 Business Name <span className="text-slate-400 font-normal">(Optional)</span>
+                              </label>
                               <input
-                                 type="text" name="company" placeholder="BRAND / FIRM"
+                                 type="text"
+                                 name="company"
+                                 placeholder="Self / Company Name"
                                  value={formData.company}
-                                 className="w-full bg-white/[0.03] border border-white/10 p-7 font-jetbrains text-xs text-normal focus:border-accent outline-none transition-all"
                                  onChange={handleChange}
+                                 className="w-full bg-slate-50 border border-slate-300 hover:border-slate-400 focus:border-blue-600 focus:bg-white text-slate-900 text-sm px-4 py-2.5 rounded-none transition-all outline-none font-medium placeholder:text-slate-400"
                               />
                            </div>
                         </div>
                      </div>
 
-                     {/* 03: TAX & INCENTIVES */}
-                     <div className="space-y-10 protocol-reveal">
-                        <div className="flex items-center gap-6 group">
-                           <span className="font-montserrat text-[14px] text-accent font-black border border-accent/30 w-10 h-10 flex items-center justify-center rounded-full group-hover:bg-accent group-hover:text-dark transition-all duration-500">03</span>
-                           <h3 className="font-newsreader italic text-3xl text-normal">Tax Codes & Coupons</h3>
+                     {/* 03: COUPONS & TAX CARD (SQUARE) */}
+                     <div className="bg-white border border-slate-300 shadow-sm rounded-none p-6 sm:p-7 space-y-5 transition-all hover:border-slate-400">
+                        <div className="flex items-center gap-3 pb-3 border-b border-slate-200">
+                           <span className="bg-blue-50 text-blue-700 border border-blue-300 text-xs font-bold w-7 h-7 rounded-none flex items-center justify-center">
+                              03
+                           </span>
+                           <div>
+                              <h3 className="font-bold text-base text-slate-900">Coupons & Tax</h3>
+                              <p className="text-xs text-slate-500">Apply discount codes or add GSTIN</p>
+                           </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                           <div className="space-y-3">
-                              <label className="font-jetbrains text-[9px] text-normal/40 uppercase tracking-[0.4em] font-black">GST Identifier</label>
-                              <input
-                                 type="text" name="gst" placeholder="GSTN"
-                                 value={formData.gst}
-                                 className="w-full bg-white/[0.03] border border-white/10 p-7 font-jetbrains text-xs text-normal focus:border-accent outline-none transition-all"
-                                 onChange={handleChange}
-                              />
-                           </div>
-                           <div className="space-y-3">
-                              <label className="font-jetbrains text-[9px] text-normal/40 uppercase tracking-[0.4em] font-black">Promotional Dispatch</label>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+                           {/* Coupon Code */}
+                           <div className="space-y-1.5">
+                              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                                 Have a Coupon?
+                              </label>
                               <div className="flex gap-2">
                                  <select
                                     name="coupon"
-                                    className="flex-1 bg-white/[0.03] border border-white/10 p-7 font-jetbrains text-xs text-normal focus:border-accent outline-none transition-all appearance-none"
-                                    onChange={handleChange}
                                     value={formData.coupon}
+                                    onChange={handleChange}
+                                    className="flex-1 min-w-0 bg-slate-50 border border-slate-300 hover:border-slate-400 focus:border-blue-600 focus:bg-white text-slate-900 text-xs px-3 py-2.5 rounded-none outline-none font-medium transition-all"
                                  >
-                                    <option value="" className="bg-dark text-normal/40">SELECT COUPON</option>
+                                    <option value="">Select coupon</option>
                                     {Array.isArray(coupons) && coupons.map(c => (
-                                       <option key={c._id} value={c.code} className="bg-dark text-normal">
+                                       <option key={c._id} value={c.code}>
                                           {c.code} - {c.discountType === 'percentage' ? `${c.discountPercent}% OFF` : `₹${c.discountAmount} OFF`}
                                        </option>
                                     ))}
@@ -543,135 +581,131 @@ const Checkout = () => {
                                     type="button"
                                     onClick={handleApplyCoupon}
                                     disabled={couponLoading || !formData.coupon}
-                                    className={`bg-accent/15 border border-accent/30 px-8 font-jetbrains text-[9px] text-accent font-black uppercase hover:bg-accent hover:text-dark transition-all duration-500 ${(couponLoading || !formData.coupon) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold uppercase rounded-none transition-all shadow-sm shrink-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                                  >
-                                    {couponLoading ? 'Verifying...' : 'Apply'}
+                                    {couponLoading ? '...' : 'Apply'}
                                  </button>
                               </div>
-                              {couponError && <p className="font-jetbrains text-[8px] text-red-500 uppercase tracking-widest mt-2">{couponError}</p>}
-                              {couponData && <p className="font-jetbrains text-[8px] text-accent uppercase tracking-widest mt-2">Protocol Applied: -₹{discount}</p>}
+                              {couponError && <p className="text-xs text-red-500 font-semibold mt-1">{couponError}</p>}
+                              {couponData && <p className="text-xs text-emerald-600 font-semibold mt-1">✓ Discount Applied: -₹{discount}</p>}
+                           </div>
+
+                           {/* GST Number */}
+                           <div className="space-y-1.5">
+                              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                                 GST Number <span className="text-slate-400 font-normal">(Optional)</span>
+                              </label>
+                              <input
+                                 type="text"
+                                 name="gst"
+                                 placeholder="22AAAAA0000A1Z5"
+                                 value={formData.gst}
+                                 onChange={handleChange}
+                                 className="w-full bg-slate-50 border border-slate-300 hover:border-slate-400 focus:border-blue-600 focus:bg-white text-slate-900 text-sm px-4 py-2.5 rounded-none transition-all outline-none font-medium placeholder:text-slate-400 uppercase"
+                              />
                            </div>
                         </div>
                      </div>
 
-                     {/* COMPLETE ACTIVATION CTA */}
-                     <div className="pt-10 protocol-reveal grid gap-4">
-
-                        <button onClick={handlePayment} type="button" className="w-full group relative bg-accent py-9 flex items-center justify-center gap-6 hover:scale-[1.01] active:scale-[0.98] transition-all duration-700 overflow-hidden shadow-[0_0_30px_rgba(139, 92, 246,0.1)]">
-                           <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 skew-x-12" />
-                           <span className="relative z-10 font-jetbrains text-dark text-sm font-black tracking-[0.8em] uppercase">Pay Now</span>
-                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="relative z-10 text-dark stroke-dark group-hover:translate-x-3 transition-transform duration-700">
-                              <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="4" />
+                     {/* COMPLETE PAYMENT BUTTON (SQUARE) */}
+                     <div className="pt-2">
+                        <button 
+                           onClick={handlePayment} 
+                           type="button" 
+                           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 px-6 rounded-none font-bold text-base shadow-md transition-all flex items-center justify-center gap-3 cursor-pointer"
+                        >
+                           <span>Complete Payment • ₹{displayTotal}</span>
+                           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                            </svg>
                         </button>
 
-                        <div className="mt-6">
-                           <div className="mt-2 flex justify-between items-center opacity-30 px-2">
-                              <p className="font-jetbrains text-[8px] uppercase tracking-[0.4em]">SSL ENCRYPTED 256-BIT</p>
-                              <p className="font-jetbrains text-[8px] uppercase tracking-[0.4em]">Activation Protocol v1.4</p>
-                           </div>
+                        <div className="mt-4 flex items-center justify-center gap-6 text-xs text-slate-500">
+                           <span className="flex items-center gap-1.5">
+                              <svg className="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                              </svg>
+                              256-Bit SSL Encrypted
+                           </span>
+                           <span className="flex items-center gap-1.5">
+                              <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                              </svg>
+                              Instant LMS Access
+                           </span>
                         </div>
                      </div>
 
                   </form>
-
-                  {/* Mobile: show breakdown lower on small screens (placed after form) */}
-                  <div className="lg:hidden mt-8 px-2">
-                     <CheckoutBreakdown
-                        basePrice={basePrice}
-                        discount={discount}
-                        gstRate={gstRate}
-                        couponData={couponData}
-                     />
-                     <div className="mt-4 text-center">
-                        <div className="text-sm text-normal/70">Quick total</div>
-                        <div className="font-newsreader italic text-2xl text-accent mt-1">{formatCurrency(total)}</div>
-                     </div>
-                  </div>
-
                </div>
 
-               {/* RIGHT SIDEBAR: sticky breakdown */}
+               {/* RIGHT SIDEBAR: Sticky breakdown on desktop */}
                <aside className="hidden lg:block lg:col-span-1">
-                  <div className="sticky top-28">
+                  <div className="sticky top-20">
                      <CheckoutBreakdown
                         basePrice={basePrice}
                         discount={discount}
                         gstRate={gstRate}
                         couponData={couponData}
                      />
-                     <div className="mt-6 p-4 text-center">
-                        <div className="text-sm text-normal/70">Quick total</div>
-                        <div className="font-newsreader italic text-3xl text-accent mt-2">{formatCurrency(total)}</div>
-                     </div>
                   </div>
                </aside>
             </div>
          </div>
 
+         {/* OTP MODAL */}
          {showOTPModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-               <div className="bg-dark p-6 rounded max-w-sm w-full">
-                  <h3 className="font-newsreader text-xl text-normal mb-4">Verify OTP</h3>
-                  <p className="text-sm text-normal/70 mb-2">Enter the OTP sent to {formData.email}</p>
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+               <div className="bg-white border border-slate-300 p-6 rounded-none max-w-sm w-full shadow-2xl space-y-4">
+                  <div>
+                     <h3 className="font-bold text-lg text-slate-900">Verify Email Address</h3>
+                     <p className="text-xs text-slate-500 mt-1">Enter the 6-digit OTP sent to <strong className="text-blue-600">{formData.email}</strong></p>
+                  </div>
                   <input
                      value={otp}
                      onChange={e => setOtp(e.target.value)}
-                     placeholder="Enter OTP"
-                     className="w-full p-3 bg-white/[0.03] border border-white/10 mb-4 font-jetbrains text-sm"
+                     placeholder="Enter 6-digit OTP"
+                     className="w-full p-3 bg-slate-50 border border-slate-300 focus:border-blue-600 focus:bg-white text-slate-900 text-sm rounded-none text-center tracking-widest font-mono font-bold outline-none"
                   />
-                  <div className="flex gap-3 justify-end">
-                     <button type="button" onClick={() => { setShowOTPModal(false); setOtp(''); setOtpMessage('') }} className="px-4 py-2 border">Cancel</button>
-                     <button type="button" onClick={verifyOtp} disabled={verifyingOtp} className={`px-4 py-2 bg-accent text-dark ${verifyingOtp ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                        {verifyingOtp ? 'Verifying...' : 'Verify'}
+                  <div className="flex gap-2.5 justify-end">
+                     <button type="button" onClick={() => { setShowOTPModal(false); setOtp(''); setOtpMessage('') }} className="px-4 py-2 border border-slate-300 hover:bg-slate-50 rounded-none text-xs font-semibold text-slate-700 cursor-pointer">
+                        Cancel
+                     </button>
+                     <button type="button" onClick={verifyOtp} disabled={verifyingOtp} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-none text-xs font-bold shadow-sm cursor-pointer disabled:opacity-50">
+                        {verifyingOtp ? 'Verifying...' : 'Verify OTP'}
                      </button>
                   </div>
-                  {otpMessage && <p className="mt-3 text-sm text-normal/70">{otpMessage}</p>}
+                  {otpMessage && <p className="text-xs text-slate-500 text-center font-medium">{otpMessage}</p>}
                </div>
             </div>
          )}
 
          {/* SUCCESS MODAL */}
          {showSuccessModal && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm px-4">
-               <div className="bg-dark border border-accent/20 p-8 md:p-12 max-w-lg w-full relative overflow-hidden shadow-[0_0_50px_rgba(139, 92, 246,0.15)] group">
-                  {/* Decorative background elements */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-accent/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
-
-                  {/* Content */}
-                  <div className="relative z-10 flex flex-col items-center text-center space-y-6">
-                     {/* Success Icon */}
-                     <div className="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center border border-accent/30 relative">
-                        <div className="absolute inset-0 rounded-full border border-accent animate-ping opacity-20" />
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="text-accent stroke-accent">
-                           <path d="M20 6L9 17l-5-5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                     </div>
-
-                     <div className="space-y-2">
-                        <p className="font-jetbrains text-[10px] text-accent uppercase tracking-[0.4em] font-black">Transaction Verified</p>
-                        <h3 className="font-newsreader italic text-3xl md:text-4xl text-normal tracking-tight">Activation Complete.</h3>
-                        <p className="font-jetbrains text-[11px] text-normal/60 uppercase tracking-widest mt-2">
-                           Your credentials are now securely bound to the system.
-                        </p>
-                     </div>
-
-                     {/* CTA */}
-                     <button
-                        onClick={() => navigate('/dashboard/my-courses')}
-                        className="mt-4 w-full bg-accent text-dark py-5 font-jetbrains text-xs font-black uppercase tracking-[0.4em] hover:scale-[1.02] transition-transform duration-300 flex justify-center items-center gap-3"
-                     >
-                        Enter Dashboard
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                           <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg>
-                     </button>
+            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md px-4">
+               <div className="bg-white border border-slate-300 p-8 md:p-10 max-w-md w-full relative rounded-none shadow-2xl text-center space-y-6">
+                  <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-none mx-auto flex items-center justify-center border border-emerald-300">
+                     <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                     </svg>
                   </div>
 
-                  {/* Border accents */}
-                  <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-accent to-transparent opacity-50" />
-                  <div className="absolute bottom-0 left-0 w-full h-[1px] bg-accent/20" />
+                  <div className="space-y-2">
+                     <h3 className="text-2xl font-bold text-slate-900">Enrollment Confirmed!</h3>
+                     <p className="text-sm text-slate-600">
+                        Your payment was successful. The course has been activated on your account.
+                     </p>
+                  </div>
+
+                  <button
+                     onClick={() => navigate('/dashboard/my-courses')}
+                     className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-none font-bold text-sm shadow-md hover:bg-blue-800 transition-all flex justify-center items-center gap-2 cursor-pointer"
+                  >
+                     <span>Go to My Courses</span>
+                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                     </svg>
+                  </button>
                </div>
             </div>
          )}

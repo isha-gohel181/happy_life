@@ -66,6 +66,19 @@ import { useAppDispatch } from "../../hooks/redux";
 import PopupAlert from "../../components/popUpAlert";
 import { useParams } from "react-router";
 
+const maxWidthClasses: Record<string, string> = {
+  sm: "max-w-sm",
+  md: "max-w-md",
+  lg: "max-w-lg",
+  xl: "max-w-xl",
+  "2xl": "max-w-2xl",
+  "3xl": "max-w-3xl",
+  "4xl": "max-w-4xl",
+  "5xl": "max-w-5xl",
+  "6xl": "max-w-6xl",
+  full: "max-w-full",
+};
+
 const Modal = ({
   isOpen,
   onClose,
@@ -78,31 +91,27 @@ const Modal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[1000] h-full flex bg-[#00000021] bg-opacity-70 items-center justify-center p-4 animate-fade-in">
+    <div className="fixed inset-0 z-[1000] h-full flex bg-black/40 backdrop-blur-sm items-center justify-center p-4 animate-fade-in">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#00000021] bg-opacity-70 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-transparent"
         onClick={onClose}
       />
 
       {/* Modal Container */}
       <div
-        className={`relative w-full max-h-[90vh] overflow-hidden flex flex-col rounded-xl transform scale-95 animate-scale-in
-                    max-w-${maxWidth}`}
+        className={`relative w-full max-h-[90vh] flex flex-col rounded-2xl shadow-2xl transform transition-all duration-200 ${
+          maxWidthClasses[maxWidth] || "max-w-4xl"
+        }`}
       >
         {/* Modal Body */}
-        <div
-          className="overflow-y-auto custom-scrollbar flex-1"
-          style={{
-            maxHeight: "90vh"
-          }}
-        >
+        <div className="flex-1 overflow-hidden flex flex-col rounded-2xl">
           {children}
         </div>
 
         {/* Modal Footer (Optional) */}
         {footer && (
-          <div className="sticky bottom-0 bg-gray-50 p-6 border-t border-gray-200 rounded-b-xl flex justify-end gap-3 shadow-inner">
+          <div className="sticky bottom-0 bg-gray-50 p-6 border-t border-gray-200 rounded-b-2xl flex justify-end gap-3 shadow-inner">
             {footer}
           </div>
         )}

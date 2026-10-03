@@ -313,6 +313,15 @@ const DashboardCoursePlayer = () => {
             if (video.sourcePlatform === 'youtube') {
                 return `https://www.youtube.com/embed/${decVideoId || decVideoUrl?.split('v=')[1] || decSecureUrl?.split('v=')[1]}?modestbranding=1&rel=0&controls=1&showinfo=0&fs=1`;
             }
+            if (video.sourcePlatform === 'vimeo') {
+                const url = decSecureUrl || decVideoUrl || video.embedUrl || '';
+                if (url.includes('player.vimeo.com/video/')) {
+                    const separator = url.includes('?') ? '&' : '?';
+                    return `${url}${separator}title=0&byline=0&portrait=0&dnt=1`;
+                }
+                const cleanId = decVideoId || url.replace(/^https?:\/\/(?:www\.)?vimeo\.com\//, '').split('?')[0];
+                return `https://player.vimeo.com/video/${cleanId}?title=0&byline=0&portrait=0&dnt=1`;
+            }
             if (decVideoUrl) return decVideoUrl;
             if (decSecureUrl) return decSecureUrl;
         }
@@ -397,7 +406,7 @@ const DashboardCoursePlayer = () => {
                                             src={videoSrc} 
                                             className={`w-full h-full border-0 absolute inset-0 z-0 transition-all duration-300 ${isObscured ? 'opacity-0 pointer-events-none filter blur-xl' : 'opacity-100'}`}
                                             allowFullScreen
-                                            allow="autoplay; encrypted-media"
+                                            allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
                                             title={selectedLesson.title}
                                             onError={() => {
                                                 if (reportIncidentRef.current) {
