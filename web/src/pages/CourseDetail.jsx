@@ -97,8 +97,20 @@ const CourseDetail = () => {
   // Temporary debug: log course data when loaded
   useEffect(() => {
     if (course) {
-      // eslint-disable-next-line no-console
-      console.log('CourseDetail loaded:', { id, title: course.title, course })
+      // Set dynamic page title
+      if (course.title) {
+        document.title = `${course.title} | Happy Life Astro`
+      }
+      // Set dynamic SEO meta description for search engines
+      if (course.seoMetaDescription || course.subtitle || course.description) {
+        let metaDesc = document.querySelector('meta[name="description"]')
+        if (!metaDesc) {
+          metaDesc = document.createElement('meta')
+          metaDesc.setAttribute('name', 'description')
+          document.head.appendChild(metaDesc)
+        }
+        metaDesc.setAttribute('content', course.seoMetaDescription || course.subtitle || course.description || '')
+      }
     }
   }, [course, id])
 
